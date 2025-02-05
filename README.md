@@ -216,8 +216,8 @@ Post::getRequiredFields(
 Post::getAllFields();
 // returns
 // [
-//     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug',
-//     'created_at', 'updated_at', 'deleted_at'
+//     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description',
+//     'slug', 'created_at', 'updated_at', 'deleted_at'
 // ]
 ```
 
