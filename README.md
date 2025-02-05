@@ -194,7 +194,7 @@ Post::getRequiredFieldsWithDefaultsAndPrimaryKey();
 ```
 
 ```php
-// get required fields with defaults and primary key
+// get required fields with nullables, defaults and primary key
 Post::getRequiredFields(
     $withNullables = true,
     $withDefaults = true,
