@@ -8,7 +8,7 @@
 [![GitHub Tests For Laravel Versions Action Status](https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-laravel-versions.yml?branch=main&label=tests-for-laravel-versions&style=flat-square)](https://github.com/watheqalshowaiter/model-required-fields/actions?query=workflow%3A"tests-for-laravel-versions"+branch%3Amain)
 [![GitHub Tests For Databases Action Status](https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-databases.yml?branch=main&label=tests-for-databases&style=flat-square)](https://github.com/watheqalshowaiter/model-required-fields/actions?query=workflow%3Atests-for-databases+branch%3Amain)
 
-Get the **required** model fields, excluding **primary keys**, **nullable** fields, and fields with **defaults**.
+Get the **required** model fields, excluding **primary keys**, **nullable** fields, and fields with **defaults**. In other words, get the **minimal required** fields necessary to create the model without causing a database error.
 
 ## Installation
 
@@ -130,7 +130,11 @@ Post::getRequiredFields(
 Post::getRequiredFields(true);
 // or
 Post::getRequiredFieldsWithNullables();
-// returns ['user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug', 'created_at', 'updated_at', 'deleted_at']
+// returns
+// [
+//     'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug',
+//     'created_at', 'updated_at', 'deleted_at'
+// ]
 ```
 
 ```php
@@ -166,7 +170,11 @@ Post::getRequiredFields(
 );
 // or
 Post::getRequiredFieldsWithNullablesAndDefaults();
-// returns ['user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug', 'created_at', 'updated_at', 'deleted_at']
+// returns
+// [
+//     'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug',
+//     'created_at', 'updated_at', 'deleted_at'
+// ]
 ```
 
 ```php
@@ -178,7 +186,11 @@ Post::getRequiredFields(
 );
 // or
 Post::getRequiredFieldsWithNullablesAndPrimaryKey();
-// returns ['id', 'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug', 'created_at', 'updated_at', 'deleted_at']
+// returns
+// [
+//     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug',
+//     'created_at', 'updated_at', 'deleted_at'
+// ]
 ```
 
 ```php
@@ -202,7 +214,11 @@ Post::getRequiredFields(
 );
 // or
 Post::getAllFields();
-// returns ['id', 'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug', 'created_at', 'updated_at', 'deleted_at']
+// returns
+// [
+//     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug',
+//     'created_at', 'updated_at', 'deleted_at'
+// ]
 ```
 
 ## Why?
