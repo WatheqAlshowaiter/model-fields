@@ -2,6 +2,23 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 1.14.0 - 2025-02-14
+
+### Release Notes
+
+#### Added
+
+* feat: exclude model default attributes from required fields by Watheq Alshowaiter in [`df76b26`](https://github.com/WatheqAlshowaiter/model-required-fields/commit/df76b2649fb441186f29cc1b56bc5a77c751c4ea)
+
+#### Changed
+
+* chore: trigger github action tests on pull requests by Watheq Alshowaiter in [`ccbc56f`](https://github.com/WatheqAlshowaiter/model-required-fields/commit/ccbc56fcd4d63f22705290d28445f229e8d476b5)
+* update shields by Watheq Alshowaiter in [`4f70bb9`](https://github.com/WatheqAlshowaiter/model-required-fields/commit/4f70bb9f22bb259c548b0ab828bf519b2e6e5c85)
+* refactor: move related classes to tests to test folder: Model, migrations, and constants by Watheq Alshowaiter in [`6663828`](https://github.com/WatheqAlshowaiter/model-required-fields/commit/6663828178094aecd8d407e04245e0882acc7d74)
+* chore: issue feature note textarea is required by Watheq Alshowaiter in [`894fd56`](https://github.com/WatheqAlshowaiter/model-required-fields/commit/894fd56f3072391506335dacc6af0ec4b678d5ae)
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-required-fields/compare/1.13.3...1.14.0
+
 ## 1.13.3 - 2024-08-07
 
 - Improve GitHub issues templates and Security policy
