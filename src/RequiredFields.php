@@ -19,7 +19,7 @@ trait RequiredFields
     public static function getRequiredFields(
         $withNullables = false,
         $withDefaults = false,
-        $withPrimaryKey = false,
+        $withPrimaryKey = false
     ) {
         if ((float) App::version() < 10) {
             return self::getRequiredFieldsForOlderVersions(
