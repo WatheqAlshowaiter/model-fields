@@ -49,12 +49,12 @@ trait RequiredFields
             })
             ->reject(function ($column) use ($primaryIndex, $withNullables, $withDefaults) {
                 return
-                    $column['nullable'] && !$withNullables ||
-                    $column['default'] != null && !$withDefaults ||
+                    $column['nullable'] && ! $withNullables ||
+                    $column['default'] != null && ! $withDefaults ||
                     (in_array($column['name'], $primaryIndex));
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->when($withPrimaryKey, function ($collection) use ($primaryIndex) {
@@ -120,12 +120,12 @@ trait RequiredFields
                 return (array) $column;
             })
             ->reject(function ($column) use ($withNullables, $withDefaults, $withPrimaryKey) {
-                return $column['pk'] && !$withPrimaryKey
-                    || $column['dflt_value'] != null && !$withDefaults
-                    || !$column['notnull'] && !$withNullables;
+                return $column['pk'] && ! $withPrimaryKey
+                    || $column['dflt_value'] != null && ! $withDefaults
+                    || ! $column['notnull'] && ! $withNullables;
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -170,12 +170,12 @@ trait RequiredFields
                 return $column;
             })
             ->reject(function ($column) use ($withNullables, $withDefaults, $withPrimaryKey) {
-                return $column['primary'] && !$withPrimaryKey
-                    || $column['default'] != null && !$withDefaults
-                    || $column['nullable'] && !$withNullables;
+                return $column['primary'] && ! $withPrimaryKey
+                    || $column['default'] != null && ! $withDefaults
+                    || $column['nullable'] && ! $withNullables;
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -227,7 +227,7 @@ trait RequiredFields
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -246,12 +246,12 @@ trait RequiredFields
                 return (array) $column;
             })
             ->reject(function ($column) use ($primaryIndex, $withDefaults, $withNullables) {
-                return ($column['default'] && !$withDefaults) ||
-                    ($column['nullable'] == 'YES' && !$withNullables) ||
+                return ($column['default'] && ! $withDefaults) ||
+                    ($column['nullable'] == 'YES' && ! $withNullables) ||
                     (in_array($column['name'], $primaryIndex));
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->when($withPrimaryKey, function ($collection) use ($primaryIndex) {
@@ -289,7 +289,7 @@ trait RequiredFields
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -311,12 +311,12 @@ trait RequiredFields
             })
             ->reject(function ($column) use ($withDefaults, $withNullables, $primaryIndex, $withPrimaryKey) {
                 return
-                    $column['default'] != null && !$withDefaults
-                    || $column['nullable'] && !$withNullables
-                    || (in_array($column['name'], $primaryIndex) && !$withPrimaryKey);
+                    $column['default'] != null && ! $withDefaults
+                    || $column['nullable'] && ! $withNullables
+                    || (in_array($column['name'], $primaryIndex) && ! $withPrimaryKey);
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
