@@ -48,6 +48,7 @@ Schema::create('users', function (Blueprint $table) {
     $table->string('email')->unique(); // required
     $table->timestamp('email_verified_at')->nullable(); // nullable
     $table->string('password'); // required
+    $table->string('random_number'); // default (in model attributes)
     $table->rememberToken(); // nullable
     $table->timestamps(); // nullable
 });
@@ -61,6 +62,10 @@ use WatheqAlshowaiter\ModelRequiredFields\RequiredFields;
 class User extends Model
 {
    use RequiredFields;
+
+   protected $attributes = [
+       'random_number' => '1234',
+   ];
 }
 ```
 
