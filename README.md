@@ -1,12 +1,29 @@
 ![Package cover](./arts/package-cover.png)
 
 # Model Required Fields
+<!-- shields -->
+[![Required Laravel Version][ico-laravel]][link-packagist]
+[![Required PHP Version][ico-php]][link-packagist]
+[![Latest Version on Packagist][ico-version]][link-packagist]
+![GitHub Tests For Laravel Versions Action Status][ico-tests-for-laravel-versions]
+![GitHub Tests For Databases Action Status][ico-tests-for-databases]
+![GitHub Code Style Action Status][ico-code-style]
+[![Total Downloads][ico-downloads]][link-downloads]
+![GitHub Stars][ico-github-stars]
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/watheqalshowaiter/model-required-fields.svg?style=flat-square)](https://packagist.org/packages/watheqalshowaiter/model-required-fields)
-[![Total Downloads](https://img.shields.io/packagist/dt/watheqalshowaiter/model-required-fields.svg?style=flat-square)](https://packagist.org/packages/watheqalshowaiter/model-required-fields)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/watheqalshowaiter/model-required-fields/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![GitHub Tests For Laravel Versions Action Status](https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-laravel-versions.yml?branch=main&label=tests-for-laravel-versions&style=flat-square)](https://github.com/watheqalshowaiter/model-required-fields/actions?query=workflow%3A"tests-for-laravel-versions"+branch%3Amain)
-[![GitHub Tests For Databases Action Status](https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-databases.yml?branch=main&label=tests-for-databases&style=flat-square)](https://github.com/watheqalshowaiter/model-required-fields/actions?query=workflow%3Atests-for-databases+branch%3Amain)
+[ico-laravel]: https://img.shields.io/badge/Laravel-%E2%89%A56.0-ff2d20?style=flat-square&logo=laravel
+[ico-php]: https://img.shields.io/packagist/php-v/watheqalshowaiter/model-required-fields?color=%238892BF&style=flat-square&logo=php
+[ico-version]: https://img.shields.io/packagist/v/watheqalshowaiter/model-required-fields.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/watheqalshowaiter/model-required-fields.svg?style=flat-square&color=%23007ec6
+[ico-code-style]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square
+[ico-tests-for-laravel-versions]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-laravel-versions.yml?branch=main&label=laravel%20versions%20tests&style=flat-square
+[ico-tests-for-databases]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-databases.yml?branch=main&label=databases%20tests&style=flat-square
+[ico-github-stars]: https://img.shields.io/github/stars/watheqalshowaiter/model-required-fields?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/watheqalshowaiter/model-required-fields
+[link-downloads]: https://packagist.org/packages/watheqalshowaiter/model-required-fields/stats
+<!-- ./shields -->
 
 Get the **required** model fields, excluding **primary keys**, **nullable** fields, and fields with **defaults**.
 
