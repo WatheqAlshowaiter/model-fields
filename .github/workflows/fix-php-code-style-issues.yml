@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "**.php"
+  pull_request:
   workflow_dispatch:
 
 permissions:
