@@ -1,0 +1,21 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateBrothersTable extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('brothers', function (Blueprint $table) {
+            $table->string('email'); // required
+            $table->string('name'); // default => ignored because it has the default value in the model $attributes
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('brothers');
+    }
+}
