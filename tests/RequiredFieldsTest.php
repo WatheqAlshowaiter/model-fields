@@ -1,4 +1,5 @@
 <?php
+
 namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -248,13 +249,15 @@ class RequiredFieldsTest extends TestCase
         ], Son::getRequiredFieldsForOlderVersions());
     }
 
-    public function test_get_required_fields_excluding_default_model_attributes(){
+    public function test_get_required_fields_excluding_default_model_attributes()
+    {
         $this->assertEquals([
             'email',
         ], Brother::getRequiredFields());
     }
 
-    public function test_get_required_fields_with_applications_defaults(){
+    public function test_get_required_fields_with_applications_defaults()
+    {
         $expected = [
             'email',
             'name',
