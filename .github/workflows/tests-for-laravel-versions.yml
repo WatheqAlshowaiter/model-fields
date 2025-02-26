@@ -2,13 +2,8 @@ name: tests-for-laravel-versions
 
 on:
   push:
-    paths:
-      - "**.php"
-      - ".github/workflows/tests-for-laravel-versions.yml"
-      - ".github/workflows/tests-for-databases.yml"
-      - "phpunit.xml.dist"
-      - "composer.json"
-      - "composer.lock"
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 

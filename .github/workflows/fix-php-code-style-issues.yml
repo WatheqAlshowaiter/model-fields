@@ -2,8 +2,8 @@ name: fix-php-code-style-issues
 
 on:
   push:
-    paths:
-      - "**.php"
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
