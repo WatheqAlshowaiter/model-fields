@@ -9,7 +9,7 @@ on:
       - "phpunit.xml.dist"
       - "composer.json"
       - "composer.lock"
-    pull_request:
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
           coverage: none
 
       - name: Set Framework version
-        run: composer config version "11.x-dev"
+        run: composer config version "12.x-dev"
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -90,7 +90,7 @@ jobs:
           coverage: none
 
       - name: Set Framework version
-        run: composer config version "11.x-dev"
+        run: composer config version "12.x-dev"
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -135,7 +135,7 @@ jobs:
           coverage: none
 
       - name: Set Framework version
-        run: composer config version "11.x-dev"
+        run: composer config version "12.x-dev"
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -181,7 +181,7 @@ jobs:
           coverage: none
 
       - name: Set Framework version
-        run: composer config version "11.x-dev"
+        run: composer config version "12.x-dev"
 
       - name: Install dependencies
         uses: nick-fields/retry@v3
@@ -227,7 +227,7 @@ jobs:
           coverage: none
 
       - name: Set Framework version
-        run: composer config version "11.x-dev"
+        run: composer config version "12.x-dev"
 
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress

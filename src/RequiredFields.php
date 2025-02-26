@@ -31,13 +31,7 @@ trait RequiredFields
 
         $modelDefaultAttributes = self::getModelDefaultAttributes();
 
-        $primaryIndex = collect(Schema::getIndexes((new self)->getTable()))
-            ->filter(function ($index) {
-                return $index['primary'];
-            })
-            ->pluck('columns')
-            ->flatten()
-            ->toArray();
+        $primaryIndex = self::getPrimaryField();
 
         return collect(Schema::getColumns((new self)->getTable()))
             ->map(function ($column) { // specific to mariadb
@@ -129,7 +123,6 @@ trait RequiredFields
             })
             ->pluck('name')
             ->toArray();
-
     }
 
     protected static function getRequiredFieldsForMysqlAndMariaDb(
@@ -377,5 +370,21 @@ trait RequiredFields
             $withDefaults = true,
             $withPrimaryKey = true
         );
+    }
+
+    /**
+     * Get the primary field for the table
+     *
+     * @return array<string>
+     */
+    private static function getPrimaryField()
+    {
+        return collect(Schema::getIndexes((new self)->getTable()))
+            ->filter(function ($index) {
+                return $index['primary'];
+            })
+            ->pluck('columns')
+            ->flatten()
+            ->toArray();
     }
 }
