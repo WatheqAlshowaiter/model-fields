@@ -2,6 +2,15 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 1.15.0 - 2025-02-26
+
+### What's Changed
+
+* feat: support laravel 12 by in https://github.com/WatheqAlshowaiter/model-required-fields/pull/13
+* chore: improve github actions triggers
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-required-fields/compare/1.14.0...1.15.0
+
 ## 1.14.0 - 2025-02-14
 
 ### Release Notes
