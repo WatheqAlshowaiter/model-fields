@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * @deprecated
- *
  * @see ModelFields instead
  */
 trait RequiredFields
