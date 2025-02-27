@@ -38,7 +38,7 @@ class ModelFieldsService
      * no nullables, no database or application defaults
      *
      *
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFields(
         $withNullables = false,
@@ -91,7 +91,8 @@ class ModelFieldsService
      * @param  $withNullables  = false
      * @param  $withDefaults  = false
      * @param  $withPrimaryKey  = false
-     * @return array<string>
+     *
+     * @return string[]
      */
     public function getRequiredFieldsForOlderVersions(
         $withNullables = false,
@@ -136,7 +137,7 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFieldsWithNullables()
     {
@@ -146,7 +147,7 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFieldsWithDefaults()
     {
@@ -156,7 +157,7 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFieldsWithPrimaryKey()
     {
@@ -166,7 +167,7 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFieldsWithDefaultsAndPrimaryKey()
     {
@@ -176,7 +177,7 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFieldsWithNullablesAndDefaults()
     {
@@ -186,7 +187,7 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     public function getRequiredFieldsWithNullablesAndPrimaryKey()
     {
@@ -214,7 +215,7 @@ class ModelFieldsService
     /**
      * Get the primary field for the table
      *
-     * @return array<string>
+     * @return string[]
      */
     public function getPrimaryField()
     {
@@ -247,6 +248,9 @@ class ModelFieldsService
         return (float) App::version() < 10;
     }
 
+    /**
+     * @return string[]
+     */
     protected function getRequiredFieldsForSqlite(
         $withNullables = false,
         $withDefaults = false,
@@ -273,6 +277,9 @@ class ModelFieldsService
             ->toArray();
     }
 
+    /**
+     * @return string[]
+     */
     protected function getRequiredFieldsForMysqlAndMariaDb(
         $withNullables = false,
         $withDefaults = false,
@@ -322,6 +329,9 @@ class ModelFieldsService
             ->toArray();
     }
 
+    /**
+     * @return string[]
+     */
     protected function getRequiredFieldsForPostgres(
         $withNullables = false,
         $withDefaults = false,
@@ -402,6 +412,9 @@ class ModelFieldsService
             ->toArray();
     }
 
+    /**
+     * @return string[]
+     */
     protected function getRequiredFieldsForSqlServer(
         $withNullables = false,
         $withDefaults = false,
@@ -474,14 +487,17 @@ class ModelFieldsService
     }
 
     /**
-     * @return array<string>
+     * @return string[]
      */
     protected function getModelDefaultAttributes()
     {
         return array_keys((new $this->model)->getAttributes());
     }
 
-    private function throwIfNotUsingModelMethodFirst(): void
+    /**
+     * @return void
+     */
+    private function throwIfNotUsingModelMethodFirst()
     {
         if (is_null($this->model)) {
             throw new MissingModelMethodException('You should use the model method first');
