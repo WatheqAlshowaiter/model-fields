@@ -25,3 +25,14 @@
 - [x] fix issues with mariadb database
 - [x] test code for SQL server
 - [x] add GitHub action for all supported SQL databases
+- [x] use facade instead of trait
+- [x] use builder pattern
+- [x] test all the above
+- [x] use model fields instead of required model fields
+- [ ] make the trait @deprecated
+- [ ] use fields() then filter against it
+- [ ] change the readme docs in response to that
+- [ ] in next version remove trait and keep facade
+- [ ] in next version change the whole namespace, github about to model fields
+- [ ] then add methods along the way.. 
+- [ ] add command to get fields like backup-tables
