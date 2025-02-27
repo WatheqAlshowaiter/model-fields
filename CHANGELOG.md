@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 1.16.0 - 2025-02-27
+
+### What's Changed
+
+* feat: add facade to get fields in addition to trait way in https://github.com/WatheqAlshowaiter/model-required-fields/pull/15
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-required-fields/compare/1.14.0...1.16.0
+
 ## 1.15.0 - 2025-02-26
 
 ### What's Changed
