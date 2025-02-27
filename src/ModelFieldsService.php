@@ -19,6 +19,7 @@ class ModelFieldsService
     /**
      * Set up the model class to get fields from
      *
+     * @param  class-string<Model>  $modelClass
      *
      * @return $this
      */
@@ -36,7 +37,6 @@ class ModelFieldsService
     /**
      * Get the required fields that without it we will have a SQL error, not primary,
      * no nullables, no database or application defaults
-     *
      *
      * @return string[]
      */

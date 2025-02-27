@@ -286,7 +286,7 @@ class ModelFieldsTest extends TestCase
 
     public function test_accept_models_that_one_of_the_eloquent_ancestors()
     {
-        $this->assertequals([], ModelFields::model(Grandson::class)->getRequiredFields());
+        $this->assertEquals([], ModelFields::model(Grandson::class)->getRequiredFields());
     }
 
     public function test_throw_exception_if_use_get_methods_before_using_model_method()
