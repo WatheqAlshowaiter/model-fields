@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @deprecated
+ *
+ * @see ModelFields instead
+ */
 trait RequiredFields
 {
     /**
