@@ -2,6 +2,4 @@
 
 namespace WatheqAlshowaiter\ModelRequiredFields\Exceptions;
 
-class InvalidModelException extends \InvalidArgumentException
-{
-}
+class InvalidModelException extends \InvalidArgumentException {}

@@ -12,21 +12,20 @@ use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException
 class ModelFieldsService
 {
     /**
-     * @var Model $model
+     * @var Model
      */
     public $model;
 
     /**
      * Set up the model class to get fields from
      *
-     * @param $modelClass
      *
      * @return $this
      */
     public function model($modelClass)
     {
-        if (!$this->isEloquentModelClass($modelClass)) {
-            throw new InvalidModelException("Model class must be an instance of Eloquent model");
+        if (! $this->isEloquentModelClass($modelClass)) {
+            throw new InvalidModelException('Model class must be an instance of Eloquent model');
         }
 
         $this->model = $modelClass;
@@ -38,9 +37,6 @@ class ModelFieldsService
      * Get the required fields that without it we will have a SQL error, not primary,
      * no nullables, no database or application defaults
      *
-     * @param $withNullables
-     * @param $withDefaults
-     * @param $withPrimaryKey
      *
      * @return array<string>
      */
@@ -73,12 +69,12 @@ class ModelFieldsService
             })
             ->reject(function ($column) use ($primaryIndex, $withNullables, $withDefaults) {
                 return
-                    $column['nullable'] && !$withNullables ||
-                    $column['default'] != null && !$withDefaults ||
+                    $column['nullable'] && ! $withNullables ||
+                    $column['default'] != null && ! $withDefaults ||
                     (in_array($column['name'], $primaryIndex));
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->when($withPrimaryKey, function ($collection) use ($primaryIndex) {
@@ -92,10 +88,9 @@ class ModelFieldsService
      * Get the required fields for the old version when not supported from schema
      * So we need to write an individual query for each SQL database
      *
-     * @param $withNullables  = false
-     * @param $withDefaults  = false
-     * @param $withPrimaryKey  = false
-     *
+     * @param  $withNullables  = false
+     * @param  $withDefaults  = false
+     * @param  $withPrimaryKey  = false
      * @return array<string>
      */
     public function getRequiredFieldsForOlderVersions(
@@ -135,7 +130,7 @@ class ModelFieldsService
                 );
             default:
                 return [
-                    'error' => 'NOT SUPPORTED DATABASE DRIVER'
+                    'error' => 'NOT SUPPORTED DATABASE DRIVER',
                 ];
         }
     }
@@ -237,8 +232,6 @@ class ModelFieldsService
     }
 
     /**
-     * @param $modelClass
-     *
      * @return bool
      */
     protected function isEloquentModelClass($modelClass)
@@ -269,12 +262,12 @@ class ModelFieldsService
                 return (array) $column;
             })
             ->reject(function ($column) use ($withNullables, $withDefaults, $withPrimaryKey) {
-                return $column['pk'] && !$withPrimaryKey
-                    || $column['dflt_value'] != null && !$withDefaults
-                    || !$column['notnull'] && !$withNullables;
+                return $column['pk'] && ! $withPrimaryKey
+                    || $column['dflt_value'] != null && ! $withDefaults
+                    || ! $column['notnull'] && ! $withNullables;
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -289,7 +282,7 @@ class ModelFieldsService
         $modelDefaultAttributes = $this->getModelDefaultAttributes();
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -318,12 +311,12 @@ class ModelFieldsService
                 return $column;
             })
             ->reject(function ($column) use ($withNullables, $withDefaults, $withPrimaryKey) {
-                return $column['primary'] && !$withPrimaryKey
-                    || $column['default'] != null && !$withDefaults
-                    || $column['nullable'] && !$withNullables;
+                return $column['primary'] && ! $withPrimaryKey
+                    || $column['default'] != null && ! $withDefaults
+                    || $column['nullable'] && ! $withNullables;
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -375,7 +368,7 @@ class ModelFieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -394,12 +387,12 @@ class ModelFieldsService
                 return (array) $column;
             })
             ->reject(function ($column) use ($primaryIndex, $withDefaults, $withNullables) {
-                return ($column['default'] && !$withDefaults) ||
-                    ($column['nullable'] == 'YES' && !$withNullables) ||
+                return ($column['default'] && ! $withDefaults) ||
+                    ($column['nullable'] == 'YES' && ! $withNullables) ||
                     (in_array($column['name'], $primaryIndex));
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->when($withPrimaryKey, function ($collection) use ($primaryIndex) {
@@ -437,7 +430,7 @@ class ModelFieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -459,12 +452,12 @@ class ModelFieldsService
             })
             ->reject(function ($column) use ($withDefaults, $withNullables, $primaryIndex, $withPrimaryKey) {
                 return
-                    $column['default'] != null && !$withDefaults
-                    || $column['nullable'] && !$withNullables
-                    || (in_array($column['name'], $primaryIndex) && !$withPrimaryKey);
+                    $column['default'] != null && ! $withDefaults
+                    || $column['nullable'] && ! $withNullables
+                    || (in_array($column['name'], $primaryIndex) && ! $withPrimaryKey);
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -488,14 +481,10 @@ class ModelFieldsService
         return array_keys((new $this->model)->getAttributes());
     }
 
-    /**
-     * @return void
-     */
     private function throwIfNotUsingModelMethodFirst(): void
     {
         if (is_null($this->model)) {
-            throw new MissingModelMethodException("You should use the model method first");
+            throw new MissingModelMethodException('You should use the model method first');
         }
     }
-
 }

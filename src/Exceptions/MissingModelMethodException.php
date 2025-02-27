@@ -2,6 +2,4 @@
 
 namespace WatheqAlshowaiter\ModelRequiredFields\Exceptions;
 
-class MissingModelMethodException extends \BadMethodCallException
-{
-}
+class MissingModelMethodException extends \BadMethodCallException {}

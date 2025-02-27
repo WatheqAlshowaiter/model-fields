@@ -2,7 +2,6 @@
 
 namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
 
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelException;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException;
