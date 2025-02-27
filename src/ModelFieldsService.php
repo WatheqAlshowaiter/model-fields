@@ -20,7 +20,6 @@ class ModelFieldsService
      * Set up the model class to get fields from
      *
      * @param  class-string<Model>  $modelClass
-     *
      * @return $this
      */
     public function model($modelClass)
@@ -91,7 +90,6 @@ class ModelFieldsService
      * @param  $withNullables  = false
      * @param  $withDefaults  = false
      * @param  $withPrimaryKey  = false
-     *
      * @return string[]
      */
     public function getRequiredFieldsForOlderVersions(

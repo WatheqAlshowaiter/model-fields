@@ -1,5 +1,5 @@
 {
-    "rules": {
-        "phpdoc_separation": false
-    }
+    "notName": [
+        "ModelFields.php"
+    ]
 }
