@@ -30,7 +30,7 @@
 <!-- ./shields -->
 
 Get the **required** model fields, excluding **primary keys**, **nullable** fields, and fields with **defaults**. In
-other words, get the **minimal required** fields necessary to create the model without causing a database error.
+In other words, get the **minimal required** fields necessary to create the model without causing a database error.
 
 ## Installation
 
@@ -40,11 +40,12 @@ You can install the package via Composer:
 composer require watheqalshowaiter/model-required-fields --dev
 ```
 
-We prefer `--dev` because usually you will use it in development, not in production.
+We prefer `--dev` because you usually use it in development, not in production. If you have a use case that requires
+using the package in production, then remove the --dev flag.
 
 ## Usage
 
-We Assume that the `User` model has this schema as the defaults
+We Assume that the `User` model has this schema as the default.
 
 ```php
 Schema::create('users', function (Blueprint $table) {
@@ -59,9 +60,24 @@ Schema::create('users', function (Blueprint $table) {
 });
 ```
 
-- Add the `RequiredFields` trait to your model
+> [!IMPORTANT]  
+> We have two ways:
+> - Either use the `ModelFields` facade. (encouraged).
+> - Or use the `RequiredFields` trait. (less encouraged and will be removed in the next major version).
+
+We will explain the **trait way** in one example, and the other will be only using the **facade way** and all the methods
+on both ways are the same.
 
 ```php
+// Facade way
+use WatheqAlshowaiter\ModelRequiredFields\ModelFields;
+use App\Models\User;
+
+ModelFields::model(User::class)->getRequiredFields(); // returns ['name', 'email', 'password']
+```
+
+```php
+// Trait way
 use WatheqAlshowaiter\ModelRequiredFields\RequiredFields;
 
 class User extends Model
@@ -84,7 +100,7 @@ That's it!
 
 ### Another Complex Table
 
-let's say the `Post` model has these fields
+Let's say the `Post` model has these fields
 
 ```php
 Schema::create('posts', function (Blueprint $table) {
@@ -109,21 +125,8 @@ Schema::table('posts', function(Blueprint $table){
 });
 ```
 
-- We can add the `RequiredFields` trait to the `Post` Model
-
 ```php
-use WatheqAlshowaiter\ModelRequiredFields\RequiredFields;
-
-class Post extends Model
-{
-   use RequiredFields;
-}
-```
-
-- Now use the trait as follows
-
-```php
-Post::getRequiredFields(); // returns ['user_id', 'ulid', 'title', 'description']
+ModelFields::model(Post::class)->getRequiredFields(); // returns ['user_id', 'ulid', 'title', 'description']
 ```
 
 ### And more
@@ -132,32 +135,41 @@ We have the flexibility to get required fields with nullables, defaults, primary
 fields. You can use these methods with these results:
 
 ```php
-// The default parameters, only required fields
-Post::getRequiredFields(
-    $withNullables = false,
-    $withDefaults = false,
-    $withPrimaryKey = false
-);
+// The default parameters only required fields
+ModelFields::model(Post::class)
+    ->getRequiredFields(
+        $withNullables = false,
+        $withDefaults = false,
+        $withPrimaryKey = false
+    );
+
 // or
-Post::getRequiredFields();
+ModelFields::model(Post::class)->getRequiredFields();
 // returns ['user_id', 'ulid', 'title', 'description']
 ```
 
 ```php
 // get required fields with nullables
-Post::getRequiredFields(
-    $withNullables = true,
-    $withDefaults = false,
-    $withPrimaryKey = false
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+                $withNullables = true,
+                $withDefaults = false,
+                $withPrimaryKey = false        
+            );
+
 // or
-Post::getRequiredFields(
-    $withNullables = true,
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+                $withNullables = true    
+            );
+
 // or
-Post::getRequiredFields(true);
+ModelFields::model(Post::class)
+            ->getRequiredFields(true);
+
 // or
-Post::getRequiredFieldsWithNullables();
+ModelFields::model(Post::class)
+            ->getRequiredFieldsWithNullables();
 // returns
 // [
 //     'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug',
@@ -167,37 +179,46 @@ Post::getRequiredFieldsWithNullables();
 
 ```php
 // get required fields with defaults
-Post::getRequiredFields(
-    $withNullables = false,
-    $withDefaults = true,
-    $withPrimaryKey = false
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+                $withNullables = false,
+                $withDefaults = true,
+                $withPrimaryKey = false
+        );
+
 // or
-Post::getRequiredFieldsWithDefaults();
+ModelFields::model(Post::class)
+            ->getRequiredFieldsWithDefaults();
 // returns ['user_id', 'ulid', 'active', 'title', 'description']
 ```
 
 ```php
 // get required fields with primary key
-Post::getRequiredFields(
-    $withNullables = false,
-    $withDefaults = false,
-    $withPrimaryKey = true
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+            $withNullables = false,
+            $withDefaults = false,
+            $withPrimaryKey = true
+        );
+
 // or
-Post::getRequiredFieldsWithPrimaryKey();
+ModelFields::model(Post::class)
+            ->getRequiredFieldsWithPrimaryKey();
 // returns ['id', 'user_id', 'ulid', 'title', 'description']
 ```
 
 ```php
 // get required fields with nullables and defaults
-Post::getRequiredFields(
-    $withNullables = true,
-    $withDefaults = true,
-    $withPrimaryKey = false
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+                $withNullables = true,
+                $withDefaults = true,
+                $withPrimaryKey = false
+            );
+
 // or
-Post::getRequiredFieldsWithNullablesAndDefaults();
+ModelFields::model(Post::class)
+            ->getRequiredFieldsWithNullablesAndDefaults();
 // returns
 // [
 //     'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug',
@@ -207,13 +228,16 @@ Post::getRequiredFieldsWithNullablesAndDefaults();
 
 ```php
 // get required fields with nullables and primary key
-Post::getRequiredFields(
-    $withNullables = true,
-    $withDefaults = false,
-    $withPrimaryKey = true
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+                $withNullables = true,
+                $withDefaults = false,
+                $withPrimaryKey = true
+            );
+
 // or
-Post::getRequiredFieldsWithNullablesAndPrimaryKey();
+ModelFields::model(Post::class)
+            ->getRequiredFieldsWithNullablesAndPrimaryKey();
 // returns
 // [
 //     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug',
@@ -223,25 +247,31 @@ Post::getRequiredFieldsWithNullablesAndPrimaryKey();
 
 ```php
 // get required fields with defaults and primary key
-Post::getRequiredFields(
-    $withNullables = false,
-    $withDefaults = true,
-    $withPrimaryKey = true
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+            $withNullables = false,
+            $withDefaults = true,
+            $withPrimaryKey = true
+        );
+
 // or
-Post::getRequiredFieldsWithDefaultsAndPrimaryKey();
+ModelFields::model(Post::class)
+          ->getRequiredFieldsWithDefaultsAndPrimaryKey();
 // returns ['id', 'user_id', 'ulid', 'active', 'title', 'description']
 ```
 
 ```php
 // get required fields with nullables, defaults and primary key
-Post::getRequiredFields(
-    $withNullables = true,
-    $withDefaults = true,
-    $withPrimaryKey = true
-);
+ModelFields::model(Post::class)
+            ->getRequiredFields(
+                $withNullables = true,
+                $withDefaults = true,
+                $withPrimaryKey = true
+            );
+
 // or
-Post::getAllFields();
+ModelFields::model(Post::class)
+            ->getAllFields();
 // returns
 // [
 //     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description',
@@ -259,8 +289,7 @@ some tables have too many fields.
 
 ### The Solution
 
-To solve this, I created a simple trait that retrieves the required fields easily. Later, I added support for older
-Laravel versions, as that was where most of the use cases occurred. Eventually, I extracted it into this package.
+To solve this, I created a simple trait (and a facade class) that retrieves the required fields easily. Later, I added support for older Laravel versions, as that was where most of the use cases occurred. Eventually, I extracted it into this package.
 
 So Briefly, This package is useful if:
 
@@ -281,6 +310,8 @@ So Briefly, This package is useful if:
 
 ✅ Full GitHub Action CI pipeline to format code and test against all Laravel and PHP versions.
 
+✅ Can return fields based on the dynamically added class strings (in the facade method).
+
 ## Testing
 
 ```sh
@@ -298,7 +329,7 @@ If you have any ideas or suggestions to improve it or fix bugs, your contributio
 I encourage you to look at [Issues](https://github.com/WatheqAlshowaiter/model-required-fields/issues) which are the
 most important features need to be added.
 
-If you have something different, submit an issue first to discus or report a bug, then do a pull request.
+If you have something different, submit an issue first to discuss or report a bug, then do a pull request.
 
 ## Security Vulnerabilities
 
