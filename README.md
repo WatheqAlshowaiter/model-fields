@@ -142,7 +142,7 @@ ModelFields::model(Post::class)
         $withDefaults = false,
         $withPrimaryKey = false
     );
-    
+
 // or
 ModelFields::model(Post::class)->getRequiredFields();
 // returns ['user_id', 'ulid', 'title', 'description']
@@ -156,11 +156,13 @@ ModelFields::model(Post::class)
                 $withDefaults = false,
                 $withPrimaryKey = false        
             );
+
 // or
 ModelFields::model(Post::class)
             ->getRequiredFields(
                 $withNullables = true    
             );
+
 // or
 ModelFields::model(Post::class)
             ->getRequiredFields(true);
@@ -183,7 +185,7 @@ ModelFields::model(Post::class)
                 $withDefaults = true,
                 $withPrimaryKey = false
         );
-        
+
 // or
 ModelFields::model(Post::class)
             ->getRequiredFieldsWithDefaults();
@@ -213,7 +215,7 @@ ModelFields::model(Post::class)
                 $withDefaults = true,
                 $withPrimaryKey = false
             );
-            
+
 // or
 ModelFields::model(Post::class)
             ->getRequiredFieldsWithNullablesAndDefaults();
@@ -251,7 +253,7 @@ ModelFields::model(Post::class)
             $withDefaults = true,
             $withPrimaryKey = true
         );
-        
+
 // or
 ModelFields::model(Post::class)
           ->getRequiredFieldsWithDefaultsAndPrimaryKey();
