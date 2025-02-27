@@ -8,13 +8,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelException;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException;
+use WatheqAlshowaiter\ModelRequiredFields\Exceptions\UnsupportedDatabaseDriverException;
 
 class ModelFieldsService
 {
     /**
-     * @var Model
+     * @var class-string<Model>
      */
-    public $model;
+    protected $modelClass;
 
     /**
      * Set up the model class to get fields from
@@ -28,7 +29,7 @@ class ModelFieldsService
             throw new InvalidModelException('Model class must be an instance of Eloquent model');
         }
 
-        $this->model = $modelClass;
+        $this->modelClass = $modelClass;
 
         return $this;
     }
@@ -58,7 +59,7 @@ class ModelFieldsService
 
         $primaryIndex = $this->getPrimaryField();
 
-        return collect(Schema::getColumns((new $this->model)->getTable()))
+        return collect(Schema::getColumns((new $this->modelClass)->getTable()))
             ->map(function ($column) { // specific to mariadb
                 if ($column['default'] == 'NULL') {
                     $column['default'] = null;
@@ -128,9 +129,7 @@ class ModelFieldsService
                     $withPrimaryKey
                 );
             default:
-                return [
-                    'error' => 'NOT SUPPORTED DATABASE DRIVER',
-                ];
+                throw new UnsupportedDatabaseDriverException('Unsupported database driver.');
         }
     }
 
@@ -219,7 +218,7 @@ class ModelFieldsService
     {
         $this->throwIfNotUsingModelMethodFirst();
 
-        $modelTable = (new $this->model)->getTable();
+        $modelTable = (new $this->modelClass)->getTable();
 
         return collect(Schema::getIndexes($modelTable))
             ->filter(function ($index) {
@@ -243,7 +242,7 @@ class ModelFieldsService
      */
     protected function isLaravelVersionLessThan10()
     {
-        return (float) App::version() < 10;
+        return version_compare(App::version(), '10.0', '<');
     }
 
     /**
@@ -479,7 +478,7 @@ class ModelFieldsService
      */
     protected function getTableFromThisModel()
     {
-        $table = (new $this->model)->getTable();
+        $table = (new $this->modelClass)->getTable();
 
         return str_replace('.', '__', $table);
     }
@@ -489,15 +488,15 @@ class ModelFieldsService
      */
     protected function getModelDefaultAttributes()
     {
-        return array_keys((new $this->model)->getAttributes());
+        return array_keys((new $this->modelClass)->getAttributes());
     }
 
     /**
      * @return void
      */
-    private function throwIfNotUsingModelMethodFirst()
+    protected function throwIfNotUsingModelMethodFirst()
     {
-        if (is_null($this->model)) {
+        if (is_null($this->modelClass)) {
             throw new MissingModelMethodException('You should use the model method first');
         }
     }
