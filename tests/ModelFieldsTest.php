@@ -3,7 +3,6 @@
 namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelException;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException;
 use WatheqAlshowaiter\ModelRequiredFields\ModelFields;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Brother;
@@ -272,13 +271,14 @@ class ModelFieldsTest extends TestCase
         ];
 
         $this->assertEquals($expected, ModelFields::model(Brother::class)->getRequiredFieldsWithDefaults());
-        $this->assertEquals($expected,
-            ModelFields::model(Brother::class)->getRequiredFields($withNullables = false, $withDefaults = true));
+        $this->assertEquals($expected, ModelFields::model(Brother::class)->getRequiredFields(
+            $withNullables = false, $withDefaults = true
+        ));
     }
 
     public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
     {
-        $this->expectException(InvalidModelException::class);
+        $this->expectException(MissingModelMethodException::class);
         $this->expectExceptionMessage('Model class must be an instance of Eloquent model');
 
         ModelFields::model(Someone::class)->getRequiredFields();

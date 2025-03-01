@@ -3,12 +3,11 @@
 namespace WatheqAlshowaiter\ModelRequiredFields;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelException;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\UnsupportedDatabaseDriverException;
+use WatheqAlshowaiter\ModelRequiredFields\Support\Helpers;
 
 class ModelFieldsService
 {
@@ -26,7 +25,7 @@ class ModelFieldsService
     public function model($modelClass)
     {
         if (! $this->isEloquentModelClass($modelClass)) {
-            throw new InvalidModelException('Model class must be an instance of Eloquent model');
+            throw new MissingModelMethodException('Model class must be an instance of Eloquent model');
         }
 
         $this->modelClass = $modelClass;
@@ -47,7 +46,7 @@ class ModelFieldsService
     ) {
         $this->throwIfNotUsingModelMethodFirst();
 
-        if ($this->isLaravelVersionLessThan10()) {
+        if (Helpers::isLaravelVersionLessThan10()) {
             return $this->getRequiredFieldsForOlderVersions(
                 $withNullables,
                 $withDefaults,
@@ -55,7 +54,7 @@ class ModelFieldsService
             );
         }
 
-        $modelDefaultAttributes = $this->getModelDefaultAttributes();
+        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $primaryIndex = $this->getPrimaryField();
 
@@ -81,6 +80,7 @@ class ModelFieldsService
                 return $collection->prepend(...$primaryIndex);
             })
             ->unique()
+            ->values()
             ->toArray();
     }
 
@@ -238,14 +238,6 @@ class ModelFieldsService
     }
 
     /**
-     * @return bool
-     */
-    protected function isLaravelVersionLessThan10()
-    {
-        return version_compare(App::version(), '10.0', '<');
-    }
-
-    /**
      * @return string[]
      */
     protected function getRequiredFieldsForSqlite(
@@ -253,8 +245,8 @@ class ModelFieldsService
         $withDefaults = false,
         $withPrimaryKey = false
     ) {
-        $table = $this->getTableFromThisModel();
-        $modelDefaultAttributes = $this->getModelDefaultAttributes();
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $queryResult = DB::select(/** @lang SQLite */ "PRAGMA table_info($table)");
 
@@ -282,8 +274,8 @@ class ModelFieldsService
         $withDefaults = false,
         $withPrimaryKey = false
     ) {
-        $table = $this->getTableFromThisModel();
-        $modelDefaultAttributes = $this->getModelDefaultAttributes();
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $queryResult = DB::select(
             /** @lang SQLite */ "
@@ -334,8 +326,8 @@ class ModelFieldsService
         $withDefaults = false,
         $withPrimaryKey = false
     ) {
-        $table = $this->getTableFromThisModel();
-        $modelDefaultAttributes = $this->getModelDefaultAttributes();
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang PostgreSQL */ "
             SELECT
@@ -417,8 +409,8 @@ class ModelFieldsService
         $withDefaults = false,
         $withPrimaryKey = false
     ) {
-        $table = $this->getTableFromThisModel();
-        $modelDefaultAttributes = $this->getModelDefaultAttributes();
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang TSQL */ '
             SELECT
@@ -471,24 +463,6 @@ class ModelFieldsService
             })
             ->pluck('name')
             ->toArray();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getTableFromThisModel()
-    {
-        $table = (new $this->modelClass)->getTable();
-
-        return str_replace('.', '__', $table);
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getModelDefaultAttributes()
-    {
-        return array_keys((new $this->modelClass)->getAttributes());
     }
 
     /**
