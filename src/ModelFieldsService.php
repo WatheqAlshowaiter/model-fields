@@ -5,7 +5,7 @@ namespace WatheqAlshowaiter\ModelRequiredFields;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException;
+use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelClassException;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\UnsupportedDatabaseDriverException;
 use WatheqAlshowaiter\ModelRequiredFields\Support\Helpers;
 
@@ -25,7 +25,7 @@ class ModelFieldsService
     public function model($modelClass)
     {
         if (! $this->isEloquentModelClass($modelClass)) {
-            throw new MissingModelMethodException('Model class must be an instance of Eloquent model');
+            throw new InvalidModelClassException('Model class must be an instance of Eloquent model');
         }
 
         $this->modelClass = $modelClass;
@@ -471,7 +471,7 @@ class ModelFieldsService
     protected function throwIfNotUsingModelMethodFirst()
     {
         if (is_null($this->modelClass)) {
-            throw new MissingModelMethodException('You should use the model method first');
+            throw new InvalidModelClassException('You should use the model method first');
         }
     }
 }
