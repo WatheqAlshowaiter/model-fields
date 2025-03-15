@@ -19,8 +19,6 @@
 
 [ico-version]: https://img.shields.io/packagist/v/watheqalshowaiter/model-required-fields.svg?style=flat-square
 
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-
 [ico-downloads]: https://img.shields.io/packagist/dt/watheqalshowaiter/model-required-fields.svg?style=flat-square&color=%23007ec6
 
 [ico-code-style]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square
