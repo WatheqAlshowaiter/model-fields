@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 2.0.0 - 2025-03-15
+
+### What's Changed
+
+* Using models directly without the need for trait.
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-required-fields/compare/1.14.0...2.0.0
+
 ## 1.16.0 - 2025-02-27
 
 ### What's Changed
