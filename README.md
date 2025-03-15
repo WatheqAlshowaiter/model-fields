@@ -105,7 +105,8 @@ User::getRequiredFields(); // returns ['name', 'email', 'password']
 That's it!
 
 > [!NOTE]  
-> If you want to disable the macro way, you can change the `enable_macro` value to false after publishing the config file.
+> If you want to disable the macro way, you can change the `enable_macro` value to false after publishing the config
+> file.
 
 ### Another Complex Table
 
@@ -301,16 +302,16 @@ some tables have too many fields.
 
 ### The Solution
 
-To solve this, I created a simple trait (and a facade class) that retrieves the required fields easily. Later, I added
-support for older Laravel versions, as that was where most of the use cases occurred. Eventually, I extracted it into
-this package.
+To solve this, I first created a simple facade class and a trait (which was later removed) to allow direct method usage
+on models for retrieving required fields. Later, I added support for older Laravel versions, as most use cases were on
+those versions.
 
 So Briefly, This package is useful if:
 
 - you want to build factories or tests for projects you didn't start from scratch.
-- you are working with a legacy project and don't want to be faced with SQL errors when creating tables.
-- you have so many fields in your table and want to get the required fields fast.
-- or any use case you find it useful.
+    - you are working with a legacy project and don't want to be faced with SQL errors when creating tables.
+    - you have so many fields in your table and want to get the required fields fast.
+    - or any use case you find it useful.
 
 ## Features
 
@@ -354,7 +355,7 @@ them.
 
 - [Watheq Alshowaiter](https://github.com/WatheqAlshowaiter)
 
-- [All Contributors](https://github.com/WatheqAlshowaiter/model-required-fields/graphs/contributors)
+    - [All Contributors](https://github.com/WatheqAlshowaiter/model-required-fields/graphs/contributors)
 
 ## License
 
