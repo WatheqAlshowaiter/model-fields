@@ -45,6 +45,11 @@ composer require watheqalshowaiter/model-required-fields --dev
 We prefer `--dev` because you usually use it in development, not in production. If you have a use case that requires
 using the package in production, then remove the --dev flag.
 
+Optionally, if you want to publish the configuration to disable/enable model macros
+```sh
+php artisan vendor:publish --provider="WatheqAlshowaiter\ModelRequiredFields\ModelRequiredFieldsServiceProvider" --tag="config"
+```
+
 ## Usage
 
 We Assume that the `User` model has this schema as the default.
@@ -329,7 +334,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 If you have any ideas or suggestions to improve it or fix bugs, your contribution is welcome.
 
 I encourage you to look at [Issues](https://github.com/WatheqAlshowaiter/model-required-fields/issues) which are the
-most important features need to be added.
+most important features that need to be added.
 
 If you have something different, submit an issue first to discuss or report a bug, then do a pull request.
 

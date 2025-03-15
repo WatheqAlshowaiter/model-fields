@@ -2,7 +2,11 @@
 
 namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
+use ReflectionClass;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Brother;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Father;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Mother;
@@ -265,5 +269,56 @@ class RequiredFieldsTest extends TestCase
 
         $this->assertEquals($expected, Brother::getRequiredFieldsWithDefaults());
         $this->assertEquals($expected, Brother::getRequiredFields($withNullables = false, $withDefaults = true));
+    }
+
+    public function test_get_required_fields_only_if_config_enabled_macro()
+    {
+        // simulate when config model-required-fields.enable_macro => false
+        $this->removeMacro(Builder::class, 'getRequiredFields');
+
+        $this->expectException(\BadMethodCallException::class);
+        Father::getRequiredFields();
+    }
+
+    public function test_macro_is_overridden_when_same_static_method_name_added()
+    {
+        Schema::create('test_table', function ($table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        $testModelClass = new class extends Model
+        {
+            protected $table = 'test_table';
+
+            public static function getRequiredFields()
+            {
+                return [
+                    'some_field',
+                ];
+            }
+        };
+
+        $this->assertEquals(['some_field'], $testModelClass::getRequiredFields());
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function removeMacro(string $class, string $macro): void
+    {
+        if (! method_exists($class, 'hasMacro')) {
+            return;
+        }
+
+        $reflection = new ReflectionClass($class);
+        $property = $reflection->getProperty('macros');
+        $property->setAccessible(true);
+
+        $macros = $property->getValue();
+        unset($macros[$macro]);
+        $property->setValue($macros);
+        $property->setAccessible(false);
     }
 }
