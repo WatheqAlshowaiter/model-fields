@@ -103,8 +103,7 @@ User::getRequiredFields(); // returns ['name', 'email', 'password']
 That's it!
 
 > [!NOTE]  
-> If you want to disable the macro way, you can change the `enable_macro` value to false after publishing the config
-> file.
+> To disable the macro approach, set the `enable_macro` value to false in the published `model-required-fields.php` configuration file.
 
 ### Another Complex Table
 
