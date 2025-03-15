@@ -14,25 +14,38 @@
 [![StandWithPalestine][ico-palestine]][link-palestine]
 
 [ico-laravel]: https://img.shields.io/badge/Laravel-%E2%89%A56.0-ff2d20?style=flat-square&logo=laravel
+
 [ico-php]: https://img.shields.io/packagist/php-v/watheqalshowaiter/model-required-fields?color=%238892BF&style=flat-square&logo=php
+
 [ico-version]: https://img.shields.io/packagist/v/watheqalshowaiter/model-required-fields.svg?style=flat-square
+
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+
 [ico-downloads]: https://img.shields.io/packagist/dt/watheqalshowaiter/model-required-fields.svg?style=flat-square&color=%23007ec6
+
 [ico-code-style]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square
+
 [ico-tests-for-laravel-versions]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-laravel-versions.yml?branch=main&label=laravel%20versions%20tests&style=flat-square
+
 [ico-tests-for-databases]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-required-fields/tests-for-databases.yml?branch=main&label=databases%20tests&style=flat-square
+
 [ico-github-stars]: https://img.shields.io/github/stars/watheqalshowaiter/model-required-fields?style=flat-square
+
 [ico-palestine]: https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg
 
 [link-packagist]: https://packagist.org/packages/watheqalshowaiter/model-required-fields
+
 [link-downloads]: https://packagist.org/packages/watheqalshowaiter/model-required-fields/stats
+
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
 <!-- ./shields -->
 
-Get the **required** model fields, excluding **primary keys**, **nullable** fields, and fields with **defaults**. In other words, get the **minimal required** fields necessary to create the model without causing a database error.
+Get the **required** model fields, excluding **primary keys**, **nullable** fields, and fields with **defaults**. In
+other words, get the **minimal required** fields necessary to create the model without causing a database error.
 
 > [!Note]  
-> This is the documentation for version 2, if you want the version 1 documentation go with [this link](./v1.documentation.md)
+> This is the documentation for version 2, if you want the version 1 documentation go
+> with [this link](./v1.documentation.md)
 
 ## Installation
 
@@ -45,7 +58,8 @@ composer require watheqalshowaiter/model-required-fields --dev
 We prefer `--dev` because you usually use it in development, not in production. If you have a use case that requires
 using the package in production, then remove the --dev flag.
 
-Optionally, if you want to publish the configuration to disable/enable model macros
+Optionally, if you want to publish the configuration to disable/enable model macros.
+
 ```sh
 php artisan vendor:publish --provider="WatheqAlshowaiter\ModelRequiredFields\ModelRequiredFieldsServiceProvider" --tag="config"
 ```
@@ -69,11 +83,11 @@ Schema::create('users', function (Blueprint $table) {
 
 > [!IMPORTANT]  
 > We have two ways:
-> - Either use the `ModelFields` facade. (encouraged).
-> - Or use the `RequiredFields` trait. (less encouraged and will be removed in the next major version).
+> - Either use the `ModelFields` facade.
+> - Or use the method statically on the model. (using the magic of laravel macros).
 
-We will explain the **trait way** in one example, and the other will be only using the **facade way** and all the methods
-on both ways are the same.
+We will explain the **macro way** in two examples, and the other will be only using the **facade way** and all the
+methods in both ways are the same.
 
 ```php
 // Facade way
@@ -84,26 +98,14 @@ ModelFields::model(User::class)->getRequiredFields(); // returns ['name', 'email
 ```
 
 ```php
-// Trait way
-use WatheqAlshowaiter\ModelRequiredFields\RequiredFields;
-
-class User extends Model
-{
-   use RequiredFields;
-
-   protected $attributes = [
-       'random_number' => '1234',
-   ];
-}
-```
-
-- Now use the trait as follows
-
-```php
+// Macro way
 User::getRequiredFields(); // returns ['name', 'email', 'password']
 ```
 
 That's it!
+
+> [!NOTE]  
+> If you want to disable the macro way, you can change the `enable_macro` value to false after publishing the config file.
 
 ### Another Complex Table
 
@@ -133,7 +135,10 @@ Schema::table('posts', function(Blueprint $table){
 ```
 
 ```php
+// Facade way 
 ModelFields::model(Post::class)->getRequiredFields(); // returns ['user_id', 'ulid', 'title', 'description']
+// Macro way
+Post::getRequiredFields();  // returns ['user_id', 'ulid', 'title', 'description']
 ```
 
 ### And more
@@ -296,7 +301,9 @@ some tables have too many fields.
 
 ### The Solution
 
-To solve this, I created a simple trait (and a facade class) that retrieves the required fields easily. Later, I added support for older Laravel versions, as that was where most of the use cases occurred. Eventually, I extracted it into this package.
+To solve this, I created a simple trait (and a facade class) that retrieves the required fields easily. Later, I added
+support for older Laravel versions, as that was where most of the use cases occurred. Eventually, I extracted it into
+this package.
 
 So Briefly, This package is useful if:
 
