@@ -3,8 +3,7 @@
 namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelException;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\MissingModelMethodException;
+use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelClassException;
 use WatheqAlshowaiter\ModelRequiredFields\ModelFields;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Brother;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Father;
@@ -272,13 +271,14 @@ class ModelFieldsTest extends TestCase
         ];
 
         $this->assertEquals($expected, ModelFields::model(Brother::class)->getRequiredFieldsWithDefaults());
-        $this->assertEquals($expected,
-            ModelFields::model(Brother::class)->getRequiredFields($withNullables = false, $withDefaults = true));
+        $this->assertEquals($expected, ModelFields::model(Brother::class)->getRequiredFields(
+            $withNullables = false, $withDefaults = true
+        ));
     }
 
     public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
     {
-        $this->expectException(InvalidModelException::class);
+        $this->expectException(InvalidModelClassException::class);
         $this->expectExceptionMessage('Model class must be an instance of Eloquent model');
 
         ModelFields::model(Someone::class)->getRequiredFields();
@@ -291,7 +291,7 @@ class ModelFieldsTest extends TestCase
 
     public function test_throw_exception_if_use_get_methods_before_using_model_method()
     {
-        $this->expectException(MissingModelMethodException::class);
+        $this->expectException(InvalidModelClassException::class);
         $this->expectExceptionMessage('You should use the model method first');
 
         ModelFields::getRequiredFields();
@@ -299,7 +299,7 @@ class ModelFieldsTest extends TestCase
 
     public function test_throw_exception_if_use_get_older_versions_methods_before_using_model_method()
     {
-        $this->expectException(MissingModelMethodException::class);
+        $this->expectException(InvalidModelClassException::class);
         $this->expectExceptionMessage('You should use the model method first');
 
         ModelFields::getPrimaryField();
