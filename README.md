@@ -352,7 +352,7 @@ them.
 
 - [Watheq Alshowaiter](https://github.com/WatheqAlshowaiter)
 
-    - [All Contributors](https://github.com/WatheqAlshowaiter/model-required-fields/graphs/contributors)
+- [All Contributors](https://github.com/WatheqAlshowaiter/model-required-fields/graphs/contributors)
 
 ## License
 
