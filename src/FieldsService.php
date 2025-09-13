@@ -121,7 +121,7 @@ class FieldsService
 
     /**
      * @return string[]
-     * todo thinking what is better to return ['id'] or 'id'?
+     *                  todo thinking what is better to return ['id'] or 'id'?
      */
     public function primaryField()
     {
@@ -173,13 +173,13 @@ class FieldsService
 
         $databaseDriver = DB::connection()->getDriverName();
 
-        //todo until here
+        // todo until here
         switch ($databaseDriver) {
             case 'sqlite':
                 return $this->primaryFieldForSqlite();
             case 'mysql':
             case 'mariadb':
-            return $this->primaryFieldForMysqlAndMariaDb();
+                return $this->primaryFieldForMysqlAndMariaDb();
             case 'pgsql':
                 return $this->primaryFieldForPostgres();
             case 'sqlsrv':
@@ -239,7 +239,6 @@ class FieldsService
                 throw new UnsupportedDatabaseDriverException('Unsupported database driver.');
         }
     }
-
 
     /**
      * Get the required fields that without it we will have a SQL error, not primary,
@@ -389,7 +388,6 @@ class FieldsService
             ->toArray();
     }
 
-
     /**
      * @return string[]
      */
@@ -406,7 +404,6 @@ class FieldsService
             ->pluck('name')
             ->toArray();
     }
-
 
     /**
      * @return string[]
@@ -618,7 +615,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -653,7 +650,6 @@ class FieldsService
             ->toArray();
     }
 
-
     /**
      * @return string[]
      */
@@ -663,7 +659,7 @@ class FieldsService
 
         // todo simplify the query
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -791,8 +787,6 @@ class FieldsService
             ->toArray();
     }
 
-
-
     /**
      * @return string[]
      */
@@ -837,7 +831,6 @@ class FieldsService
             ->flatten()
             ->toArray();
     }
-
 
     /**
      * @return string[]
@@ -898,7 +891,7 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) {
-                return ($column['nullable'] == 'YES');
+                return $column['nullable'] == 'YES';
             })
             ->pluck('name')
             ->unique()
@@ -1076,7 +1069,6 @@ class FieldsService
             ->toArray();
     }
 
-
     /**
      * @return string[]
      */
@@ -1085,7 +1077,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -1108,7 +1100,6 @@ class FieldsService
             ->pluck('name')
             ->toArray();
     }
-
 
     /**
      * @return string[]
@@ -1224,7 +1215,7 @@ class FieldsService
      */
     private function getTableFromModel()
     {
-        //todo return Helpers::getTableFromThisModel($this->modelClass);
+        // todo return Helpers::getTableFromThisModel($this->modelClass);
         return (new $this->modelClass)->getTable();
     }
 }

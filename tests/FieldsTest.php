@@ -119,7 +119,6 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Brother::class)->nullableFieldsForOlderVersions());
     }
 
-
     public function test_required_fields_with_nullables()
     {
         $expected = [

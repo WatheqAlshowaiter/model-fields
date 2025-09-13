@@ -52,16 +52,20 @@ class Fields extends Facade
      * @method static string[] getRequiredFieldsWithPrimaryKey()
      *
      *  @see FieldsService::requiredFields()
-     *  @method static string[] requiredFields()
+     *
+     * @method static string[] requiredFields()
      *
      *  @see FieldsService::nullableFields()
-     *  @method static string[] nullableFields()
+     *
+     * @method static string[] nullableFields()
      *
      *  @see FieldsService::requiredFieldsForOlderVersions()
-     *  @method static string[] requiredFieldsForOlderVersions()
+     *
+     * @method static string[] requiredFieldsForOlderVersions()
      *
      *  @see FieldsService::nullableFieldsForOlderVersions()
-     *  @method static string[] nullableFieldsForOlderVersions()
+     *
+     * @method static string[] nullableFieldsForOlderVersions()
      */
     protected static function getFacadeAccessor(): string
     {
