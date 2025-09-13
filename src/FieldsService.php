@@ -1289,10 +1289,10 @@ class FieldsService
             ->map(function ($column) {
                 return (array) $column;
             })
-            ->filter(function ($column) {
+            ->filter(function ($column) use ($primaryIndex) {
                 // todo clean this later
-                // return $column['default'] && ! (in_array($column['name'], $primaryIndex));
-                return $column['default'] !== null;
+                 return $column['default'] !== null && ! (in_array($column['name'], $primaryIndex));
+                //return $column['default'] !== null;
 
             })
             ->pluck('name')
