@@ -113,7 +113,7 @@ class FieldsTest extends TestCase
     public function test_nullable_fields_for_brother_model()
     {
         $expected = [
-            'number'
+            'number',
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->nullableFields());
         $this->assertEquals($expected, Fields::model(Brother::class)->nullableFieldsForOlderVersions());
