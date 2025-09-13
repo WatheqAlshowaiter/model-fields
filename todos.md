@@ -48,3 +48,4 @@
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
 - [ ] add command to get fields like backup-tables
+- [ ] review coderabbit ai comments
