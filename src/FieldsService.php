@@ -1143,7 +1143,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -1162,7 +1162,7 @@ class FieldsService
                 return (array) $column;
             })
             ->reject(function ($column) use ($primaryIndex) {
-                return ($column['default']) ||
+                return $column['default'] ||
                     ($column['nullable'] == 'YES') ||
                     (in_array($column['name'], $primaryIndex));
             })
