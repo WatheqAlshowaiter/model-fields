@@ -41,9 +41,8 @@
     - [x] Fields::model(User::class)->allFields()  // all fields
 - [x] fix postgres database for databaseDefaultFields
 - [x] fix SQLServer in github action 
+- [x] fix all todos
+- [x] return github actions
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
-- [ ] then add methods along the way..
 - [ ] add command to get fields like backup-tables
-- [ ] fix all todos
-- [ ] return github actions 

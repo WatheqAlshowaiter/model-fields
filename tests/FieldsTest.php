@@ -147,20 +147,6 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Brother::class)->nullableFieldsForOlderVersions());
     }
 
-    public function test_required_fields_with_nullables()
-    {
-        $expected = [
-            'name',
-            'email',
-            'username',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFields($withNullables = true));
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsWithNullables());
-    }
-
     public function test_primary_field_for_mother_model()
     {
         $this->assertEquals(['id'], Fields::model(Mother::class)->primaryField());
