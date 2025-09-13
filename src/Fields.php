@@ -7,38 +7,57 @@ use Illuminate\Support\Facades\Facade;
 class Fields extends Facade
 {
     /**
-     * @see FieldsService::allFields()
-     *
-     * @method static string[] allFields()
-     *
-     *
      * @see FieldsService::model()
      *
      * @method static FieldsService model($modelClass)
      *
-     *  @see FieldsService::requiredFields()
+     * @see FieldsService::allFields()
+     *
+     * @method static string[] allFields()
+     *
+     * @see FieldsService::requiredFields()
      *
      * @method static string[] requiredFields()
      *
-     *  @see FieldsService::nullableFields()
+     * @see FieldsService::nullableFields()
      *
      * @method static string[] nullableFields()
      *
-     *  @see FieldsService::requiredFieldsForOlderVersions()
+     * @see FieldsService::primaryField()
      *
-     * @method static string[] requiredFieldsForOlderVersions()
+     * @method static string[] primaryField()
      *
-     *  @see FieldsService::nullableFieldsForOlderVersions()
+     * @see FieldsService::databaseDefaultFields()
+     *
+     * @method static string[] databaseDefaultFields()
+     *
+     * @see FieldsService::nullableFieldsForOlderVersions()
      *
      * @method static string[] nullableFieldsForOlderVersions()
      *
-     *  @see FieldsService::applicationDefaultFields()
+     * @see FieldsService::databaseDefaultFieldsForOlderVersions()
+     *
+     * @method static string[] databaseDefaultFieldsForOlderVersions()
+     *
+     * @see FieldsService::applicationDefaultFields()
      *
      * @method static string[] applicationDefaultFields()
      *
-     *  @see FieldsService::defaultFields()
+     * @see FieldsService::defaultFields()
      *
      * @method static string[] defaultFields()
+     *
+     * @see FieldsService::primaryFieldForOlderVersions()
+     *
+     * @method static string[] primaryFieldForOlderVersions()
+     *
+     * @see FieldsService::requiredFieldsForOlderVersions()
+     *
+     * @method static string[] requiredFieldsForOlderVersions()
+     *
+     * @see FieldsService::allFieldsForOlderVersions()
+     *
+     * @method static string[] allFieldsForOlderVersions()
      */
     protected static function getFacadeAccessor(): string
     {
