@@ -154,33 +154,30 @@ class FieldsTest extends TestCase
     // todo until here
 
     // databaseDefaultFields
-    public function test_database_default_fields_for_mother_model ()
+    public function test_database_default_fields_for_mother_model()
     {
         $expected = [
             'types',
         ];
-        $this->assertEquals($expected,Fields::model(Mother::class)->databaseDefaultFields());
-        $this->assertEquals($expected,Fields::model(Mother::class)->databaseDefaultFieldsForOlderVersions());
+        $this->assertEquals($expected, Fields::model(Mother::class)->databaseDefaultFields());
+        $this->assertEquals($expected, Fields::model(Mother::class)->databaseDefaultFieldsForOlderVersions());
     }
 
-    public function test_database_default_fields_for_father_model ()
+    public function test_database_default_fields_for_father_model()
     {
         $expected = [
             'active',
         ];
-        $this->assertEquals($expected,Fields::model(Father::class)->databaseDefaultFields());
-        $this->assertEquals($expected,Fields::model(Father::class)->databaseDefaultFieldsForOlderVersions());
+        $this->assertEquals($expected, Fields::model(Father::class)->databaseDefaultFields());
+        $this->assertEquals($expected, Fields::model(Father::class)->databaseDefaultFieldsForOlderVersions());
     }
 
-    public function test_database_default_fields_for_son_model ()
+    public function test_database_default_fields_for_son_model()
     {
         $expected = [];
-        $this->assertEquals($expected,Fields::model(Son::class)->databaseDefaultFields());
-        $this->assertEquals($expected,Fields::model(Son::class)->databaseDefaultFieldsForOlderVersions());
+        $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFields());
+        $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFieldsForOlderVersions());
     }
-
-
-
 
     public function test_get_required_fields_with_nullables_for_older_versions()
     {
