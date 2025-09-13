@@ -681,8 +681,7 @@ class FieldsService
     /**
      * @return string[]
      */
-    protected function databaseDefaultFieldsForMysqlAndMariaDb
-    ()
+    protected function databaseDefaultFieldsForMysqlAndMariaDb()
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
@@ -716,7 +715,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) {
-                return $column['default'];
+                return $column['default'] !== null;
             })
             ->pluck('name')
             ->toArray();
@@ -1143,7 +1142,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-            /** @lang PostgreSQL */ '
+        /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -1176,10 +1175,65 @@ class FieldsService
 
     /**
      * @return string[]
+     *
+     * todo 1) WatheqAlshowaiter\ModelRequiredFields\Tests\FieldsTest::test_database_default_fields_for_father_model
+     * Failed asserting that two arrays are equal.
+     * --- Expected
+     * +++ Actual
+     * @@ @@
+     * Array (
+     * -    0 => 'active'
+     * +    0 => 'id'
+     * +    1 => 'active'
+     * )
+     *
+     * /home/runner/work/model-required-fields/model-required-fields/tests/FieldsTest.php:171
+     *
+     * FAILURES!
+     * Tests: 76, Assertions: 137, Failures: 1.
+     * Error: Process completed with exit code 1.
      */
     protected function databaseDefaultFieldsForPostgres()
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $primaryIndex = DB::select(/** @lang PostgreSQL */ "
+            SELECT
+                ic.relname AS name,
+                string_agg(a.attname, ',' ORDER BY indseq.ord) AS columns,
+                am.amname AS type,
+                i.indisunique AS unique,
+                i.indisprimary AS primary
+            FROM
+                pg_index i
+                JOIN pg_class tc ON tc.oid = i.indrelid
+                JOIN pg_namespace tn ON tn.oid = tc.relnamespace
+                JOIN pg_class ic ON ic.oid = i.indexrelid
+                JOIN pg_am am ON am.oid = ic.relam
+                JOIN LATERAL unnest(i.indkey) WITH ORDINALITY AS indseq(num, ord) ON true
+                LEFT JOIN pg_attribute a ON a.attrelid = i.indrelid
+                AND a.attnum = indseq.num
+            WHERE
+                tc.relname = ?
+                AND tn.nspname = CURRENT_SCHEMA
+            GROUP BY
+                ic.relname,
+                am.amname,
+                i.indisunique,
+                i.indisprimary;
+        ", [$table]);
+
+        $primaryIndex = collect($primaryIndex)
+            ->map(function ($index) {
+                return (array) $index;
+            })
+            ->filter(function ($index) {
+                return $index['primary'];
+            })
+            ->pluck('columns')
+            ->flatten()
+            ->toArray();
+
 
         $queryResult = DB::select(
         /** @lang PostgreSQL */ '
@@ -1200,8 +1254,8 @@ class FieldsService
             ->map(function ($column) {
                 return (array) $column;
             })
-            ->filter(function ($column) {
-                return ($column['default']);
+            ->filter(function ($column) use ($primaryIndex) {
+                return $column['default'] && !(in_array($column['name'], $primaryIndex));
             })
             ->pluck('name')
             ->unique()
