@@ -157,7 +157,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) {
-                return $column['default'];
+                return $column['default'] !== null;
             })
             ->pluck('name')
             ->unique()
@@ -739,12 +739,6 @@ class FieldsService
             [$table]
         );
 
-        echo "\n\n=== DEBUG MySQL/MariaDB Query Result ===\n";
-        var_dump(collect($queryResult)->map(function ($column) {
-            return (array) $column;
-        })->toArray());
-        echo "=== END DEBUG ===\n\n";
-
         return collect($queryResult)
             ->map(function ($column) {
                 return (array) $column;
@@ -757,7 +751,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) {
-                return $column['default'] !== null && ! $column['primary'];
+                return $column['default'] !== null;
             })
             ->pluck('name')
             ->toArray();
@@ -1291,18 +1285,15 @@ class FieldsService
             [$table]
         );
 
-        echo "\n\n=== DEBUG PostgreSQL Query Result ===\n";
-        var_dump(collect($queryResult)->map(function ($column) {
-            return (array) $column;
-        })->toArray());
-        echo "=== END DEBUG ===\n\n";
-
         return collect($queryResult)
             ->map(function ($column) {
                 return (array) $column;
             })
-            ->filter(function ($column) use ($primaryIndex) {
-                return $column['default'] && ! (in_array($column['name'], $primaryIndex));
+            ->filter(function ($column) {
+                // todo clean this later
+                // return $column['default'] && ! (in_array($column['name'], $primaryIndex));
+                return $column['default'] !== null;
+
             })
             ->pluck('name')
             ->unique()
