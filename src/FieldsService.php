@@ -219,11 +219,11 @@ class FieldsService
     public function applicationDefaultFields()
     {
         $this->throwIfNotUsingModelMethodFirst();
-        
-        $modelInstance = new $this->modelClass();
+
+        $modelInstance = new $this->modelClass;
         $attributes = $modelInstance->getAttributes();
         $allFields = $this->allFields();
-        
+
         return collect($attributes)
             ->keys()
             ->filter(function ($field) use ($allFields) {
@@ -239,10 +239,10 @@ class FieldsService
     public function defaultFields()
     {
         $this->throwIfNotUsingModelMethodFirst();
-        
+
         $applicationDefaults = $this->applicationDefaultFields();
         $databaseDefaults = $this->databaseDefaultFields();
-        
+
         return collect($applicationDefaults)
             ->merge($databaseDefaults)
             ->unique()
@@ -749,7 +749,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) {
-                return $column['default'] !== null && !$column['primary'];
+                return $column['default'] !== null && ! $column['primary'];
             })
             ->pluck('name')
             ->toArray();

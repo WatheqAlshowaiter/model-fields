@@ -151,7 +151,6 @@ class FieldsTest extends TestCase
         $this->assertEquals(['id'], Fields::model(Son::class)->primaryFieldForOlderVersions());
     }
 
-
     // databaseDefaultFields
     public function test_database_default_fields_for_mother_model()
     {
@@ -179,7 +178,6 @@ class FieldsTest extends TestCase
     }
 
     // todo until here
-
 
     public function test_get_required_fields_with_nullables_for_older_versions()
     {
