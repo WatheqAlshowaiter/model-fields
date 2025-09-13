@@ -1138,7 +1138,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -1176,6 +1176,7 @@ class FieldsService
      * Failed asserting that two arrays are equal.
      * --- Expected
      * +++ Actual
+     *
      * @@ @@
      * Array (
      * -    0 => 'active'
@@ -1230,7 +1231,6 @@ class FieldsService
             ->flatten()
             ->toArray();
 
-
         $queryResult = DB::select(
             /** @lang PostgreSQL */ '
             SELECT
@@ -1251,7 +1251,7 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) use ($primaryIndex) {
-                return $column['default'] && !(in_array($column['name'], $primaryIndex));
+                return $column['default'] && ! (in_array($column['name'], $primaryIndex));
             })
             ->pluck('name')
             ->unique()
