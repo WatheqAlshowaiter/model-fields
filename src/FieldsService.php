@@ -216,6 +216,43 @@ class FieldsService
     /**
      * @return string[]
      */
+    public function applicationDefaultFields()
+    {
+        $this->throwIfNotUsingModelMethodFirst();
+        
+        $modelInstance = new $this->modelClass();
+        $attributes = $modelInstance->getAttributes();
+        $allFields = $this->allFields();
+        
+        return collect($attributes)
+            ->keys()
+            ->filter(function ($field) use ($allFields) {
+                return in_array($field, $allFields);
+            })
+            ->values()
+            ->toArray();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function defaultFields()
+    {
+        $this->throwIfNotUsingModelMethodFirst();
+        
+        $applicationDefaults = $this->applicationDefaultFields();
+        $databaseDefaults = $this->databaseDefaultFields();
+        
+        return collect($applicationDefaults)
+            ->merge($databaseDefaults)
+            ->unique()
+            ->values()
+            ->toArray();
+    }
+
+    /**
+     * @return string[]
+     */
     public function primaryFieldForOlderVersions()
     {
         $this->throwIfNotUsingModelMethodFirst();
@@ -712,7 +749,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) {
-                return $column['default'] !== null;
+                return $column['default'] !== null && !$column['primary'];
             })
             ->pluck('name')
             ->toArray();

@@ -151,7 +151,6 @@ class FieldsTest extends TestCase
         $this->assertEquals(['id'], Fields::model(Son::class)->primaryFieldForOlderVersions());
     }
 
-    // todo until here
 
     // databaseDefaultFields
     public function test_database_default_fields_for_mother_model()
@@ -178,6 +177,9 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFields());
         $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFieldsForOlderVersions());
     }
+
+    // todo until here
+
 
     public function test_get_required_fields_with_nullables_for_older_versions()
     {
@@ -423,5 +425,37 @@ class FieldsTest extends TestCase
         $this->expectExceptionMessage('You should use the model method first');
 
         ModelFields::getPrimaryField();
+    }
+
+    public function test_application_default_fields_for_brother_model()
+    {
+        $expected = [
+            'name',
+            'number',
+        ];
+        $this->assertEquals($expected, Fields::model(Brother::class)->applicationDefaultFields());
+    }
+
+    public function test_application_default_fields_for_father_model()
+    {
+        $expected = [];
+        $this->assertEquals($expected, Fields::model(Father::class)->applicationDefaultFields());
+    }
+
+    public function test_default_fields_for_brother_model()
+    {
+        $expected = [
+            'name',
+            'number',
+        ];
+        $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
+    }
+
+    public function test_default_fields_for_father_model()
+    {
+        $expected = [
+            'active',
+        ];
+        $this->assertEquals($expected, Fields::model(Father::class)->defaultFields());
     }
 }

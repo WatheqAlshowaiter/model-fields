@@ -66,6 +66,14 @@ class Fields extends Facade
      *  @see FieldsService::nullableFieldsForOlderVersions()
      *
      * @method static string[] nullableFieldsForOlderVersions()
+     *
+     *  @see FieldsService::applicationDefaultFields()
+     *
+     * @method static string[] applicationDefaultFields()
+     *
+     *  @see FieldsService::defaultFields()
+     *
+     * @method static string[] defaultFields()
      */
     protected static function getFacadeAccessor(): string
     {

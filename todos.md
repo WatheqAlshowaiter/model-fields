@@ -36,7 +36,7 @@
     - [x] Fields::model(User::class)->primaryField() // primary key 
     - [x] Fields::model(User::class)->requiredFields() // required fields 
     - [x] Fields::model(User::class)->nullableFields() // nullable fields
-    - [ ] Fields::model(User::class)->applicationDefaultFields() // laravel attributes fields 
+    - [x] Fields::model(User::class)->applicationDefaultFields() // laravel attributes fields 
     - [x] Fields::model(User::class)->databaseDefaultFields()  // database attributes fields
     - [ ] Fields::model(User::class)->defaultFields()  // both database and laravel fields
     - [x] Fields::model(User::class)->allFields()  // all fields
