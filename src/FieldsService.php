@@ -991,6 +991,82 @@ class FieldsService
     /**
      * @return string[]
      */
+    protected function requiredFieldsForPostgres() {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+
+        $primaryIndex = DB::select(/** @lang PostgreSQL */ "
+            SELECT
+                ic.relname AS name,
+                string_agg(a.attname, ',' ORDER BY indseq.ord) AS columns,
+                am.amname AS type,
+                i.indisunique AS unique,
+                i.indisprimary AS primary
+            FROM
+                pg_index i
+                JOIN pg_class tc ON tc.oid = i.indrelid
+                JOIN pg_namespace tn ON tn.oid = tc.relnamespace
+                JOIN pg_class ic ON ic.oid = i.indexrelid
+                JOIN pg_am am ON am.oid = ic.relam
+                JOIN LATERAL unnest(i.indkey) WITH ORDINALITY AS indseq(num, ord) ON true
+                LEFT JOIN pg_attribute a ON a.attrelid = i.indrelid
+                AND a.attnum = indseq.num
+            WHERE
+                tc.relname = ?
+                AND tn.nspname = CURRENT_SCHEMA
+            GROUP BY
+                ic.relname,
+                am.amname,
+                i.indisunique,
+                i.indisprimary;
+        ", [$table]);
+
+        $primaryIndex = collect($primaryIndex)
+            ->map(function ($index) {
+                return (array) $index;
+            })
+            ->filter(function ($index) {
+                return $index['primary'];
+            })
+            ->pluck('columns')
+            ->flatten()
+            ->toArray();
+
+        $queryResult = DB::select(
+        /** @lang PostgreSQL */ '
+            SELECT
+                is_nullable AS nullable,
+                column_name AS name,
+                column_default AS default
+            FROM
+                information_schema.columns
+            WHERE
+                table_name = ?
+            ORDER BY
+                ordinal_position ASC',
+            [$table]
+        );
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
+            })
+            ->reject(function ($column) use ($primaryIndex) {
+                return ($column['default']) ||
+                    ($column['nullable'] == 'YES') ||
+                    (in_array($column['name'], $primaryIndex));
+            })
+            ->reject(function ($column) use ($modelDefaultAttributes) {
+                return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->pluck('name')
+            ->unique()
+            ->toArray();
+    }
+
+    /**
+     * @return string[]
+     */
     protected function requiredFieldsForSqlServer()
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
