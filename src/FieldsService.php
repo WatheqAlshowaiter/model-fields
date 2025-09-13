@@ -753,7 +753,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) {
-                return $column['default'] !== null && !$column['primary'];
+                return $column['default'] !== null && ! $column['primary'];
             })
             ->pluck('name')
             ->toArray();
