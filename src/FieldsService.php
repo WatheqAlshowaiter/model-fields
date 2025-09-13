@@ -39,8 +39,7 @@ class FieldsService
         $this->throwIfNotUsingModelMethodFirst();
 
         if (Helpers::isLaravelVersionLessThan10()) {
-            //todo later
-            //return $this->getallFieldsForOlderVersions();
+            return $this->allFieldsForOlderVersions();
         }
 
         return collect(Schema::getColumns((new $this->modelClass)->getTable()))
@@ -92,6 +91,8 @@ class FieldsService
     }
 
     /**
+     * Get the fields that can be nullable when creating the model
+     *
      * @return string[]
      */
     public function nullableFields()
@@ -165,6 +166,30 @@ class FieldsService
                 return $this->requiredFieldsForPostgres();
             case 'sqlsrv':
                 return $this->requiredFieldsForSqlServer();
+            default:
+                throw new UnsupportedDatabaseDriverException('Unsupported database driver.');
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function allFieldsForOlderVersions()
+    {
+        $this->throwIfNotUsingModelMethodFirst();
+
+        $databaseDriver = DB::connection()->getDriverName();
+
+        switch ($databaseDriver) {
+            case 'sqlite':
+                return $this->allFieldsForSqlite();
+            case 'mysql':
+            case 'mariadb':
+                return $this->allFieldsForMysqlAndMariaDb();
+            case 'pgsql':
+                return $this->allFieldsForPostgres();
+            case 'sqlsrv':
+                return $this->allFieldsForSqlServer();
             default:
                 throw new UnsupportedDatabaseDriverException('Unsupported database driver.');
         }
@@ -299,6 +324,24 @@ class FieldsService
             ->pluck('name')
             ->toArray();
     }
+
+    /**
+     * @return string[]
+     */
+    protected function allFieldsForSqlite()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $queryResult = DB::select(/** @lang SQLite */ "PRAGMA table_info($table)");
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
+            })
+            ->pluck('name')
+            ->toArray();
+    }
+
 
     /**
      * @return string[]
@@ -506,6 +549,47 @@ class FieldsService
     /**
      * @return string[]
      */
+    protected function allFieldsForMysqlAndMariaDb()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        // todo simplify the query
+        $queryResult = DB::select(
+        /** @lang SQLite */ "
+            SELECT
+                COLUMN_NAME AS name,
+                COLUMN_TYPE AS type,
+                IF(IS_NULLABLE = 'YES', 1, 0) AS nullable,
+                COLUMN_DEFAULT AS `default`,
+                IF(COLUMN_KEY = 'PRI', 1, 0) AS `primary`
+            FROM
+                INFORMATION_SCHEMA.COLUMNS
+            WHERE
+                TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME = ?
+            ORDER BY
+                ORDINAL_POSITION ASC",
+            [$table]
+        );
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
+            })
+            ->map(function ($column) { // specific to mariadb
+                if ($column['default'] == 'NULL') {
+                    $column['default'] = null;
+                }
+
+                return $column;
+            })
+            ->pluck('name')
+            ->toArray();
+    }
+
+    /**
+     * @return string[]
+     */
     protected function nullableFieldsForMysqlAndMariaDb()
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
@@ -670,6 +754,38 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->pluck('name')
+            ->unique()
+            ->toArray();
+    }
+
+
+    /**
+     * @return string[]
+     */
+    protected function allFieldsForPostgres()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $queryResult = DB::select(
+        /** @lang PostgreSQL */ '
+            SELECT
+                is_nullable AS nullable,
+                column_name AS name,
+                column_default AS default
+            FROM
+                information_schema.columns
+            WHERE
+                table_name = ?
+            ORDER BY
+                ordinal_position ASC',
+            [$table]
+        );
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
             })
             ->pluck('name')
             ->unique()
@@ -854,6 +970,39 @@ class FieldsService
             ->pluck('name')
             ->toArray();
     }
+
+    /**
+     * @return string[]
+     */
+    protected function allFieldsForSqlServer()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $queryResult = DB::select(
+        /** @lang TSQL */ "
+            SELECT
+                COLUMN_NAME AS name,
+                DATA_TYPE AS type,
+                CASE WHEN IS_NULLABLE = 'YES' THEN 1 ELSE 0 END AS nullable,
+                COLUMN_DEFAULT AS [default]
+            FROM
+                INFORMATION_SCHEMA.COLUMNS
+            WHERE
+                TABLE_SCHEMA = SCHEMA_NAME()
+                AND TABLE_NAME = ?
+            ORDER BY
+                ORDINAL_POSITION ASC",
+            [$table]
+        );
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
+            })
+            ->pluck('name')
+            ->toArray();
+    }
+
 
     /**
      * @return string[]

@@ -17,9 +17,9 @@ class FieldsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_get_all_fields_for_father_model()
+    public function test_all_fields_for_father_model()
     {
-        $this->assertEquals([
+        $expected = [
             'id',
             'active',
             'name',
@@ -28,43 +28,43 @@ class FieldsTest extends TestCase
             'created_at',
             'updated_at',
             'deleted_at',
-        ], Fields::model(Father::class)->allFields());
+        ];
+        $this->assertEquals($expected, Fields::model(Father::class)->allFields());
+        $this->assertEquals($expected, Fields::model(Father::class)->allFieldsForOlderVersions());
     }
 
-    public function test_get_all_fields_for_mother_model()
+    public function test_all_fields_for_mother_model()
     {
-        $this->assertEquals([
+        $expected = [
             'id',
             'types',
             'uuid',
             'ulid',
             'description',
-        ], Fields::model(Mother::class)->allFields());
+        ];
+        $this->assertEquals($expected, Fields::model(Mother::class)->allFields());
+        $this->assertEquals($expected, Fields::model(Mother::class)->allFieldsForOlderVersions());
     }
 
-    public function test_get_all_fields_for_son_model()
+    public function test_all_fields_for_son_model()
     {
-        $this->assertEquals([
+        $expected = [
             'id',
             'father_id',
             'mother_id',
-        ], Fields::model(Son::class)->allFields());
+        ];
+        $this->assertEquals($expected, Fields::model(Son::class)->allFields());
+        $this->assertEquals($expected, Fields::model(Son::class)->allFieldsForOlderVersions());
     }
 
     public function test_required_fields_for_father_model()
     {
-        $this->assertEquals([
+        $expected = [
             'name',
             'email',
-        ], Fields::model(Father::class)->requiredFields());
-    }
-
-    public function test_required_fields_for_father_model_for_older_versions()
-    {
-        $this->assertEquals([
-            'name',
-            'email',
-        ], Fields::model(Father::class)->requiredFieldsForOlderVersions());
+        ];
+        $this->assertEquals($expected, Fields::model(Father::class)->requiredFields());
+        $this->assertEquals($expected, Fields::model(Father::class)->requiredFieldsForOlderVersions());
     }
 
     public function test_required_fields_in_order()
