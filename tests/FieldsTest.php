@@ -119,7 +119,6 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Brother::class)->nullableFieldsForOlderVersions());
     }
 
-    // todo until here
 
     public function test_required_fields_with_nullables()
     {
@@ -135,6 +134,25 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsWithNullables());
     }
 
+    public function test_primary_field_for_mother_model()
+    {
+        $this->assertEquals(['id'], Fields::model(Mother::class)->primaryField());
+        $this->assertEquals(['id'], Fields::model(Mother::class)->primaryFieldForOlderVersions());
+    }
+
+    public function test_primary_field_for_father_model()
+    {
+        $this->assertEquals(['id'], Fields::model(Father::class)->primaryField());
+        $this->assertEquals(['id'], Fields::model(Father::class)->primaryFieldForOlderVersions());
+    }
+
+    public function test_primary_field_for_son_model()
+    {
+        $this->assertEquals(['id'], Fields::model(Son::class)->primaryField());
+        $this->assertEquals(['id'], Fields::model(Son::class)->primaryFieldForOlderVersions());
+    }
+
+    // todo until here
     public function test_get_required_fields_with_nullables_for_older_versions()
     {
         $expected = [

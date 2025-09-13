@@ -42,7 +42,7 @@ class FieldsService
             return $this->allFieldsForOlderVersions();
         }
 
-        return collect(Schema::getColumns((new $this->modelClass)->getTable()))
+        return collect(Schema::getColumns($this->getTableFromModel()))
             ->pluck('name')
             ->unique()
             ->values()
@@ -67,7 +67,7 @@ class FieldsService
 
         $primaryIndex = $this->getPrimaryField();
 
-        return collect(Schema::getColumns((new $this->modelClass)->getTable()))
+        return collect(Schema::getColumns($this->getTableFromModel()))
             ->map(function ($column) { // specific to mariadb
                 if ($column['default'] == 'NULL') {
                     $column['default'] = null;
@@ -103,7 +103,7 @@ class FieldsService
             return $this->nullableFieldsForOlderVersions();
         }
 
-        return collect(Schema::getColumns((new $this->modelClass)->getTable()))
+        return collect(Schema::getColumns($this->getTableFromModel()))
             ->map(function ($column) { // specific to mariadb
                 if ($column['default'] == 'NULL') {
                     $column['default'] = null;
@@ -117,6 +117,27 @@ class FieldsService
             ->pluck('name')
             ->unique()
             ->values()
+            ->toArray();
+    }
+
+    /**
+     * @return string[]
+     * todo thinking what is better to return ['id'] or 'id'?
+     */
+    public function primaryField()
+    {
+        $this->throwIfNotUsingModelMethodFirst();
+
+        if (Helpers::isLaravelVersionLessThan10()) {
+            return $this->primaryFieldForOlderVersions();
+        }
+
+        return collect(Schema::getIndexes($this->getTableFromModel()))
+            ->filter(function ($index) {
+                return $index['primary'];
+            })
+            ->pluck('columns')
+            ->flatten()
             ->toArray();
     }
 
@@ -139,6 +160,31 @@ class FieldsService
                 return $this->nullableFieldsForPostgres();
             case 'sqlsrv':
                 return $this->nullableFieldsForSqlServer();
+            default:
+                throw new UnsupportedDatabaseDriverException('Unsupported database driver.');
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function primaryFieldForOlderVersions()
+    {
+        $this->throwIfNotUsingModelMethodFirst();
+
+        $databaseDriver = DB::connection()->getDriverName();
+
+        //todo until here
+        switch ($databaseDriver) {
+            case 'sqlite':
+                return $this->primaryFieldForSqlite();
+            case 'mysql':
+            case 'mariadb':
+            return $this->primaryFieldForMysqlAndMariaDb();
+            case 'pgsql':
+                return $this->primaryFieldForPostgres();
+            case 'sqlsrv':
+                return $this->primaryFieldForSqlServer();
             default:
                 throw new UnsupportedDatabaseDriverException('Unsupported database driver.');
         }
@@ -221,7 +267,7 @@ class FieldsService
 
         $primaryIndex = $this->getPrimaryField();
 
-        return collect(Schema::getColumns((new $this->modelClass)->getTable()))
+        return collect(Schema::getColumns($this->getTableFromModel()))
             ->map(function ($column) { // specific to mariadb
                 if ($column['default'] == 'NULL') {
                     $column['default'] = null;
@@ -324,6 +370,27 @@ class FieldsService
             ->pluck('name')
             ->toArray();
     }
+
+    /**
+     * @return string[]
+     */
+    protected function primaryFieldForSqlite()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $queryResult = DB::select(/** @lang SQLite */ "PRAGMA table_info($table)");
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
+            })
+            ->filter(function ($column) {
+                return $column['pk'];
+            })
+            ->pluck('name')
+            ->toArray();
+    }
+
 
     /**
      * @return string[]
@@ -449,7 +516,7 @@ class FieldsService
     {
         $this->throwIfNotUsingModelMethodFirst();
 
-        $modelTable = (new $this->modelClass)->getTable();
+        $modelTable = $this->getTableFromModel();
 
         return collect(Schema::getIndexes($modelTable))
             ->filter(function ($index) {
@@ -545,6 +612,50 @@ class FieldsService
             ->pluck('name')
             ->toArray();
     }
+
+    /**
+     * @return string[]
+     */
+    protected function primaryFieldForMysqlAndMariaDb()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $queryResult = DB::select(
+        /** @lang SQLite */ "
+            SELECT
+                COLUMN_NAME AS name,
+                COLUMN_TYPE AS type,
+                IF(IS_NULLABLE = 'YES', 1, 0) AS nullable,
+                COLUMN_DEFAULT AS `default`,
+                IF(COLUMN_KEY = 'PRI', 1, 0) AS `primary`
+            FROM
+                INFORMATION_SCHEMA.COLUMNS
+            WHERE
+                TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME = ?
+            ORDER BY
+                ORDINAL_POSITION ASC",
+            [$table]
+        );
+
+        return collect($queryResult)
+            ->map(function ($column) {
+                return (array) $column;
+            })
+            ->map(function ($column) { // specific to mariadb
+                if ($column['default'] == 'NULL') {
+                    $column['default'] = null;
+                }
+
+                return $column;
+            })
+            ->filter(function ($column) {
+                return $column['primary'];
+            })
+            ->pluck('name')
+            ->toArray();
+    }
+
 
     /**
      * @return string[]
@@ -683,13 +794,14 @@ class FieldsService
             ->toArray();
     }
 
+
+
     /**
      * @return string[]
      */
-    protected function requiredFieldsForPostgres()
+    protected function primaryFieldForPostgres()
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
-        $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang PostgreSQL */ "
             SELECT
@@ -717,7 +829,7 @@ class FieldsService
                 i.indisprimary;
         ", [$table]);
 
-        $primaryIndex = collect($primaryIndex)
+        return collect($primaryIndex)
             ->map(function ($index) {
                 return (array) $index;
             })
@@ -726,37 +838,6 @@ class FieldsService
             })
             ->pluck('columns')
             ->flatten()
-            ->toArray();
-
-        $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
-            SELECT
-                is_nullable AS nullable,
-                column_name AS name,
-                column_default AS default
-            FROM
-                information_schema.columns
-            WHERE
-                table_name = ?
-            ORDER BY
-                ordinal_position ASC',
-            [$table]
-        );
-
-        return collect($queryResult)
-            ->map(function ($column) {
-                return (array) $column;
-            })
-            ->reject(function ($column) use ($primaryIndex) {
-                return ($column['default']) ||
-                    ($column['nullable'] == 'YES') ||
-                    (in_array($column['name'], $primaryIndex));
-            })
-            ->reject(function ($column) use ($modelDefaultAttributes) {
-                return in_array($column['name'], $modelDefaultAttributes);
-            })
-            ->pluck('name')
-            ->unique()
             ->toArray();
     }
 
@@ -820,7 +901,7 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) {
-                return  ($column['nullable'] == 'YES');
+                return ($column['nullable'] == 'YES');
             })
             ->pluck('name')
             ->unique()
@@ -974,6 +1055,34 @@ class FieldsService
     /**
      * @return string[]
      */
+    protected function primaryFieldForSqlServer()
+    {
+        $table = Helpers::getTableFromThisModel($this->modelClass);
+
+        $primaryIndex = DB::select(/** @lang TSQL */ '
+            SELECT
+                COL_NAME(ic.object_id, ic.column_id) AS [column]
+            FROM
+                sys.indexes AS i
+                INNER JOIN sys.index_columns AS ic
+                    ON i.object_id = ic.object_id
+                    AND i.index_id = ic.index_id
+                INNER JOIN sys.objects AS o
+                    ON i.object_id = o.object_id
+            WHERE
+                i.is_primary_key = 1
+                AND o.name = ?
+                AND SCHEMA_NAME(o.schema_id) = schema_name()', [$table]);
+
+        return collect($primaryIndex)
+            ->pluck('column')
+            ->toArray();
+    }
+
+
+    /**
+     * @return string[]
+     */
     protected function allFieldsForSqlServer()
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
@@ -1111,5 +1220,14 @@ class FieldsService
         if (is_null($this->modelClass)) {
             throw new InvalidModelClassException('You should use the model method first');
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getTableFromModel()
+    {
+        //todo return Helpers::getTableFromThisModel($this->modelClass);
+        return (new $this->modelClass)->getTable();
     }
 }
