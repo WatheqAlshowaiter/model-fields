@@ -20,12 +20,11 @@ class FieldsService
      * Set up the model class to get fields from
      *
      * @param  class-string<Model>  $modelClass
-     *
      * @return $this
      */
     public function model($modelClass)
     {
-        if (!$this->isEloquentModelClass($modelClass)) {
+        if (! $this->isEloquentModelClass($modelClass)) {
             throw new InvalidModelClassException('Model class must be an instance of Eloquent model');
         }
 
@@ -39,8 +38,8 @@ class FieldsService
         $this->throwIfNotUsingModelMethodFirst();
 
         if (Helpers::isLaravelVersionLessThan10()) {
-            //todo later
-            //return $this->getallFieldsForOlderVersions();
+            // todo later
+            // return $this->getallFieldsForOlderVersions();
         }
 
         return collect(Schema::getColumns((new $this->modelClass)->getTable()))
@@ -170,7 +169,6 @@ class FieldsService
         }
     }
 
-
     /**
      * Get the required fields that without it we will have a SQL error, not primary,
      * no nullables, no database or application defaults
@@ -206,12 +204,12 @@ class FieldsService
             })
             ->reject(function ($column) use ($primaryIndex, $withNullables, $withDefaults) {
                 return
-                    $column['nullable'] && !$withNullables ||
-                    $column['default'] != null && !$withDefaults ||
+                    $column['nullable'] && ! $withNullables ||
+                    $column['default'] != null && ! $withDefaults ||
                     (in_array($column['name'], $primaryIndex));
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->when($withPrimaryKey, function ($collection) use ($primaryIndex) {
@@ -229,7 +227,6 @@ class FieldsService
      * @param  $withNullables  = false
      * @param  $withDefaults  = false
      * @param  $withPrimaryKey  = false
-     *
      * @return string[]
      *
      * @deprecated
@@ -291,7 +288,7 @@ class FieldsService
             ->reject(function ($column) {
                 return $column['pk']
                     || $column['dflt_value'] != null
-                    || !$column['notnull'];
+                    || ! $column['notnull'];
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
@@ -314,12 +311,11 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) {
-                return !$column['notnull'];
+                return ! $column['notnull'];
             })
             ->pluck('name')
             ->toArray();
     }
-
 
     /**
      * @return string[]
@@ -443,12 +439,12 @@ class FieldsService
                 return (array) $column;
             })
             ->reject(function ($column) use ($withNullables, $withDefaults, $withPrimaryKey) {
-                return $column['pk'] && !$withPrimaryKey
-                    || $column['dflt_value'] != null && !$withDefaults
-                    || !$column['notnull'] && !$withNullables;
+                return $column['pk'] && ! $withPrimaryKey
+                    || $column['dflt_value'] != null && ! $withDefaults
+                    || ! $column['notnull'] && ! $withNullables;
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -463,7 +459,7 @@ class FieldsService
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -512,7 +508,7 @@ class FieldsService
 
         // todo exclude not nullable from the query
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -559,7 +555,7 @@ class FieldsService
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -588,12 +584,12 @@ class FieldsService
                 return $column;
             })
             ->reject(function ($column) use ($withNullables, $withDefaults, $withPrimaryKey) {
-                return $column['primary'] && !$withPrimaryKey
-                    || $column['default'] != null && !$withDefaults
-                    || $column['nullable'] && !$withNullables;
+                return $column['primary'] && ! $withPrimaryKey
+                    || $column['default'] != null && ! $withDefaults
+                    || $column['nullable'] && ! $withNullables;
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
@@ -645,7 +641,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -664,7 +660,7 @@ class FieldsService
                 return (array) $column;
             })
             ->reject(function ($column) use ($primaryIndex) {
-                return ($column['default']) ||
+                return $column['default'] ||
                     ($column['nullable'] == 'YES') ||
                     (in_array($column['name'], $primaryIndex));
             })
@@ -685,7 +681,7 @@ class FieldsService
 
         // todo just take nullables from the query
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -704,7 +700,7 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) {
-                return  ($column['nullable'] == 'YES');
+                return $column['nullable'] == 'YES';
             })
             ->pluck('name')
             ->unique()
@@ -760,7 +756,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -779,12 +775,12 @@ class FieldsService
                 return (array) $column;
             })
             ->reject(function ($column) use ($primaryIndex, $withDefaults, $withNullables) {
-                return ($column['default'] && !$withDefaults) ||
-                    ($column['nullable'] == 'YES' && !$withNullables) ||
+                return ($column['default'] && ! $withDefaults) ||
+                    ($column['nullable'] == 'YES' && ! $withNullables) ||
                     (in_array($column['name'], $primaryIndex));
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->when($withPrimaryKey, function ($collection) use ($primaryIndex) {
@@ -822,7 +818,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -848,7 +844,7 @@ class FieldsService
                     || $column['nullable']
                     || (in_array($column['name'], $primaryIndex));
             })
-            ->reject(function ($column) use ($modelDefaultAttributes,) {
+            ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
             })
             ->pluck('name')
@@ -863,7 +859,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -921,7 +917,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -943,12 +939,12 @@ class FieldsService
             })
             ->reject(function ($column) use ($withDefaults, $withNullables, $primaryIndex, $withPrimaryKey) {
                 return
-                    $column['default'] != null && !$withDefaults
-                    || $column['nullable'] && !$withNullables
-                    || (in_array($column['name'], $primaryIndex) && !$withPrimaryKey);
+                    $column['default'] != null && ! $withDefaults
+                    || $column['nullable'] && ! $withNullables
+                    || (in_array($column['name'], $primaryIndex) && ! $withPrimaryKey);
             })
             ->reject(function ($column) use ($modelDefaultAttributes, $withDefaults) {
-                return in_array($column['name'], $modelDefaultAttributes) && !$withDefaults;
+                return in_array($column['name'], $modelDefaultAttributes) && ! $withDefaults;
             })
             ->pluck('name')
             ->toArray();
