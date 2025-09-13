@@ -741,6 +741,11 @@ class FieldsService
             [$table]
         );
 
+        dump(
+            ['active'],
+            collect($queryResult)
+        );
+
         return collect($queryResult)
             ->map(function ($column) {
                 return (array) $column;
@@ -1285,6 +1290,11 @@ class FieldsService
             ORDER BY
                 ordinal_position ASC',
             [$table]
+        );
+
+        dump(
+            ['active'],
+            collect($queryResult)
         );
 
         return collect($queryResult)
