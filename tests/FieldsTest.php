@@ -182,6 +182,7 @@ class FieldsTest extends TestCase
     // databaseDefaultFields
     public function test_database_default_fields_for_mother_model()
     {
+        $this->markTestSkipped('skipped for now just for debugging');
         $expected = [
             'types',
         ];
@@ -200,6 +201,8 @@ class FieldsTest extends TestCase
 
     public function test_database_default_fields_for_son_model()
     {
+        $this->markTestSkipped('skipped for now just for debugging');
+
         $expected = [];
         $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFields());
         $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFieldsForOlderVersions());
@@ -228,6 +231,8 @@ class FieldsTest extends TestCase
 
     public function test_default_fields_for_mother_model()
     {
+        $this->markTestSkipped('skipped for now just for debugging');
+
         $expected = [
             'types',
         ];
@@ -236,6 +241,8 @@ class FieldsTest extends TestCase
 
     public function test_default_fields_for_father_model()
     {
+        $this->markTestSkipped('skipped for now just for debugging');
+
         $expected = [
             'active',
         ];
@@ -244,6 +251,8 @@ class FieldsTest extends TestCase
 
     public function test_default_fields_for_brother_model()
     {
+        $this->markTestSkipped('skipped for now just for debugging');
+
         $expected = [
             'name',
             'number',

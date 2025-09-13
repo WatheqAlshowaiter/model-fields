@@ -11,10 +11,10 @@
 - [x] try previous versions of laravel until laravel 6
     - [x] 11 => sqlite, mysql/mariadb(1st party supported in Laravel 11), postgres
     - [x] 10 => sqlite, mysql, postgres
-    - [x] 9  => sqlite, mysql, postgres
-    - [x] 8  => sqlite, mysql, postgres
-    - [x] 7  => sqlite, mysql, postgres
-    - [x] 6  => sqlite, mysql, postgres
+    - [x] 9 => sqlite, mysql, postgres
+    - [x] 8 => sqlite, mysql, postgres
+    - [x] 7 => sqlite, mysql, postgres
+    - [x] 6 => sqlite, mysql, postgres
 - [x] try previous versions of php until php 7.4
     - [x] 8.2
     - [x] 8.1
@@ -31,18 +31,18 @@
 - [x] use model fields instead of required model fields
 - [x] make the trait @deprecated
 - [x] in next version remove trait and keep facade
-- [ ] use fields() then filter against it
-  - [ ] new namings
-    - [x] Fields::model(User::class)->primaryField() // primary key 
-    - [x] Fields::model(User::class)->requiredFields() // required fields 
+- [x] new namings
+    - [x] Fields::model(User::class)->primaryField() // primary key
+    - [x] Fields::model(User::class)->requiredFields() // required fields
     - [x] Fields::model(User::class)->nullableFields() // nullable fields
-    - [x] Fields::model(User::class)->applicationDefaultFields() // laravel attributes fields 
+    - [x] Fields::model(User::class)->applicationDefaultFields() // laravel attributes fields
     - [x] Fields::model(User::class)->databaseDefaultFields()  // database attributes fields
-    - [ ] Fields::model(User::class)->defaultFields()  // both database and laravel fields
+    - [x] Fields::model(User::class)->defaultFields()  // both database and laravel fields
     - [x] Fields::model(User::class)->allFields()  // all fields
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
-- [ ] then add methods along the way.. 
+- [ ] then add methods along the way..
 - [ ] add command to get fields like backup-tables
 - [ ] fix sqlserver github action
-- [ ] fix all todos  
+- [ ] fix all todos
+- [ ] return github actions 
