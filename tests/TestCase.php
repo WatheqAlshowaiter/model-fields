@@ -80,6 +80,7 @@ class TestCase extends Orchestra
                 'database' => env('DB_DATABASE', 'master'),
                 'username' => env('DB_USERNAME', 'SA'),
                 'password' => env('DB_PASSWORD', 'Forge123'),
+                'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', true),
             ]);
         }
 

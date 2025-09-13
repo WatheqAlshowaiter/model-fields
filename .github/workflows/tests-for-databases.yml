@@ -253,3 +253,5 @@ jobs:
           DB_DATABASE: master
           DB_USERNAME: SA
           DB_PASSWORD: Forge123
+          DB_ENCRYPT: true
+          DB_TRUST_SERVER_CERTIFICATE: true
