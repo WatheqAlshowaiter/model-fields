@@ -221,6 +221,14 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Install SQL Server ODBC Driver and Tools
+        run: |
+          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+          curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev
+          echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> $GITHUB_ENV
+
       - name: Set Framework version
         run: composer config version "12.x-dev"
 
@@ -231,7 +239,7 @@ jobs:
         run: |
           echo "Waiting for SQL Server to start..."
           for i in {1..30}; do
-            /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Forge123 -Q "SELECT 1" && break
+            /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P Forge123 -Q "SELECT 1" && break
             echo "SQL Server is starting up..."
             sleep 2
           done
