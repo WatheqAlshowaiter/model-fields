@@ -741,7 +741,7 @@ class FieldsService
 
         dump(
             ['active'],
-            collect($queryResult)
+            collect($queryResult)->map(function ($column) {return (array) $column;})
         );
 
         return collect($queryResult)
@@ -1292,7 +1292,7 @@ class FieldsService
 
         dump(
             ['active'],
-            collect($queryResult)
+            collect($queryResult)->map(function ($column) {return (array) $column;})
         );
 
         return collect($queryResult)
