@@ -17,6 +17,36 @@ class FieldsTest extends TestCase
 {
     use RefreshDatabase;
 
+
+    public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
+    {
+        $this->expectException(InvalidModelClassException::class);
+        $this->expectExceptionMessage('Model class must be an instance of Eloquent model');
+
+        Fields::model(Someone::class)->requiredFields();
+    }
+
+    public function test_accept_models_that_one_of_the_eloquent_ancestors()
+    {
+        $this->assertEquals([], Fields::model(Grandson::class)->requiredFields());
+    }
+
+    public function test_throw_exception_if_use_get_methods_before_using_model_method()
+    {
+        $this->expectException(InvalidModelClassException::class);
+        $this->expectExceptionMessage('You should use the model method first');
+
+        Fields::requiredFields();
+    }
+
+    public function test_throw_exception_if_use_get_older_versions_methods_before_using_model_method()
+    {
+        $this->expectException(InvalidModelClassException::class);
+        $this->expectExceptionMessage('You should use the model method first');
+
+        Fields::primaryField();
+    }
+
     public function test_all_fields_for_father_model()
     {
         $expected = [
@@ -178,253 +208,16 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Son::class)->databaseDefaultFieldsForOlderVersions());
     }
 
-    // todo until here
-
-
-    public function test_get_required_fields_with_nullables_for_older_versions()
+    public function test_application_default_fields_for_mother_model()
     {
-        $expected = [
-            'name',
-            'email',
-            'username',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-        $this->assertEquals($expected,
-            Fields::model(Father::class)->getRequiredFieldsForOlderVersions($withNullables = true));
+        $expected = [];
+        $this->assertEquals($expected, Fields::model(Mother::class)->applicationDefaultFields());
     }
 
-    public function test_get_required_fields_with_defaults()
+    public function test_application_default_fields_for_father_model()
     {
-        $expected = [
-            'active',
-            'name',
-            'email',
-        ];
-        $this->assertEquals($expected,
-            Fields::model(Father::class)->getRequiredFields($withNullables = false, $withDefaults = true));
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsForOlderVersions(
-            $withNullables = false,
-            $withDefaults = true
-        ));
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsWithDefaults());
-    }
-
-    public function test_get_required_with_primary_key()
-    {
-        $expected = [
-            'id',
-            'name',
-            'email',
-        ];
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFields(
-            $withNullables = false,
-            $withDefaults = false,
-            $withPrimaryKey = true
-        ));
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsForOlderVersions(
-            $withNullables = false,
-            $withDefaults = false,
-            $withPrimaryKey = true
-        ));
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsWithPrimaryKey());
-    }
-
-    public function test_get_required_with_nullables_and_defaults()
-    {
-        $expected = [
-            'active',
-            'name',
-            'email',
-            'username',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFields(
-            $withNullables = true,
-            $withDefaults = true,
-            $withPrimaryKey = false
-        ));
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsForOlderVersions(
-            $withNullables = true,
-            $withDefaults = true,
-            $withPrimaryKey = false
-        ));
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsWithNullablesAndDefaults());
-    }
-
-    public function test_get_required_with_nullables_and_primary_key()
-    {
-        $expected = [
-            'id',
-            'name',
-            'email',
-            'username',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFields(
-            $withNullables = true,
-            $withDefaults = false,
-            $withPrimaryKey = true
-        ));
-
-        $this->assertEquals($expected,
-            Fields::model(Father::class)->getRequiredFieldsWithNullablesAndPrimaryKey());
-    }
-
-    public function test_get_required_with_nullables_and_primary_key_for_older_versions()
-    {
-        $expected = [
-            'id',
-            'name',
-            'email',
-            'username',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsForOlderVersions(
-            $withNullables = true,
-            $withDefaults = false,
-            $withPrimaryKey = true
-        ));
-    }
-
-    public function test_get_required_with_defaults_and_primary_key()
-    {
-        $expected = [
-            'id',
-            'active',
-            'name',
-            'email',
-        ];
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFields(
-            $withNullables = false,
-            $withDefaults = true,
-            $withPrimaryKey = true
-        ));
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsForOlderVersions(
-            $withNullables = false,
-            $withDefaults = true,
-            $withPrimaryKey = true
-        ));
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsWithDefaultsAndPrimaryKey());
-    }
-
-    public function test_get_required_with_defaults_and_nullables_and_primary_key()
-    {
-        $expected = [
-            'id',
-            'active',
-            'name',
-            'email',
-            'username',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFields(
-            $withNullables = true,
-            $withDefaults = true,
-            $withPrimaryKey = true
-        ));
-
-        $this->assertEquals($expected, Fields::model(Father::class)->getRequiredFieldsForOlderVersions(
-            $withNullables = true,
-            $withDefaults = true,
-            $withPrimaryKey = true
-        ));
-        $this->assertEquals($expected, Fields::model(Father::class)->getAllFields());
-    }
-
-    public function test_get_required_fields_for_mother_model()
-    {
-        $this->assertEquals([
-            'uuid',
-            'ulid',
-        ], Fields::model(Mother::class)->getRequiredFields());
-    }
-
-    public function test_get_required_fields_for_mother_model_for_older_versions()
-    {
-        $this->assertEquals([
-            'uuid',
-            'ulid',
-        ], Fields::model(Mother::class)->getRequiredFieldsForOlderVersions());
-    }
-
-    public function test_get_required_fields_for_son_model()
-    {
-        $this->assertEquals([
-            'father_id',
-        ], Fields::model(Son::class)->getRequiredFields());
-    }
-
-    public function test_get_required_fields_for_son_model_for_older_versions()
-    {
-        $this->assertEquals([
-            'father_id',
-        ], Fields::model(Son::class)->getRequiredFieldsForOlderVersions());
-    }
-
-    public function test_get_required_fields_excluding_default_model_attributes()
-    {
-        $this->assertEquals([
-            'email',
-        ], Fields::model(Brother::class)->getRequiredFields());
-    }
-
-    public function test_get_required_fields_with_applications_defaults()
-    {
-        $expected = [
-            'email',
-            'name',
-        ];
-
-        $this->assertEquals($expected, Fields::model(Brother::class)->getRequiredFieldsWithDefaults());
-        $this->assertEquals($expected, Fields::model(Brother::class)->getRequiredFields(
-            $withNullables = false, $withDefaults = true
-        ));
-    }
-
-    public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
-    {
-        $this->expectException(InvalidModelClassException::class);
-        $this->expectExceptionMessage('Model class must be an instance of Eloquent model');
-
-        Fields::model(Someone::class)->getRequiredFields();
-    }
-
-    public function test_accept_models_that_one_of_the_eloquent_ancestors()
-    {
-        $this->assertEquals([], Fields::model(Grandson::class)->getRequiredFields());
-    }
-
-    public function test_throw_exception_if_use_get_methods_before_using_model_method()
-    {
-        $this->expectException(InvalidModelClassException::class);
-        $this->expectExceptionMessage('You should use the model method first');
-
-        ModelFields::getRequiredFields();
-    }
-
-    public function test_throw_exception_if_use_get_older_versions_methods_before_using_model_method()
-    {
-        $this->expectException(InvalidModelClassException::class);
-        $this->expectExceptionMessage('You should use the model method first');
-
-        ModelFields::getPrimaryField();
+        $expected = [];
+        $this->assertEquals($expected, Fields::model(Father::class)->applicationDefaultFields());
     }
 
     public function test_application_default_fields_for_brother_model()
@@ -436,26 +229,29 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Fields::model(Brother::class)->applicationDefaultFields());
     }
 
-    public function test_application_default_fields_for_father_model()
+    public function test_default_fields_for_mother_model()
     {
-        $expected = [];
-        $this->assertEquals($expected, Fields::model(Father::class)->applicationDefaultFields());
+        $expected = [
+            'types'
+        ];
+        $this->assertEquals($expected, Fields::model(Mother::class)->defaultFields());
+    }
+
+    public function test_default_fields_for_father_model()
+    {
+        $expected = [
+            'active'
+        ];
+        $this->assertEquals($expected, Fields::model(Father::class)->defaultFields());
     }
 
     public function test_default_fields_for_brother_model()
     {
         $expected = [
             'name',
-            'number',
+            'number'
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
     }
 
-    public function test_default_fields_for_father_model()
-    {
-        $expected = [
-            'active',
-        ];
-        $this->assertEquals($expected, Fields::model(Father::class)->defaultFields());
-    }
 }
