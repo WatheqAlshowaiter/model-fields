@@ -43,6 +43,8 @@
 - [x] fix SQLServer in github action 
 - [x] fix all todos
 - [x] return github actions
+- [ ] add all what is inside FieldsTest to Builder::macros and try to abstract to use one logic  
+- [ ] make commands like backup:tables
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
 - [ ] add command to get fields like backup-tables
