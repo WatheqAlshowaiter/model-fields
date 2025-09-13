@@ -39,7 +39,7 @@
     - [x] Fields::model(User::class)->databaseDefaultFields()  // database attributes fields
     - [x] Fields::model(User::class)->defaultFields()  // both database and laravel fields
     - [x] Fields::model(User::class)->allFields()  // all fields
-- [ ] fix postgres database for databaseDefaultFields
+- [x] fix postgres database for databaseDefaultFields
 - [ ] fix SQLServer in github action 
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields

@@ -148,6 +148,11 @@ class FieldsService
             return $this->databaseDefaultFieldsForOlderVersions();
         }
 
+        // we should exclude primary keys in postgres
+        // because the consider primary keys as
+        // default sequences values
+        $primaryField = $this->primaryField();
+
         return collect(Schema::getColumns($this->getTableFromModel()))
             ->map(function ($column) { // specific to mariadb
                 if ($column['default'] == 'NULL') {
@@ -156,8 +161,8 @@ class FieldsService
 
                 return $column;
             })
-            ->filter(function ($column) {
-                return $column['default'] !== null;
+            ->filter(function ($column) use ($primaryField) {
+                return $column['default'] !== null && ! (in_array($column['name'], $primaryField));
             })
             ->pluck('name')
             ->unique()
@@ -261,7 +266,6 @@ class FieldsService
 
         $databaseDriver = DB::connection()->getDriverName();
 
-        // todo until here
         switch ($databaseDriver) {
             case 'sqlite':
                 return $this->primaryFieldForSqlite();
@@ -1210,24 +1214,6 @@ class FieldsService
 
     /**
      * @return string[]
-     *
-     * todo 1) WatheqAlshowaiter\ModelRequiredFields\Tests\FieldsTest::test_database_default_fields_for_father_model
-     * Failed asserting that two arrays are equal.
-     * --- Expected
-     * +++ Actual
-     *
-     * @@ @@
-     * Array (
-     * -    0 => 'active'
-     * +    0 => 'id'
-     * +    1 => 'active'
-     * )
-     *
-     * /home/runner/work/model-required-fields/model-required-fields/tests/FieldsTest.php:171
-     *
-     * FAILURES!
-     * Tests: 76, Assertions: 137, Failures: 1.
-     * Error: Process completed with exit code 1.
      */
     protected function databaseDefaultFieldsForPostgres()
     {
