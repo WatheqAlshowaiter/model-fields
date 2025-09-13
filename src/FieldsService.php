@@ -811,7 +811,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-            /** @lang SQLite */ "
+            /** @lang SQLite */ '
             SELECT
                 COLUMN_NAME AS name
             FROM
@@ -820,7 +820,7 @@ class FieldsService
                 TABLE_SCHEMA = DATABASE()
                 AND TABLE_NAME = ?
             ORDER BY
-                ORDINAL_POSITION ASC",
+                ORDINAL_POSITION ASC',
             [$table]
         );
 
@@ -1264,8 +1264,8 @@ class FieldsService
             })
             ->filter(function ($column) use ($primaryIndex) {
                 // todo clean this later
-                 return $column['default'] !== null && ! (in_array($column['name'], $primaryIndex));
-                //return $column['default'] !== null;
+                return $column['default'] !== null && ! (in_array($column['name'], $primaryIndex));
+                // return $column['default'] !== null;
 
             })
             ->pluck('name')
