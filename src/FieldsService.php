@@ -121,7 +121,6 @@ class FieldsService
 
     /**
      * @return string[]
-     *                  todo thinking what is better to return ['id'] or 'id'?
      */
     public function primaryField()
     {
@@ -811,15 +810,10 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
-        // todo simplify the query
         $queryResult = DB::select(
             /** @lang SQLite */ "
             SELECT
-                COLUMN_NAME AS name,
-                COLUMN_TYPE AS type,
-                IF(IS_NULLABLE = 'YES', 1, 0) AS nullable,
-                COLUMN_DEFAULT AS `default`,
-                IF(COLUMN_KEY = 'PRI', 1, 0) AS `primary`
+                COLUMN_NAME AS name
             FROM
                 INFORMATION_SCHEMA.COLUMNS
             WHERE
@@ -833,13 +827,6 @@ class FieldsService
         return collect($queryResult)
             ->map(function ($column) {
                 return (array) $column;
-            })
-            ->map(function ($column) { // specific to mariadb
-                if ($column['default'] == 'NULL') {
-                    $column['default'] = null;
-                }
-
-                return $column;
             })
             ->pluck('name')
             ->toArray();
