@@ -37,10 +37,12 @@
     - [x] Fields::model(User::class)->requiredFields() // required fields 
     - [x] Fields::model(User::class)->nullableFields() // nullable fields
     - [ ] Fields::model(User::class)->applicationDefaultFields() // laravel attributes fields 
-    - [ ] Fields::model(User::class)->databaseDefaultFields()  // database attributes fields
+    - [x] Fields::model(User::class)->databaseDefaultFields()  // database attributes fields
     - [ ] Fields::model(User::class)->defaultFields()  // both database and laravel fields
     - [x] Fields::model(User::class)->allFields()  // all fields
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
 - [ ] then add methods along the way.. 
 - [ ] add command to get fields like backup-tables
+- [ ] fix sqlserver github action
+- [ ] fix all todos  
