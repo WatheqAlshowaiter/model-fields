@@ -739,11 +739,11 @@ class FieldsService
             [$table]
         );
 
-        error_log('MySQL/MariaDB dd: '.json_encode(
-            collect($queryResult)->map(function ($column) {
-                return (array) $column;
-            })->toArray()
-        ));
+        echo "\n\n=== DEBUG MySQL/MariaDB Query Result ===\n";
+        var_dump(collect($queryResult)->map(function ($column) {
+            return (array) $column;
+        })->toArray());
+        echo "=== END DEBUG ===\n\n";
 
         return collect($queryResult)
             ->map(function ($column) {
@@ -1291,11 +1291,11 @@ class FieldsService
             [$table]
         );
 
-        error_log('PostgreSQL dd: '.json_encode(
-            collect($queryResult)->map(function ($column) {
-                return (array) $column;
-            })->toArray()
-        ));
+        echo "\n\n=== DEBUG PostgreSQL Query Result ===\n";
+        var_dump(collect($queryResult)->map(function ($column) {
+            return (array) $column;
+        })->toArray());
+        echo "=== END DEBUG ===\n\n";
 
         return collect($queryResult)
             ->map(function ($column) {
