@@ -739,11 +739,11 @@ class FieldsService
             [$table]
         );
 
-        dd(
+        error_log('MySQL/MariaDB dd: '.json_encode(
             collect($queryResult)->map(function ($column) {
                 return (array) $column;
-            })
-        );
+            })->toArray()
+        ));
 
         return collect($queryResult)
             ->map(function ($column) {
@@ -1291,11 +1291,11 @@ class FieldsService
             [$table]
         );
 
-        dd(
+        error_log('PostgreSQL dd: '.json_encode(
             collect($queryResult)->map(function ($column) {
                 return (array) $column;
-            })
-        );
+            })->toArray()
+        ));
 
         return collect($queryResult)
             ->map(function ($column) {
