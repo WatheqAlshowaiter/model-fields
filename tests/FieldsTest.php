@@ -5,7 +5,6 @@ namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelClassException;
 use WatheqAlshowaiter\ModelRequiredFields\Fields;
-use WatheqAlshowaiter\ModelRequiredFields\ModelFields;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Brother;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Father;
 use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Grandson;
@@ -16,7 +15,6 @@ use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Son;
 class FieldsTest extends TestCase
 {
     use RefreshDatabase;
-
 
     public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
     {
@@ -231,7 +229,7 @@ class FieldsTest extends TestCase
     public function test_default_fields_for_mother_model()
     {
         $expected = [
-            'types'
+            'types',
         ];
         $this->assertEquals($expected, Fields::model(Mother::class)->defaultFields());
     }
@@ -239,7 +237,7 @@ class FieldsTest extends TestCase
     public function test_default_fields_for_father_model()
     {
         $expected = [
-            'active'
+            'active',
         ];
         $this->assertEquals($expected, Fields::model(Father::class)->defaultFields());
     }
@@ -248,9 +246,8 @@ class FieldsTest extends TestCase
     {
         $expected = [
             'name',
-            'number'
+            'number',
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
     }
-
 }
