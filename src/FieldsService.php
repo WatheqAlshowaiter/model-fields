@@ -325,7 +325,6 @@ class FieldsService
 
         switch ($databaseDriver) {
             case 'sqlite':
-
                 return $this->requiredFieldsForSqlite();
             case 'mysql':
             case 'mariadb':

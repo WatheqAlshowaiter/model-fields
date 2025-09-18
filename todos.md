@@ -43,9 +43,10 @@
 - [x] fix SQLServer in github action 
 - [x] fix all todos
 - [x] return github actions
-- [ ] add all what is inside FieldsTest to Builder::macros and try to abstract to use one logic  
-- [ ] make commands like backup:tables
+- [x] add all what is inside FieldsTest to Builder::macros 
+- [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
-- [ ] add command to get fields like backup-tables
 - [ ] review coderabbit ai comments
+- [ ] (next version) make commands like backup:tables
+- [ ] (next version) exclude from required fields that are filled in "creating" observers/events and add test cases for that
