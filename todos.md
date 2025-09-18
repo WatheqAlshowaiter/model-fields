@@ -44,8 +44,9 @@
 - [x] fix all todos
 - [x] return github actions
 - [x] add all what is inside FieldsTest to Builder::macros 
-- [ ] change the readme docs in response to that
-- [ ] in next version change the whole namespace, github about to model fields
+- [x] change the readme docs in response to that
+- [x] change the banner 
+- [x] in next version change the whole namespace, github about to model fields
 - [ ] review coderabbit ai comments
 - [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
 - [ ] (next version) make commands like backup:tables

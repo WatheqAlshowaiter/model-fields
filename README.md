@@ -38,14 +38,13 @@
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
 <!-- ./shields -->
 
-[//]: # (todo improve the description)
-Laravel package to analyze Eloquent model fields. get **required** fields, **nullable** fields, **primary
-** default fields, with ease.
+Get the **required** fields fast for any model. You can also get **nullable** and **default** fields just as easily.
+Think that's simple? You probably haven’t faced the legacy projects I have. :).
 
 > [!Note]  
 > This is the documentation for version 3, if you want the version 1 or version 2 documentations go  
-> with [this link](./v1.documentation.md)  
-> with [this link](./v2.documentation.md)
+> V1 with [this link](./v1.documentation.md).  
+> V2 with [this link](./v2.documentation.md).
 
 ## Installation
 
@@ -61,7 +60,7 @@ using the package in production, then remove the --dev flag.
 Optionally, if you want to publish the configuration to disable/enable model macros.
 
 ```sh
-php artisan vendor:publish --provider="WatheqAlshowaiter\ModelRequiredFields\ModelRequiredFieldsServiceProvider" --tag="config"
+php artisan vendor:publish --provider="WatheqAlshowaiter\ModelFields\ModelFieldsServiceProvider" --tag="config"
 ```
 
 ## Usage
@@ -91,15 +90,17 @@ methods in both ways are the same.
 
 ```php
 // Facade way
-use WatheqAlshowaiter\ModelRequiredFields\ModelFields;
+use WatheqAlshowaiter\ModelFields\Fields;
 use App\Models\User;
 
-ModelFields::model(User::class)->getRequiredFields(); // returns ['name', 'email', 'password']
+Fields::model(User::class)->allFields(); // returns ['id', 'name', 'email', 'email_verified_at', 'password', 'random_number', 'remember_token', 'created_at', 'updated_at']
+Fields::model(User::class)->requiredFields(); // returns ['name', 'email', 'password']
 ```
 
 ```php
 // Macro way
-User::getRequiredFields(); // returns ['name', 'email', 'password']
+User::allFields(); // returns ['id', 'name', 'email', 'email_verified_at', 'password', 'random_number', 'remember_token', 'created_at', 'updated_at']
+User::requiredFields(); // returns ['name', 'email', 'password']
 ```
 
 That's it!
@@ -137,158 +138,104 @@ Schema::table('posts', function(Blueprint $table){
 
 ```php
 // Facade way 
-ModelFields::model(Post::class)->getRequiredFields(); // returns ['user_id', 'ulid', 'title', 'description']
+Fields::model(Post::class)->requiredFields(); // returns ['user_id', 'ulid', 'title', 'description']
 // Macro way
-Post::getRequiredFields();  // returns ['user_id', 'ulid', 'title', 'description']
+Post::requiredFields();  // returns ['user_id', 'ulid', 'title', 'description']
 ```
 
 ### And more
 
-We have the flexibility to get required fields with nullables, defaults, primary keys, and a mix of them or return all
-fields. You can use these methods with these results:
+We have the flexibility to get all fields, required fields, nullable fields, primary key, database default fields,
+application default fields, and default fields. You can use these methods with these results:
 
 ```php
-// The default parameters only required fields
-ModelFields::model(Post::class)
-    ->getRequiredFields(
-        $withNullables = false,
-        $withDefaults = false,
-        $withPrimaryKey = false
-    );
+// All fields
+Fields::model(Post::class)->allFields();
 
 // or
-ModelFields::model(Post::class)->getRequiredFields();
-// returns ['user_id', 'ulid', 'title', 'description']
+Post::allFields();
+
+// returns
+// [    'category_id', 'uuid', 'ulid', 'description',
+//      'slug', 'created_at', 'updated_at', 'deleted_at'
+// ]
 ```
 
 ```php
-// get required fields with nullables
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-                $withNullables = true,
-                $withDefaults = false,
-                $withPrimaryKey = false        
-            );
+// Nullable fields 
+Fields::model(Post::class)->nullableFields();
 
-// or
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-                $withNullables = true    
-            );
+//or
+Post::nullableFields();
 
-// or
-ModelFields::model(Post::class)
-            ->getRequiredFields(true);
-
-// or
-ModelFields::model(Post::class)
-            ->getRequiredFieldsWithNullables();
 // returns
 // [
-//     'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug',
+//     'user_id', 'category_id', 'uuid', 'ulid', 'slug',
 //     'created_at', 'updated_at', 'deleted_at'
 // ]
 ```
 
 ```php
-// get required fields with defaults
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-                $withNullables = false,
-                $withDefaults = true,
-                $withPrimaryKey = false
-        );
+// Primary field
+Fields::model(Post::class)->primaryField();
 
 // or
-ModelFields::model(Post::class)
-            ->getRequiredFieldsWithDefaults();
-// returns ['user_id', 'ulid', 'active', 'title', 'description']
+Post::primaryField();
+
+// returns ['id']
 ```
 
 ```php
-// get required fields with primary key
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-            $withNullables = false,
-            $withDefaults = false,
-            $withPrimaryKey = true
-        );
+// Database default fields
+Fields::model(Post::class)->databaseDefaultFields();
 
-// or
-ModelFields::model(Post::class)
-            ->getRequiredFieldsWithPrimaryKey();
-// returns ['id', 'user_id', 'ulid', 'title', 'description']
+//or 
+Post::databaseDefaultFields();
+
+// returns ['active']
 ```
 
 ```php
-// get required fields with nullables and defaults
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-                $withNullables = true,
-                $withDefaults = true,
-                $withPrimaryKey = false
-            );
+// Application default fields
+Fields::model(Post::class)->applicationDefaultFields();
 
-// or
-ModelFields::model(Post::class)
-            ->getRequiredFieldsWithNullablesAndDefaults();
+//or 
+Post::applicationDefaultFields();
+
+// If there is default attributes in the model
+class Post extends Model
+{
+    protected $attributes = [
+        'title' => 'default title', 
+        'description' => 'default description',
+    ];
+}
+
 // returns
 // [
-//     'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description', 'slug',
-//     'created_at', 'updated_at', 'deleted_at'
+//     'title', 'description',
 // ]
 ```
 
 ```php
-// get required fields with nullables and primary key
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-                $withNullables = true,
-                $withDefaults = false,
-                $withPrimaryKey = true
-            );
+// Default fields
+Fields::model(Post::class)->defaultFields();
 
-// or
-ModelFields::model(Post::class)
-            ->getRequiredFieldsWithNullablesAndPrimaryKey();
+//or 
+Post::defaultFields();
+
+// This will combine application and database defaults 
+class Post extends Model
+{
+    protected $attributes = [
+        'title' => 'default title', 
+        'description' => 'default description',
+    ];
+}
+
 // returns
 // [
-//     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'title', 'description', 'slug',
-//     'created_at', 'updated_at', 'deleted_at'
-// ]
-```
-
-```php
-// get required fields with defaults and primary key
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-            $withNullables = false,
-            $withDefaults = true,
-            $withPrimaryKey = true
-        );
-
-// or
-ModelFields::model(Post::class)
-          ->getRequiredFieldsWithDefaultsAndPrimaryKey();
-// returns ['id', 'user_id', 'ulid', 'active', 'title', 'description']
-```
-
-```php
-// get required fields with nullables, defaults and primary key
-ModelFields::model(Post::class)
-            ->getRequiredFields(
-                $withNullables = true,
-                $withDefaults = true,
-                $withPrimaryKey = true
-            );
-
-// or
-ModelFields::model(Post::class)
-            ->getAllFields();
-// returns
-// [
-//     'id', 'user_id', 'category_id', 'uuid', 'ulid', 'active', 'title', 'description',
-//     'slug', 'created_at', 'updated_at', 'deleted_at'
+//    'active', 'title', 'description',
 // ]
 ```
 
@@ -309,9 +256,9 @@ those versions.
 So Briefly, This package is useful if:
 
 - you want to build factories or tests for projects you didn't start from scratch.
-    - you are working with a legacy project and don't want to be faced with SQL errors when creating tables.
-    - you have so many fields in your table and want to get the required fields fast.
-    - or any use case you find it useful.
+- you are working with a legacy project and don't want to be faced with SQL errors when creating tables.
+- you have so many fields in your table and want to get types of fields fast, like required, nullable, default fields.
+- or any use case you find it useful.
 
 ## Features
 
