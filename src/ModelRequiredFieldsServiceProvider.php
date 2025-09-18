@@ -49,7 +49,9 @@ class ModelRequiredFieldsServiceProvider extends ServiceProvider
 
                 // Get primary keys
                 $primaryIndex = collect(Schema::getIndexes($table))
-                    ->filter(fn ($index) => $index['primary'])
+                    ->filter(function ($index) {
+                        return $index['primary'];
+                    })
                     ->pluck('columns')
                     ->flatten()
                     ->toArray();
