@@ -170,7 +170,7 @@ Post::nullableFields();
 
 // returns
 // [
-//     'user_id', 'category_id', 'uuid', 'ulid', 'slug',
+//     'category_id', 'uuid', 'slug',
 //     'created_at', 'updated_at', 'deleted_at'
 // ]
 ```
