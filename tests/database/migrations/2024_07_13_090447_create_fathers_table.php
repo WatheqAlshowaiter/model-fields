@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Constants;
+use WatheqAlshowaiter\ModelFields\Tests\Constants;
 
 class CreateFathersTable extends Migration
 {

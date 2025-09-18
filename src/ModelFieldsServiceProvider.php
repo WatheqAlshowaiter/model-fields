@@ -1,26 +1,26 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields;
+namespace WatheqAlshowaiter\ModelFields;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\UnsupportedDatabaseDriverException;
-use WatheqAlshowaiter\ModelRequiredFields\Support\Helpers;
+use WatheqAlshowaiter\ModelFields\Exceptions\UnsupportedDatabaseDriverException;
+use WatheqAlshowaiter\ModelFields\Support\Helpers;
 
-class ModelRequiredFieldsServiceProvider extends ServiceProvider
+class ModelFieldsServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/config.php', 'model-required-fields');
+        $this->mergeConfigFrom(__DIR__.'/config.php', 'model-fields');
     }
 
     public function boot()
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/config.php' => config_path('model-required-fields.php'),
+                __DIR__.'/config.php' => config_path('model-fields.php'),
             ], 'config');
 
             if ($this->app->environment() === 'testing') {
@@ -29,7 +29,7 @@ class ModelRequiredFieldsServiceProvider extends ServiceProvider
             }
         }
 
-        if (config('model-required-fields.enable_macro', true)) {
+        if (config('model-fields.enable_macro', true)) {
 
             Builder::macro('getRequiredFields', function (
                 $withNullables = false,
@@ -378,7 +378,7 @@ class ModelRequiredFieldsServiceProvider extends ServiceProvider
         }
 
         // new macros
-        if (config('model-required-fields.enable_macro', true)) {
+        if (config('model-fields.enable_macro', true)) {
 
             Builder::macro('allFields', function () {
                 if (Helpers::isLaravelVersionLessThan10()) {

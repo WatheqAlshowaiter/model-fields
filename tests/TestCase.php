@@ -1,9 +1,9 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
+namespace WatheqAlshowaiter\ModelFields\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use WatheqAlshowaiter\ModelRequiredFields\ModelRequiredFieldsServiceProvider;
+use WatheqAlshowaiter\ModelFields\ModelFieldsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -15,7 +15,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            ModelRequiredFieldsServiceProvider::class,
+            ModelFieldsServiceProvider::class,
         ];
     }
 

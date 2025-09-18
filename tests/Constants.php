@@ -1,6 +1,6 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
+namespace WatheqAlshowaiter\ModelFields\Tests;
 
 class Constants
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields;
+namespace WatheqAlshowaiter\ModelFields;
 
 use Illuminate\Support\Facades\Facade;
 

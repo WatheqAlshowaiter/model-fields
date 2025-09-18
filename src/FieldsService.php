@@ -1,13 +1,13 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields;
+namespace WatheqAlshowaiter\ModelFields;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelClassException;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\UnsupportedDatabaseDriverException;
-use WatheqAlshowaiter\ModelRequiredFields\Support\Helpers;
+use WatheqAlshowaiter\ModelFields\Exceptions\InvalidModelClassException;
+use WatheqAlshowaiter\ModelFields\Exceptions\UnsupportedDatabaseDriverException;
+use WatheqAlshowaiter\ModelFields\Support\Helpers;
 
 class FieldsService
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
+namespace WatheqAlshowaiter\ModelFields\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
-use WatheqAlshowaiter\ModelRequiredFields\Exceptions\InvalidModelClassException;
-use WatheqAlshowaiter\ModelRequiredFields\Fields;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Brother;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Father;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Grandson;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Mother;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Someone;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Son;
+use WatheqAlshowaiter\ModelFields\Exceptions\InvalidModelClassException;
+use WatheqAlshowaiter\ModelFields\Fields;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Brother;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Father;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Grandson;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Mother;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Someone;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Son;
 
 class FieldsTest extends TestCase
 {

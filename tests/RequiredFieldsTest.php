@@ -1,16 +1,16 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
+namespace WatheqAlshowaiter\ModelFields\Tests;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use ReflectionClass;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Brother;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Father;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Mother;
-use WatheqAlshowaiter\ModelRequiredFields\Tests\Models\Son;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Brother;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Father;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Mother;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Son;
 
 class RequiredFieldsTest extends TestCase
 {
