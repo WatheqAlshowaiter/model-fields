@@ -47,6 +47,7 @@
 - [x] change the readme docs in response to that
 - [x] change the banner 
 - [x] in next version change the whole namespace, github about to model fields
+- [x] remove old code that is not in v3
 - [ ] review coderabbit ai comments
 - [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
 - [ ] (next version) make commands like backup:tables

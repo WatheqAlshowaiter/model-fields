@@ -1,6 +1,6 @@
 {
     "name": "watheqalshowaiter/model-fields",
-    "description": "Get the model required fields without nullables, primary keys and fields with defaults.",
+    "description": "Get model fields fast — required, nullable, or default",
     "keywords": [
         "WatheqAlshowaiter",
         "Watheq Alshowaiter",
