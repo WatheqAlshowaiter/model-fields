@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.0.3 - 2025-09-18
+
+### What's Changed
+
+Improve DX for the package with more simple and constant methods. New changes are in the README.md documentation file.
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/2.0.0...3.0.0
+
 ## 3.0 - 2025-09-18
 
 ### What's Changed
