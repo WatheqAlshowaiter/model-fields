@@ -932,7 +932,8 @@ class ModelRequiredFieldsServiceProvider extends ServiceProvider
             });
 
             Builder::macro('applicationDefaultFields', function () {
-                $modelInstance = new ($this->getModel());
+                $modelClass = $this->getModel();
+                $modelInstance = new $modelClass;
                 $attributes = $modelInstance->getAttributes();
 
                 $allFields = $this->allFields();
@@ -996,7 +997,7 @@ class ModelRequiredFieldsServiceProvider extends ServiceProvider
                 $table = Helpers::getTableFromThisModel($this->getModel());
 
                 $queryResult = DB::select(
-                    /** @lang SQLite */ "
+                    /** @lang MySQL */ "
                     SELECT
                         COLUMN_NAME AS name,
                         COLUMN_TYPE AS type,

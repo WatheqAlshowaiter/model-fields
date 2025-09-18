@@ -44,9 +44,9 @@
 - [x] fix all todos
 - [x] return github actions
 - [x] add all what is inside FieldsTest to Builder::macros 
-- [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
 - [ ] change the readme docs in response to that
 - [ ] in next version change the whole namespace, github about to model fields
 - [ ] review coderabbit ai comments
+- [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
 - [ ] (next version) make commands like backup:tables
 - [ ] (next version) exclude from required fields that are filled in "creating" observers/events and add test cases for that
