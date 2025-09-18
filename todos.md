@@ -11,10 +11,10 @@
 - [x] try previous versions of laravel until laravel 6
     - [x] 11 => sqlite, mysql/mariadb(1st party supported in Laravel 11), postgres
     - [x] 10 => sqlite, mysql, postgres
-    - [x] 9  => sqlite, mysql, postgres
-    - [x] 8  => sqlite, mysql, postgres
-    - [x] 7  => sqlite, mysql, postgres
-    - [x] 6  => sqlite, mysql, postgres
+    - [x] 9 => sqlite, mysql, postgres
+    - [x] 8 => sqlite, mysql, postgres
+    - [x] 7 => sqlite, mysql, postgres
+    - [x] 6 => sqlite, mysql, postgres
 - [x] try previous versions of php until php 7.4
     - [x] 8.2
     - [x] 8.1
@@ -29,10 +29,25 @@
 - [x] use builder pattern
 - [x] test all the above
 - [x] use model fields instead of required model fields
-- [ ] make the trait @deprecated
-- [ ] use fields() then filter against it
-- [ ] change the readme docs in response to that
-- [ ] in next version remove trait and keep facade
-- [ ] in next version change the whole namespace, github about to model fields
-- [ ] then add methods along the way.. 
-- [ ] add command to get fields like backup-tables
+- [x] make the trait @deprecated
+- [x] in next version remove trait and keep facade
+- [x] new namings
+    - [x] Fields::model(User::class)->primaryField() // primary key
+    - [x] Fields::model(User::class)->requiredFields() // required fields
+    - [x] Fields::model(User::class)->nullableFields() // nullable fields
+    - [x] Fields::model(User::class)->applicationDefaultFields() // laravel attributes fields
+    - [x] Fields::model(User::class)->databaseDefaultFields()  // database attributes fields
+    - [x] Fields::model(User::class)->defaultFields()  // both database and laravel fields
+    - [x] Fields::model(User::class)->allFields()  // all fields
+- [x] fix postgres database for databaseDefaultFields
+- [x] fix SQLServer in github action 
+- [x] fix all todos
+- [x] return github actions
+- [x] add all what is inside FieldsTest to Builder::macros 
+- [x] change the readme docs in response to that
+- [x] change the banner 
+- [x] in next version change the whole namespace, github about to model fields
+- [x] remove old code that is not in v3
+- [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
+- [ ] (next version) make commands like backup:tables
+- [ ] (next version) exclude from required fields that are filled in "creating" observers/events and add test cases for that

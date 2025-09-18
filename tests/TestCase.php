@@ -1,9 +1,9 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Tests;
+namespace WatheqAlshowaiter\ModelFields\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use WatheqAlshowaiter\ModelRequiredFields\ModelRequiredFieldsServiceProvider;
+use WatheqAlshowaiter\ModelFields\ModelFieldsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -15,7 +15,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            ModelRequiredFieldsServiceProvider::class,
+            ModelFieldsServiceProvider::class,
         ];
     }
 
@@ -80,6 +80,8 @@ class TestCase extends Orchestra
                 'database' => env('DB_DATABASE', 'master'),
                 'username' => env('DB_USERNAME', 'SA'),
                 'password' => env('DB_PASSWORD', 'Forge123'),
+                'encrypt' => env('DB_ENCRYPT', true),
+                'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', true),
             ]);
         }
 

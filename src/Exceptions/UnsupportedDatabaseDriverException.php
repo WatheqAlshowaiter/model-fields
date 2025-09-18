@@ -1,5 +1,5 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Exceptions;
+namespace WatheqAlshowaiter\ModelFields\Exceptions;
 
 class UnsupportedDatabaseDriverException extends \UnexpectedValueException {}

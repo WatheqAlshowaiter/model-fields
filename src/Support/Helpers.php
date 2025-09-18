@@ -1,11 +1,11 @@
 <?php
 
-namespace WatheqAlshowaiter\ModelRequiredFields\Support;
+namespace WatheqAlshowaiter\ModelFields\Support;
 
 use Illuminate\Support\Facades\App;
 
 /**
- * Here are the shared logic across multiple files, now are ModelFieldsService & ModelRequiredFieldsServiceProvider
+ * Here are the shared logic across multiple files, now are ModelFieldsService & ModelFieldsServiceProvider
  */
 class Helpers
 {

@@ -11,6 +11,7 @@ class CreateBrothersTable extends Migration
         Schema::create('brothers', function (Blueprint $table) {
             $table->string('email'); // required
             $table->string('name'); // default => ignored because it has the default value in the model $attributes
+            $table->string('number')->nullable(); // nullable, with default in model
         });
     }
 

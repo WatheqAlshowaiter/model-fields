@@ -1,11 +1,11 @@
 {
-    "name": "watheqalshowaiter/model-required-fields",
-    "description": "Get the model required fields without nullables, primary keys and fields with defaults.",
+    "name": "watheqalshowaiter/model-fields",
+    "description": "Get model fields fast — required, nullable, or default",
     "keywords": [
         "WatheqAlshowaiter",
         "Watheq Alshowaiter",
         "laravel",
-        "model-required-fields",
+        "model-fields",
         "mysql",
         "mariadb",
         "php",
@@ -21,7 +21,7 @@
         "yemenopensource",
         "yemen_open_source"
     ],
-    "homepage": "https://github.com/watheqalshowaiter/model-required-fields",
+    "homepage": "https://github.com/watheqalshowaiter/model-fields",
     "license": "MIT",
     "authors": [
         {
@@ -40,12 +40,12 @@
     },
     "autoload": {
         "psr-4": {
-            "WatheqAlshowaiter\\ModelRequiredFields\\": "src/"
+            "WatheqAlshowaiter\\ModelFields\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "WatheqAlshowaiter\\ModelRequiredFields\\Tests\\": "tests/"
+            "WatheqAlshowaiter\\ModelFields\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -69,10 +69,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "WatheqAlshowaiter\\ModelRequiredFields\\ModelRequiredFieldsServiceProvider"
+                "WatheqAlshowaiter\\ModelFields\\ModelFieldsServiceProvider"
             ],
             "aliases": {
-                "ModelRequiredFields": "WatheqAlshowaiter\\ModelRequiredFields\\Facades\\ModelRequiredFields"
+                "ModelFields": "WatheqAlshowaiter\\ModelFields\\Facades\\ModelFields"
             }
         }
     },
