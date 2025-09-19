@@ -15,7 +15,12 @@ class ModelFieldsCommandTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function runCommandAndGetOutput(array $params): string
+    /**
+     * @param  array  $params
+     *
+     * @return string
+     */
+    private function runCommandAndGetOutput(array $params)
     {
         $buffer = new BufferedOutput();
         Artisan::call('model:fields', $params, $buffer);
