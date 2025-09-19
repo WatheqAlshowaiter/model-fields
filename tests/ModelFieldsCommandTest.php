@@ -7,12 +7,20 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\Console\Output\BufferedOutput;
 use WatheqAlshowaiter\ModelFields\Console\ModelFieldsCommand;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Father;
 
 class ModelFieldsCommandTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function runCommandAndGetOutput(array $params): string
+    {
+        $buffer = new BufferedOutput();
+        Artisan::call('model:fields', $params, $buffer);
+        return trim($buffer->fetch());
+    }
 
     public function test_error_when_no_model_provided()
     {
@@ -74,11 +82,9 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('Father all fields:', $output);
         $this->assertStringContainsString('  - id', $output);
@@ -97,12 +103,10 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '--required' => true,
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('Father required fields:', $output);
         $this->assertStringContainsString('  - name', $output);
@@ -115,12 +119,10 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '-r' => true,
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('Father required fields:', $output);
         $this->assertStringContainsString('  - name', $output);
@@ -133,13 +135,11 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '--nullable' => true,
             '--format' => 'json',
         ]);
-
-        $output = Artisan::output();
 
         $this->assertJson($output);
         /** @noinspection PhpComposerExtensionStubsInspection */
@@ -156,13 +156,11 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '--primary' => true,
             '--format' => 'table',
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('Father primary fields', $output);
         $this->assertStringContainsString('id', $output);
@@ -176,13 +174,11 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '-A' => true,
             '--format' => 'json',
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('No app-default fields found for Father model.', $output);
 
@@ -193,13 +189,11 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '-A' => true,
             '--format' => 'table',
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('No app-default fields found for Father model.', $output);
 
@@ -210,12 +204,10 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        Artisan::call('model:fields', [
+        $output = $this->runCommandAndGetOutput([
             'model' => Father::class,
             '-A' => true,
         ]);
-
-        $output = Artisan::output();
 
         $this->assertStringContainsString('No app-default fields found for Father model.', $output);
 
@@ -255,8 +247,7 @@ class ModelFieldsCommandTest extends TestCase
         Cache::forget('model-fields.banner_shown');
 
         // Create a subclass that overrides openUrl()
-        $stubCommand = new class extends ModelFieldsCommand
-        {
+        $stubCommand = new class extends ModelFieldsCommand {
             public string $calledWith = '';
 
             // Change to protected so test can inspect
@@ -268,7 +259,7 @@ class ModelFieldsCommandTest extends TestCase
         };
 
         // Replace the command in Laravel's container so artisan uses our stub
-        $this->app->extend(ModelFieldsCommand::class, fn () => $stubCommand);
+        $this->app->extend(ModelFieldsCommand::class, fn() => $stubCommand);
 
         $this->artisan('model:fields', [
             'model' => Father::class,

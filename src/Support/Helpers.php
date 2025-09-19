@@ -18,14 +18,6 @@ class Helpers
     }
 
     /**
-     * @return bool
-     */
-    public static function isLaravelVersionLessThanOrEqualTo10()
-    {
-        return version_compare(App::version(), '11.0', '<');
-    }
-
-    /**
      * @return string[]
      */
     public static function getModelDefaultAttributes($model)

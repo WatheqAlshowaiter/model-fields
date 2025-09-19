@@ -5,7 +5,6 @@ namespace WatheqAlshowaiter\ModelFields\Console;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use WatheqAlshowaiter\ModelFields\Fields;
-use WatheqAlshowaiter\ModelFields\Support\Helpers;
 
 class ModelFieldsCommand extends Command
 {
@@ -162,18 +161,18 @@ class ModelFieldsCommand extends Command
         switch ($format) {
             case 'json':
                 if (empty($fields)) {
-                    $this->output("No $type fields found for $modelName model.");
+                    $this->info("No $type fields found for $modelName model.");
 
                     return;
                 }
 
                 /** @noinspection PhpComposerExtensionStubsInspection */
-                $this->output(json_encode($fields, JSON_PRETTY_PRINT));
+                $this->line(json_encode($fields, JSON_PRETTY_PRINT));
                 break;
 
             case 'table':
                 if (empty($fields)) {
-                    $this->output("No $type fields found for $modelName model.");
+                    $this->info("No $type fields found for $modelName model.");
 
                     return;
                 }
@@ -187,32 +186,16 @@ class ModelFieldsCommand extends Command
             case 'list':
             default:
                 if (empty($fields)) {
-                    $this->output("No $type fields found for $modelName model.");
+                    $this->info("No $type fields found for $modelName model.");
 
                     return;
                 }
 
-                $this->output("$modelName $type fields:");
+                $this->info("$modelName $type fields:");
                 foreach ($fields as $field) {
-                    $this->output("  - $field");
+                    $this->line("  - $field");
                 }
                 break;
-        }
-    }
-
-    /**
-     * Output text with version-aware compatibility
-     *
-     * @param  string  $text
-     *
-     * @return void
-     */
-    private function output($text)
-    {
-        if ($this->needsLegacyOutputCompatibility()) {
-            $this->getOutput()->writeln($text);
-        } else {
-            $this->line("<info>$text</info>");
         }
     }
 
@@ -223,7 +206,7 @@ class ModelFieldsCommand extends Command
      */
     private function askToStarRepository()
     {
-        if (!$this->shouldShowInteractivePrompt()) {
+        if (!$this->input->isInteractive()) {
             return;
         }
 
@@ -240,44 +223,10 @@ class ModelFieldsCommand extends Command
 
         if ($wantsToStar) {
             $this->openUrl($repo);
-            $this->output('Thank you!');
+            $this->info('Thank you!');
         }
 
         Cache::forever($cacheKey, true);
-    }
-
-    /**
-     * Determine if we should show interactive prompts based on Laravel version and environment
-     *
-     * @return bool
-     */
-    private function shouldShowInteractivePrompt()
-    {
-        if ($this->needsLegacyOutputCompatibility()) {
-            return true;
-        }
-
-        return $this->input->isInteractive();
-    }
-
-    /**
-     * Check if we're running in a testing environment
-     *
-     * @return bool
-     */
-    private function isTestingEnvironment()
-    {
-        return app()->environment('testing');
-    }
-
-    /**
-     * Check if we need legacy output compatibility for Laravel ≤10 in testing
-     *
-     * @return bool
-     */
-    private function needsLegacyOutputCompatibility()
-    {
-        return $this->isTestingEnvironment() && Helpers::isLaravelVersionLessThanOrEqualTo10();
     }
 
     /**
