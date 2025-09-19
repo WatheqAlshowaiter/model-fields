@@ -48,6 +48,6 @@
 - [x] change the banner 
 - [x] in next version change the whole namespace, github about to model fields
 - [x] remove old code that is not in v3
-- [ ] abstract logic in Field Facade and Builder macro because a lot of duplications
+- [x] star after install
 - [ ] (next version) make commands like backup:tables
 - [ ] (next version) exclude from required fields that are filled in "creating" observers/events and add test cases for that
