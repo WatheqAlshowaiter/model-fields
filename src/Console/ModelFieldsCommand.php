@@ -30,7 +30,7 @@ class ModelFieldsCommand extends Command
         $modelName = $this->argument('model');
         $format = $this->option('format');
 
-        if (! in_array($format, ['list', 'json', 'table'])) {
+        if (!in_array($format, ['list', 'json', 'table'])) {
             $this->error("Invalid format '$format'. Use: list, json, or table.");
 
             return 1;
@@ -38,7 +38,7 @@ class ModelFieldsCommand extends Command
 
         $modelClass = $this->resolveModelClass($modelName);
 
-        if (! $modelClass) {
+        if (!$modelClass) {
             $this->error("Model class '$modelName' not found.");
 
             return 1;
@@ -123,6 +123,7 @@ class ModelFieldsCommand extends Command
     /**
      * @param  string  $modelClass
      * @param  string  $type
+     *
      * @return array
      */
     protected function getFieldsByType($modelClass, $type)
@@ -151,6 +152,7 @@ class ModelFieldsCommand extends Command
      * @param  string  $format
      * @param  string  $type
      * @param  string  $modelClass
+     *
      * @return void
      */
     protected function outputFields($fields, $format, $type, $modelClass)
@@ -160,18 +162,18 @@ class ModelFieldsCommand extends Command
         switch ($format) {
             case 'json':
                 if (empty($fields)) {
-                    $this->line("<info>No $type fields found for $modelName model.</info>");
+                    $this->output("No $type fields found for $modelName model.");
 
                     return;
                 }
 
                 /** @noinspection PhpComposerExtensionStubsInspection */
-                $this->line(json_encode($fields, JSON_PRETTY_PRINT));
+                $this->output(json_encode($fields, JSON_PRETTY_PRINT));
                 break;
 
             case 'table':
                 if (empty($fields)) {
-                    $this->line("<info>No $type fields found for $modelName model.</info>");
+                    $this->output("No $type fields found for $modelName model.");
 
                     return;
                 }
@@ -185,16 +187,32 @@ class ModelFieldsCommand extends Command
             case 'list':
             default:
                 if (empty($fields)) {
-                    $this->line("<info>No $type fields found for $modelName model.</info>");
+                    $this->output("No $type fields found for $modelName model.");
 
                     return;
                 }
 
-                $this->line("<info>$modelName $type fields:</info>");
+                $this->output("$modelName $type fields:");
                 foreach ($fields as $field) {
-                    $this->line("  - $field");
+                    $this->output("  - $field");
                 }
                 break;
+        }
+    }
+
+    /**
+     * Output text with version-aware compatibility
+     *
+     * @param  string  $text
+     *
+     * @return void
+     */
+    private function output($text)
+    {
+        if ($this->needsLegacyOutputCompatibility()) {
+            $this->getOutput()->writeln($text);
+        } else {
+            $this->line("<info>$text</info>");
         }
     }
 
@@ -205,7 +223,7 @@ class ModelFieldsCommand extends Command
      */
     private function askToStarRepository()
     {
-        if (! $this->shouldShowInteractivePrompt()) {
+        if (!$this->shouldShowInteractivePrompt()) {
             return;
         }
 
@@ -222,7 +240,7 @@ class ModelFieldsCommand extends Command
 
         if ($wantsToStar) {
             $this->openUrl($repo);
-            $this->line('<info>Thank you!</info>');
+            $this->output('Thank you!');
         }
 
         Cache::forever($cacheKey, true);
@@ -235,16 +253,10 @@ class ModelFieldsCommand extends Command
      */
     private function shouldShowInteractivePrompt()
     {
-        /**
-         * In testing environment, always allow prompts for Laravel ≤10 for better test compatibility
-         */
-        if ($this->isTestingEnvironment() && Helpers::isLaravelVersionLessThanOrEqualTo10()) {
+        if ($this->needsLegacyOutputCompatibility()) {
             return true;
         }
 
-        /**
-         * For Laravel 11+ or non-testing environments, use standard interactive check
-         */
         return $this->input->isInteractive();
     }
 
@@ -256,6 +268,16 @@ class ModelFieldsCommand extends Command
     private function isTestingEnvironment()
     {
         return app()->environment('testing');
+    }
+
+    /**
+     * Check if we need legacy output compatibility for Laravel ≤10 in testing
+     *
+     * @return bool
+     */
+    private function needsLegacyOutputCompatibility()
+    {
+        return $this->isTestingEnvironment() && Helpers::isLaravelVersionLessThanOrEqualTo10();
     }
 
     /**
