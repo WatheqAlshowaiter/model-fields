@@ -29,7 +29,7 @@ class ModelFieldsCommand extends Command
         $modelName = $this->argument('model');
         $format = $this->option('format');
 
-        if (!in_array($format, ['list', 'json', 'table'])) {
+        if (! in_array($format, ['list', 'json', 'table'])) {
             $this->error("Invalid format '$format'. Use: list, json, or table.");
 
             return 1;
@@ -37,7 +37,7 @@ class ModelFieldsCommand extends Command
 
         $modelClass = $this->resolveModelClass($modelName);
 
-        if (!$modelClass) {
+        if (! $modelClass) {
             $this->error("Model class '$modelName' not found.");
 
             return 1;
@@ -122,7 +122,6 @@ class ModelFieldsCommand extends Command
     /**
      * @param  string  $modelClass
      * @param  string  $type
-     *
      * @return array
      */
     protected function getFieldsByType($modelClass, $type)
@@ -151,7 +150,6 @@ class ModelFieldsCommand extends Command
      * @param  string  $format
      * @param  string  $type
      * @param  string  $modelClass
-     *
      * @return void
      */
     protected function outputFields($fields, $format, $type, $modelClass)
