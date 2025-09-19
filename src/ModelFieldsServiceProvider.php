@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use WatheqAlshowaiter\ModelFields\Console\ModelFieldsCommand;
 use WatheqAlshowaiter\ModelFields\Exceptions\UnsupportedDatabaseDriverException;
 use WatheqAlshowaiter\ModelFields\Support\Helpers;
 
@@ -22,6 +23,10 @@ class ModelFieldsServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/config.php' => config_path('model-fields.php'),
             ], 'config');
+
+            $this->commands([
+                ModelFieldsCommand::class,
+            ]);
 
             if ($this->app->environment() === 'testing') {
                 // This migration works only in the package test

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use WatheqAlshowaiter\ModelFields\Tests\Constants;
 
+/** @noinspection PhpIllegalPsrClassPathInspection */
 class CreateSonsTable extends Migration
 {
     public function up(): void

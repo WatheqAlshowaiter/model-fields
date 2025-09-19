@@ -58,10 +58,7 @@
             "@composer run build",
             "@php vendor/bin/testbench serve"
         ],
-        "test": "vendor/bin/phpunit",
-        "post-autoload-dump": [
-            "@php -r \"class_exists('WatheqAlshowaiter\\\\ModelFields\\\\Console\\\\ThanksCommand') && WatheqAlshowaiter\\\\ModelFields\\\\Console\\\\ThanksCommand::show();\""
-        ]
+        "test": "vendor/bin/phpunit"
     },
     "config": {
         "sort-packages": true,
