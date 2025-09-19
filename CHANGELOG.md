@@ -2,6 +2,12 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.0.2 - 2025-09-19
+
+Fix banner when install
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.0.1...3.0.2
+
 ## 3.0.1 - 2025-09-19
 
 ### What's Changed
