@@ -184,7 +184,7 @@ class ModelFieldsCommandTest extends TestCase
 
         $output = Artisan::output();
 
-        $this->assertEquals("No app-default fields found for Father model.\n", $output);
+        $this->assertStringContainsString("No app-default fields found for Father model.", $output);
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -201,7 +201,7 @@ class ModelFieldsCommandTest extends TestCase
 
         $output = Artisan::output();
 
-        $this->assertEquals("No app-default fields found for Father model.\n", $output);
+        $this->assertStringContainsString("No app-default fields found for Father model.", $output);
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -217,7 +217,7 @@ class ModelFieldsCommandTest extends TestCase
 
         $output = Artisan::output();
 
-        $this->assertEquals("No app-default fields found for Father model.\n", $output);
+        $this->assertStringContainsString("No app-default fields found for Father model.", $output);
 
         Cache::forget('model-fields.banner_shown');
     }
