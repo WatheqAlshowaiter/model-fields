@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.0.1 - 2025-09-19
+
+### What's Changed
+
+Add Star command after installation
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.0.0...3.0.1
+
 ## 3.0.3 - 2025-09-18
 
 ### What's Changed
