@@ -14,27 +14,24 @@ class ThanksCommand
             return;
         }
 
-        // Skip if running in a non-interactive environment
-        if (function_exists('posix_isatty') && ! posix_isatty(STDIN)) {
-            echo "\n🎉 Thanks for using Model Fields!\n";
-
-            return;
-        }
-
         echo "\n";
         echo "🎉 Thanks for using Model Fields!\n";
         echo "If you find this package useful, please consider starring it on GitHub.\n";
         echo "Repository: https://github.com/WatheqAlshowaiter/model-fields\n";
         echo "\n";
-        echo 'Would you like to open the repository in your browser? [y/N]: ';
 
-        $handle = fopen('php://stdin', 'r');
-        $response = strtolower(trim(fgets($handle)));
-        fclose($handle);
+        // Only show interactive prompt if terminal is interactive
+        if (function_exists('posix_isatty') && posix_isatty(STDIN)) {
+            echo 'Would you like to open the repository in your browser? [y/N]: ';
 
-        if ($response === 'y' || $response === 'yes') {
-            self::openUrl('https://github.com/WatheqAlshowaiter/model-fields');
-            echo "Opening repository in your browser...\n";
+            $handle = fopen('php://stdin', 'r');
+            $response = strtolower(trim(fgets($handle)));
+            fclose($handle);
+
+            if ($response === 'y' || $response === 'yes') {
+                self::openUrl('https://github.com/WatheqAlshowaiter/model-fields');
+                echo "Opening repository in your browser...\n";
+            }
         }
 
         echo "Thank you! 🙏\n\n";
