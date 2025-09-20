@@ -89,15 +89,15 @@ class ModelFieldsCommandTest extends TestCase
         $this->artisan('model:fields', [
             'model' => Father::class,
         ])
-            ->expectsOutputToContain('Father all fields:')
-            ->expectsOutputToContain('  - id')
-            ->expectsOutputToContain('  - active')
-            ->expectsOutputToContain('  - name')
-            ->expectsOutputToContain('  - email')
-            ->expectsOutputToContain('  - username')
-            ->expectsOutputToContain('  - created_at')
-            ->expectsOutputToContain('  - updated_at')
-            ->expectsOutputToContain('  - deleted_at');
+            ->expectsOutput('Father all fields:')
+            ->expectsOutput('  - id')
+            ->expectsOutput('  - active')
+            ->expectsOutput('  - name')
+            ->expectsOutput('  - email')
+            ->expectsOutput('  - username')
+            ->expectsOutput('  - created_at')
+            ->expectsOutput('  - updated_at')
+            ->expectsOutput('  - deleted_at');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -109,9 +109,10 @@ class ModelFieldsCommandTest extends TestCase
         $this->artisan('model:fields', [
             'model' => Father::class,
             '--required' => true,
-        ])->expectsOutputToContain('Father required fields:')
-            ->expectsOutputToContain('  - name')
-            ->expectsOutputToContain('  - email');
+        ])
+            ->expectsOutput('Father required fields:')
+            ->expectsOutput('  - name')
+            ->expectsOutput('  - email');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -124,9 +125,9 @@ class ModelFieldsCommandTest extends TestCase
             'model' => Father::class,
             '-r' => true,
         ])
-            ->expectsOutputToContain('Father required fields:')
-            ->expectsOutputToContain('  - name')
-            ->expectsOutputToContain('  - email');
+            ->expectsOutput('Father required fields:')
+            ->expectsOutput('  - name')
+            ->expectsOutput('  - email');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -176,7 +177,7 @@ class ModelFieldsCommandTest extends TestCase
             'model' => Father::class,
             '-A' => true,
             '--format' => 'json',
-        ])->expectsOutputToContain('No app-default fields found for Father model.');
+        ])->expectsOutput('No app-default fields found for Father model.');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -189,7 +190,7 @@ class ModelFieldsCommandTest extends TestCase
             'model' => Father::class,
             '-A' => true,
             '--format' => 'table',
-        ])->expectsOutputToContain('No app-default fields found for Father model.');
+        ])->expectsOutput('No app-default fields found for Father model.');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -201,7 +202,7 @@ class ModelFieldsCommandTest extends TestCase
         $this->artisan('model:fields', [
             'model' => Father::class,
             '-A' => true,
-        ])->expectsOutputToContain('No app-default fields found for Father model.');
+        ])->expectsOutput('No app-default fields found for Father model.');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -239,8 +240,7 @@ class ModelFieldsCommandTest extends TestCase
         Cache::forget('model-fields.banner_shown');
 
         // Create a subclass that overrides openUrl()
-        $stubCommand = new class extends ModelFieldsCommand
-        {
+        $stubCommand = new class extends ModelFieldsCommand {
             public string $calledWith = '';
 
             // Change to protected so test can inspect
@@ -252,7 +252,7 @@ class ModelFieldsCommandTest extends TestCase
         };
 
         // Replace the command in Laravel's container so artisan uses our stub
-        $this->app->extend(ModelFieldsCommand::class, fn () => $stubCommand);
+        $this->app->extend(ModelFieldsCommand::class, fn() => $stubCommand);
 
         $this->artisan('model:fields', [
             'model' => Father::class,
