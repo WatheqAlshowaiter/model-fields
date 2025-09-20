@@ -44,7 +44,8 @@ class FieldsTest extends TestCase
             $table->timestamps();
         });
 
-        $testModelClass = new class extends Model {
+        $testModelClass = new class extends Model
+        {
             protected $table = 'test_table';
 
             public static function requiredFields()
@@ -60,7 +61,6 @@ class FieldsTest extends TestCase
         // but other methods works fine
         $this->assertEquals(['created_at', 'updated_at'], $testModelClass::nullableFields());
     }
-
 
     public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
     {
@@ -95,7 +95,7 @@ class FieldsTest extends TestCase
     {
         $modelClasses = [
             "WatheqAlshowaiter\ModelFields\Tests\Models\Father",
-            "WatheqAlshowaiter\ModelFields\Tests\Models\Mother"
+            "WatheqAlshowaiter\ModelFields\Tests\Models\Mother",
         ];
 
         foreach ($modelClasses as $modelClass) {
@@ -218,7 +218,6 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::requiredFields());
         $this->assertEquals($expected, Brother::requiredFieldsForOlderVersions());
     }
-
 
     public function test_nullable_fields_for_father_model()
     {
@@ -380,7 +379,7 @@ class FieldsTest extends TestCase
      */
     private function removeMacro(string $class, string $macro): void
     {
-        if (!method_exists($class, 'hasMacro')) {
+        if (! method_exists($class, 'hasMacro')) {
             return;
         }
 
