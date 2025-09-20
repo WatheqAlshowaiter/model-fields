@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.1.0 - 2025-09-20
+
+### What's Changed
+
+* feat: add askToStarRepository command by @WatheqAlshowaiter in https://github.com/WatheqAlshowaiter/model-fields/pull/26
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.0.2...3.1.0
+
 ## 3.0.2 - 2025-09-19
 
 Fix banner when install
