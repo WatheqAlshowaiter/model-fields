@@ -2,10 +2,13 @@
 
 namespace WatheqAlshowaiter\ModelFields\Tests;
 
+use BadMethodCallException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
+use ReflectionClass;
+use ReflectionException;
 use WatheqAlshowaiter\ModelFields\Exceptions\InvalidModelClassException;
 use WatheqAlshowaiter\ModelFields\Fields;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Brother;
@@ -20,7 +23,7 @@ class FieldsTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_get_required_fields_only_if_config_enabled_macro()
     {
@@ -29,7 +32,7 @@ class FieldsTest extends TestCase
          */
         $this->removeMacro(Builder::class, 'requiredFields');
 
-        $this->expectException(\BadMethodCallException::class);
+        $this->expectException(BadMethodCallException::class);
         Father::requiredFields();
     }
 
@@ -57,7 +60,7 @@ class FieldsTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function removeMacro(string $class, string $macro): void
     {
@@ -65,7 +68,7 @@ class FieldsTest extends TestCase
             return;
         }
 
-        $reflection = new \ReflectionClass($class);
+        $reflection = new ReflectionClass($class);
         $property = $reflection->getProperty('macros');
         $property->setAccessible(true);
 

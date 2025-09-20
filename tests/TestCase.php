@@ -87,7 +87,7 @@ class TestCase extends Orchestra
 
         // if not supported above then stop the test
         if (! in_array($dbConnection, ['mysql', 'mariadb', 'pgsql', 'sqlite', 'sqlsrv'])) {
-            echo "database {$dbConnection} is not supported";
+            echo "database $dbConnection is not supported";
             exit;
         }
     }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Schema;
 use WatheqAlshowaiter\ModelFields\Tests\Constants;
 
+/** @noinspection PhpIllegalPsrClassPathInspection */
 class CreateFathersTable extends Migration
 {
     public function up(): void
@@ -27,6 +28,6 @@ class CreateFathersTable extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('parent_test_models');
+        Schema::dropIfExists('fathers');
     }
 }

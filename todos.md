@@ -40,14 +40,32 @@
     - [x] Fields::model(User::class)->defaultFields()  // both database and laravel fields
     - [x] Fields::model(User::class)->allFields()  // all fields
 - [x] fix postgres database for databaseDefaultFields
-- [x] fix SQLServer in github action 
+- [x] fix SQLServer in github action
 - [x] fix all todos
 - [x] return github actions
-- [x] add all what is inside FieldsTest to Builder::macros 
+- [x] add all what is inside FieldsTest to Builder::macros
 - [x] change the readme docs in response to that
-- [x] change the banner 
+- [x] change the banner
 - [x] in next version change the whole namespace, github about to model fields
 - [x] remove old code that is not in v3
 - [x] star after install
-- [ ] (next version) make commands like backup:tables
-- [ ] (next version) exclude from required fields that are filled in "creating" observers/events and add test cases for that
+- [ ] make model:fields command
+    - [x] signature
+        - [x] improve signature without types
+        - [x] if --type is is not correct through an exception
+        - [x] make appreciation for types like required/r, nullable, json|array etc and make naming consistent and
+          symmetric
+    - [x] improve $description
+    - [x] improve resolveModelClass
+    - [x] make sure cache is working correctly for github star
+    - [x] in format=table "Field Name" should be the actual field name
+    - [x] remove unuseful try catch
+    - [x] test each step
+        - [x] for testing ask to star I need
+            - [x] test cache key
+            - [x] test output
+            - [x] test opening the url (mocking with reflectionClass)
+    - [x] make sure $this->input->isInteractive() it enough
+    - [ ] add new changes in using the terminal to the docs 
+- [ ] (next version) exclude from required fields that are filled in "creating" observers/events and add test cases for
+  that
