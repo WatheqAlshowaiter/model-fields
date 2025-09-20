@@ -57,6 +57,10 @@ class FieldsTest extends TestCase
         };
 
         $this->assertEquals(['some_field'], $testModelClass::requiredFields());
+
+        // but other methods works fine
+        $this->assertEquals(['created_at', 'updated_at'], $testModelClass::nullableFields());
+
     }
 
     /**
