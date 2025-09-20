@@ -204,9 +204,6 @@ jobs:
         ports:
           - 1433:1433
 
-    strategy:
-      fail-fast: true
-
     name: SQL Server 2019
 
     steps:
@@ -227,7 +224,7 @@ jobs:
           curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
           sudo apt-get update
           sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev
-          echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> $GITHUB_ENV
+          echo "/opt/mssql-tools18/bin" >> $GITHUB_PATH
 
       - name: Set Framework version
         run: composer config version "12.x-dev"
@@ -239,7 +236,7 @@ jobs:
         run: |
           echo "Waiting for SQL Server to start..."
           for i in {1..30}; do
-            /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P Forge123 -Q "SELECT 1" && break
+            sqlcmd -S localhost -U SA -P Forge123 -Q "SELECT 1" -C && break
             echo "SQL Server is starting up..."
             sleep 2
           done
