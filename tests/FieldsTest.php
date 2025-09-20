@@ -94,8 +94,8 @@ class FieldsTest extends TestCase
     public function test_facade_accepts_dynamic_string_class_names()
     {
         $modelClasses = [
-            "WatheqAlshowaiter\ModelFields\Tests\Models\Father",
-            "WatheqAlshowaiter\ModelFields\Tests\Models\Mother"
+            "WatheqAlshowaiter\ModelFields\Tests\Models\Father", // with leading slash
+            "\WatheqAlshowaiter\ModelFields\Tests\Models\Mother" // without leading slash
         ];
 
         foreach ($modelClasses as $modelClass) {
