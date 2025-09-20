@@ -87,19 +87,18 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
-        ]);
-
-        $this->assertStringContainsString('Father all fields:', $output);
-        $this->assertStringContainsString('  - id', $output);
-        $this->assertStringContainsString('  - active', $output);
-        $this->assertStringContainsString('  - name', $output);
-        $this->assertStringContainsString('  - email', $output);
-        $this->assertStringContainsString('  - username', $output);
-        $this->assertStringContainsString('  - created_at', $output);
-        $this->assertStringContainsString('  - updated_at', $output);
-        $this->assertStringContainsString('  - deleted_at', $output);
+        ])
+            ->expectsOutputToContain('Father all fields:')
+            ->expectsOutputToContain('  - id')
+            ->expectsOutputToContain('  - active')
+            ->expectsOutputToContain('  - name')
+            ->expectsOutputToContain('  - email')
+            ->expectsOutputToContain('  - username')
+            ->expectsOutputToContain('  - created_at')
+            ->expectsOutputToContain('  - updated_at')
+            ->expectsOutputToContain('  - deleted_at');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -108,14 +107,12 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '--required' => true,
-        ]);
-
-        $this->assertStringContainsString('Father required fields:', $output);
-        $this->assertStringContainsString('  - name', $output);
-        $this->assertStringContainsString('  - email', $output);
+        ])->expectsOutputToContain('Father required fields:')
+            ->expectsOutputToContain('  - name')
+            ->expectsOutputToContain('  - email');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -124,14 +121,13 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '-r' => true,
-        ]);
-
-        $this->assertStringContainsString('Father required fields:', $output);
-        $this->assertStringContainsString('  - name', $output);
-        $this->assertStringContainsString('  - email', $output);
+        ])
+            ->expectsOutputToContain('Father required fields:')
+            ->expectsOutputToContain('  - name')
+            ->expectsOutputToContain('  - email');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -140,20 +136,18 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '--nullable' => true,
             '--format' => 'json',
-        ]);
+        ])
+            ->expectsOutput('[
+    "username",
+    "created_at",
+    "updated_at",
+    "deleted_at"
+]');
 
-        $this->assertJson($output);
-        /** @noinspection PhpComposerExtensionStubsInspection */
-        $decoded = json_decode(trim($output), true);
-        $this->assertIsArray($decoded);
-        $this->assertContains('username', $decoded);
-        $this->assertContains('created_at', $decoded);
-        $this->assertContains('updated_at', $decoded);
-        $this->assertContains('deleted_at', $decoded);
         Cache::forget('model-fields.banner_shown');
     }
 
@@ -161,16 +155,16 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '--primary' => true,
             '--format' => 'table',
-        ]);
-
-        $this->assertStringContainsString('Father primary fields', $output);
-        $this->assertStringContainsString('id', $output);
-        $this->assertStringContainsString('+', $output); // Table border characters
-        $this->assertStringContainsString('|', $output); // Table border characters
+        ])
+            ->expectsTable([
+                'Father primary fields',
+            ], [
+                ['id']
+            ]);
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -179,13 +173,11 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '-A' => true,
             '--format' => 'json',
-        ]);
-
-        $this->assertStringContainsString('No app-default fields found for Father model.', $output);
+        ])->expectsOutputToContain('No app-default fields found for Father model.');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -194,13 +186,11 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '-A' => true,
             '--format' => 'table',
-        ]);
-
-        $this->assertStringContainsString('No app-default fields found for Father model.', $output);
+        ])->expectsOutputToContain('No app-default fields found for Father model.');
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -209,12 +199,10 @@ class ModelFieldsCommandTest extends TestCase
     {
         Cache::forever('model-fields.banner_shown', true);
 
-        $output = $this->runCommandAndGetOutput([
+        $this->artisan('model:fields', [
             'model' => Father::class,
             '-A' => true,
-        ]);
-
-        $this->assertStringContainsString('No app-default fields found for Father model.', $output);
+        ])->expectsOutputToContain('No app-default fields found for Father model.');
 
         Cache::forget('model-fields.banner_shown');
     }
