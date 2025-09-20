@@ -204,7 +204,7 @@ class ModelFieldsCommand extends Command
      */
     private function askToStarRepository()
     {
-        if (!$this->input->isInteractive()) {
+        if (! $this->input->isInteractive()) {
             return;
         }
 
