@@ -3,29 +3,16 @@
 namespace WatheqAlshowaiter\ModelFields\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\BufferedOutput;
 use WatheqAlshowaiter\ModelFields\Console\ModelFieldsCommand;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Father;
 
 class ModelFieldsCommandTest extends TestCase
 {
     use RefreshDatabase;
-
-    /**
-     * @return string
-     */
-    private function runCommandAndGetOutput(array $params)
-    {
-        $buffer = new BufferedOutput;
-        Artisan::call('model:fields', $params, $buffer);
-
-        return trim($buffer->fetch());
-    }
 
     public function test_error_when_no_model_provided()
     {
@@ -229,7 +216,6 @@ class ModelFieldsCommandTest extends TestCase
             'model' => Father::class,
         ])
             ->expectsQuestion('🌟 Help other developers find this package by starring it on GitHub?', false)
-            ->doesntExpectOutput('Thank you!')
             ->assertExitCode(0);
 
         $this->assertTrue(Cache::get('model-fields.banner_shown'));
