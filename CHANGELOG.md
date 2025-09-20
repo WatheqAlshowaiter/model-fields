@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.1.4 - 2025-09-20
+
+### What's Changed
+
+* chore: fix SQL server cert issue in CI
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.1.3...3.1.4
+
 ## 3.1.3 - 2025-09-20
 
 Improve the test
