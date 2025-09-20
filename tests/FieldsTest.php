@@ -44,8 +44,7 @@ class FieldsTest extends TestCase
             $table->timestamps();
         });
 
-        $testModelClass = new class extends Model
-        {
+        $testModelClass = new class extends Model {
             protected $table = 'test_table';
 
             public static function requiredFields()
@@ -60,27 +59,8 @@ class FieldsTest extends TestCase
 
         // but other methods works fine
         $this->assertEquals(['created_at', 'updated_at'], $testModelClass::nullableFields());
-
     }
 
-    /**
-     * @throws ReflectionException
-     */
-    private function removeMacro(string $class, string $macro): void
-    {
-        if (! method_exists($class, 'hasMacro')) {
-            return;
-        }
-
-        $reflection = new ReflectionClass($class);
-        $property = $reflection->getProperty('macros');
-        $property->setAccessible(true);
-
-        $macros = $property->getValue();
-        unset($macros[$macro]);
-        $property->setValue($macros);
-        $property->setAccessible(false);
-    }
 
     public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
     {
@@ -109,6 +89,18 @@ class FieldsTest extends TestCase
         $this->expectExceptionMessage('You should use the model method first');
 
         Fields::primaryField();
+    }
+
+    public function test_facade_accepts_dynamic_string_class_names()
+    {
+        $modelClasses = [
+            "WatheqAlshowaiter\ModelFields\Tests\Models\Father",
+            "WatheqAlshowaiter\ModelFields\Tests\Models\Mother"
+        ];
+
+        foreach ($modelClasses as $modelClass) {
+            $this->assertEquals(['id'], Fields::model($modelClass)->primaryField());
+        }
     }
 
     public function test_all_fields_for_father_model()
@@ -192,6 +184,41 @@ class FieldsTest extends TestCase
             'name',
         ], Father::requiredFieldsForOlderVersions());
     }
+
+    public function test_required_fields_for_mother_model()
+    {
+        $expected = [
+            'uuid',
+            'ulid',
+        ];
+        $this->assertEquals($expected, Fields::model(Mother::class)->requiredFields());
+        $this->assertEquals($expected, Fields::model(Mother::class)->requiredFieldsForOlderVersions());
+        $this->assertEquals($expected, Mother::requiredFields());
+        $this->assertEquals($expected, Mother::requiredFieldsForOlderVersions());
+    }
+
+    public function test_required_fields_for_son_model()
+    {
+        $expected = [
+            'father_id',
+        ];
+        $this->assertEquals($expected, Fields::model(Son::class)->requiredFields());
+        $this->assertEquals($expected, Fields::model(Son::class)->requiredFieldsForOlderVersions());
+        $this->assertEquals($expected, Son::requiredFields());
+        $this->assertEquals($expected, Son::requiredFieldsForOlderVersions());
+    }
+
+    public function test_required_fields_for_brother_model()
+    {
+        $expected = [
+            'email',
+        ];
+        $this->assertEquals($expected, Fields::model(Brother::class)->requiredFields());
+        $this->assertEquals($expected, Fields::model(Brother::class)->requiredFieldsForOlderVersions());
+        $this->assertEquals($expected, Brother::requiredFields());
+        $this->assertEquals($expected, Brother::requiredFieldsForOlderVersions());
+    }
+
 
     public function test_nullable_fields_for_father_model()
     {
@@ -346,5 +373,24 @@ class FieldsTest extends TestCase
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
         $this->assertEquals($expected, Brother::defaultFields());
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    private function removeMacro(string $class, string $macro): void
+    {
+        if (!method_exists($class, 'hasMacro')) {
+            return;
+        }
+
+        $reflection = new ReflectionClass($class);
+        $property = $reflection->getProperty('macros');
+        $property->setAccessible(true);
+
+        $macros = $property->getValue();
+        unset($macros[$macro]);
+        $property->setValue($macros);
+        $property->setAccessible(false);
     }
 }
