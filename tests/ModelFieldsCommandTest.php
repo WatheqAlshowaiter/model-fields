@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\BufferedOutput;
 use WatheqAlshowaiter\ModelFields\Console\ModelFieldsCommand;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Father;
@@ -38,7 +39,7 @@ class ModelFieldsCommandTest extends TestCase
     {
         $this->artisan('model:fields', ['model' => 'NonExistentModel'])
             ->expectsOutput("Model class 'NonExistentModel' not found.")
-            ->assertFailed();
+            ->assertExitCode(Command::FAILURE);
     }
 
     public function test_failed_when_format_option_is_not_valid()
@@ -58,7 +59,7 @@ class ModelFieldsCommandTest extends TestCase
             '--required' => true,
             '--format' => $invalidFormat,
         ])->expectsOutput("Invalid format '$invalidFormat'. Use: list, json, or table.")
-            ->assertFailed();
+            ->assertExitCode(Command::FAILURE);
     }
 
     public function test_use_list_format_when_not_provided()
@@ -66,7 +67,7 @@ class ModelFieldsCommandTest extends TestCase
         Cache::forever('model-fields.banner_shown', true);
 
         $this->artisan('model:fields', ['model' => Father::class])
-            ->assertSuccessful();
+            ->assertExitCode(Command::SUCCESS);
 
         Cache::forget('model-fields.banner_shown');
     }
@@ -79,7 +80,7 @@ class ModelFieldsCommandTest extends TestCase
             '--nullable' => true,
         ])
             ->expectsOutput('Please specify only one field type option.')
-            ->assertFailed();
+            ->assertExitCode(Command::FAILURE);
     }
 
     public function test_default_to_all_fields_when_no_type_specified()
@@ -240,8 +241,7 @@ class ModelFieldsCommandTest extends TestCase
         Cache::forget('model-fields.banner_shown');
 
         // Create a subclass that overrides openUrl()
-        $stubCommand = new class extends ModelFieldsCommand
-        {
+        $stubCommand = new class extends ModelFieldsCommand {
             public string $calledWith = '';
 
             // Change to protected so test can inspect
@@ -253,7 +253,7 @@ class ModelFieldsCommandTest extends TestCase
         };
 
         // Replace the command in Laravel's container so artisan uses our stub
-        $this->app->extend(ModelFieldsCommand::class, fn () => $stubCommand);
+        $this->app->extend(ModelFieldsCommand::class, fn() => $stubCommand);
 
         $this->artisan('model:fields', [
             'model' => Father::class,
