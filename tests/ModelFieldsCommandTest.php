@@ -2,14 +2,11 @@
 
 namespace WatheqAlshowaiter\ModelFields\Tests;
 
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Output\BufferedOutput;
 use WatheqAlshowaiter\ModelFields\Console\ModelFieldsCommand;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Father;
 
@@ -20,7 +17,6 @@ class ModelFieldsCommandTest extends TestCase
     public const SUCCESS_EXIT_CODE = 0;
 
     public const FAILURE_EXIT_CODE = 1;
-
 
     public function test_error_when_no_model_provided()
     {
@@ -235,7 +231,8 @@ class ModelFieldsCommandTest extends TestCase
         Cache::forget('model-fields.banner_shown');
 
         // Create a subclass that overrides openUrl()
-        $stubCommand = new class extends ModelFieldsCommand {
+        $stubCommand = new class extends ModelFieldsCommand
+        {
             public string $calledWith = '';
 
             // Change to protected so test can inspect
@@ -247,7 +244,7 @@ class ModelFieldsCommandTest extends TestCase
         };
 
         // Replace the command in Laravel's container so artisan uses our stub
-        $this->app->extend(ModelFieldsCommand::class, fn() => $stubCommand);
+        $this->app->extend(ModelFieldsCommand::class, fn () => $stubCommand);
 
         $this->artisan('model:fields', [
             'model' => Father::class,
