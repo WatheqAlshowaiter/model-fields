@@ -43,8 +43,8 @@ Think that's simple? You probably haven’t faced the legacy projects I have. :)
 
 > [!Note]  
 > This is the documentation for version 3, if you want the version 1 or version 2 documentations go  
-> V1 with [this link](./v1.documentation.md).  
-> V2 with [this link](./v2.documentation.md).
+> V2 with [this link](./v2.documentation.md).\
+> V1 with [this link](./v1.documentation.md).
 
 ## Installation
 
@@ -84,9 +84,9 @@ Schema::create('users', function (Blueprint $table) {
 > We have two ways:
 > - Either use the `ModelFields` facade.
 > - Or use the method statically on the model. (using the magic of laravel macros).
+> - Or use the `model:fields` console command.
 
-We will explain the **macro way** in two examples, and the other will be only using the **facade way** and all the
-methods in both ways are the same.
+Here is the sample:
 
 ```php
 // Facade way
@@ -103,9 +103,15 @@ User::allFields(); // returns ['id', 'name', 'email', 'email_verified_at', 'pass
 User::requiredFields(); // returns ['name', 'email', 'password']
 ```
 
+```sh 
+# console command
+php artisan model:fields \\App\\Models\\User --all --format=json
+php artisan model:fields "App\Models\User" --required --format=table
+```
+
 That's it!
 
-> [!NOTE]  
+> [!NOTE]
 > To disable the macro approach, set the `enable_macro` value to false in the published `model-fields.php`
 > configuration file.
 
@@ -143,13 +149,19 @@ Fields::model(Post::class)->requiredFields(); // returns ['user_id', 'ulid', 'ti
 Post::requiredFields();  // returns ['user_id', 'ulid', 'title', 'description']
 ```
 
+```sh
+# console command 
+php artisan model:fields App\\Models\\Post --required # or -r
+```
+
 ### And more
 
 We have the flexibility to get all fields, required fields, nullable fields, primary key, database default fields,
 application default fields, and default fields. You can use these methods with these results:
 
+#### All fields
+
 ```php
-// All fields
 Fields::model(Post::class)->allFields();
 
 // or
@@ -161,8 +173,13 @@ Post::allFields();
 // ]
 ```
 
+```sh
+php artisan model:fields App\\Models\\Post --all # or just the model without option because it is the default
+```
+
+#### Nullable fields
+
 ```php
-// Nullable fields 
 Fields::model(Post::class)->nullableFields();
 
 //or
@@ -175,8 +192,14 @@ Post::nullableFields();
 // ]
 ```
 
+```sh
+# console command
+php artisan model:fields App\\Models\\Post --nullable    # or -N
+```
+
+#### Primary field
+
 ```php
-// Primary field
 Fields::model(Post::class)->primaryField();
 
 // or
@@ -185,8 +208,14 @@ Post::primaryField();
 // returns ['id']
 ```
 
+```sh
+# console command
+php artisan model:fields User --primary     # or -p
+```
+
+#### Database default fields
+
 ```php
-// Database default fields
 Fields::model(Post::class)->databaseDefaultFields();
 
 //or 
@@ -195,8 +224,14 @@ Post::databaseDefaultFields();
 // returns ['active']
 ```
 
+```sh
+# console command
+php artisan model:fields User --db-default  # or -D
+```
+
+#### Application default fields
+
 ```php
-// Application default fields
 Fields::model(Post::class)->applicationDefaultFields();
 
 //or 
@@ -217,8 +252,14 @@ class Post extends Model
 // ]
 ```
 
+```sh
+#console command
+php artisan model:fields User --app-default # or -A
+```
+
+#### Default fields
+
 ```php
-// Default fields
 Fields::model(Post::class)->defaultFields();
 
 //or 
@@ -239,13 +280,49 @@ class Post extends Model
 // ]
 ```
 
+```sh
+#console command
+php artisan model:fields User --default     # or -d
+```
+
+### More on console commands
+
+- All fields is the default option if you didn't specify one.
+
+```sh
+php artisan model:fields \\App\\Models\\Post # will result all fields
+```
+
+- The package will try to find models in common places if you don't provide full namespace.
+
+```sh
+php artisan model:fields User # It will try to find the model in `App\Models\User` or `App\User` namespaces
+```
+
+- You can add namespaces in two ways: in two backslashes `\\` or inside double quotes `""`. This is a laravel thing and
+  not specific to the package.
+
+```sh
+php artisan model:fields \\Modules\\Order\\src\\Models\\Order
+# or 
+php artisan model:fields "Modules\Order\src\Models\Order"
+```
+
+- You have 3 output formats: list, json and table. the list is the default
+
+```sh
+php artisan model:fields User --format=json
+php artisan model:fields User --format=table
+php artisan model:fields User --format=list  # default
+```
+
 ## Why?
 
 ### The problem
 
 I wanted to add tests to a legacy project that didn't have any. I wanted to add tests but couldn't find a factory, so I
 tried building them. However, it was hard to figure out the required fields for testing the basic functionality since
-some tables have too many fields.
+some tables have too many fields across many migration files.
 
 ### The Solution
 
@@ -265,6 +342,8 @@ So Briefly, This package is useful if:
 ✅ Supports Laravel versions: 12, 11, 10, 9, 8, 7, and 6.
 
 ✅ Supports PHP versions: 8.4, 8.3, 8.2, 8.1, 8.0, and 7.4.
+
+✅ Supports multiple ways of fetching fields: using console commands, or facades, or models macros.
 
 ✅ Supports SQL databases: SQLite, MySQL/MariaDB, PostgreSQL, and SQL Server.
 
