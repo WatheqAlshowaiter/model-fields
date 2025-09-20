@@ -2,6 +2,12 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.1.2 - 2025-09-20
+
+* Add more tests
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.1.1...3.1.2
+
 ## 3.1.1 - 2025-09-20
 
 ### What's Changed
