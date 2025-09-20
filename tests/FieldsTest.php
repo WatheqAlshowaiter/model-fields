@@ -95,7 +95,7 @@ class FieldsTest extends TestCase
     {
         $modelClasses = [
             "WatheqAlshowaiter\ModelFields\Tests\Models\Father", // with leading slash
-            "\WatheqAlshowaiter\ModelFields\Tests\Models\Mother" // without leading slash
+            "\WatheqAlshowaiter\ModelFields\Tests\Models\Mother", // without leading slash
         ];
 
         foreach ($modelClasses as $modelClass) {
