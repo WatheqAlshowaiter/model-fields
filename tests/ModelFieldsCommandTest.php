@@ -163,7 +163,7 @@ class ModelFieldsCommandTest extends TestCase
             ->expectsTable([
                 'Father primary fields',
             ], [
-                ['id']
+                ['id'],
             ]);
 
         Cache::forget('model-fields.banner_shown');
