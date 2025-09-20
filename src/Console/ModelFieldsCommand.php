@@ -8,6 +8,8 @@ use WatheqAlshowaiter\ModelFields\Fields;
 
 class ModelFieldsCommand extends Command
 {
+    const STAR_PROMPT_CACHE_KEY = 'model-fields.github_star_prompted';
+
     protected $signature = 'model:fields
                            {model : The model class name (e.g., User, App\\Models\\Post)}
                            {--a|all : Get all fields}
@@ -208,7 +210,7 @@ class ModelFieldsCommand extends Command
             return;
         }
 
-        $cacheKey = 'model-fields.banner_shown';
+        $cacheKey = self::STAR_PROMPT_CACHE_KEY;
         $repo = 'https://github.com/WatheqAlshowaiter/model-fields';
 
         if (Cache::get($cacheKey)) {
