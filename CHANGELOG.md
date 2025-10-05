@@ -2,6 +2,16 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.1.7 - 2025-10-05
+
+### What's Changed
+
+* refactor(tests): centralize cache management and improve maintainability by @WatheqAlshowaiter in https://github.com/WatheqAlshowaiter/model-fields/pull/33
+* Composer replace by @WatheqAlshowaiter in https://github.com/WatheqAlshowaiter/model-fields/pull/34
+* Update Readme
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.1.5...3.1.7
+
 ## 3.1.6 - 2025-09-30
 
 ### What's Changed
