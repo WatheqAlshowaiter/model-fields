@@ -38,8 +38,7 @@
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
 <!-- ./shields -->
 
-Get the **required** fields fast for any model. You can also get **nullable** and **default** fields just as easily.
-Think that's simple? You probably haven’t faced the legacy projects I have. :).
+Quickly retrieve **required**, **nullable**, and **default** fields for any Laravel model. Think that's simple? You probably haven’t faced the legacy projects I have. :).
 
 > [!Note]  
 > This is the documentation for version 3, if you want the version 1 or version 2 documentations go  
