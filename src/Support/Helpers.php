@@ -38,7 +38,6 @@ class Helpers
      * Get fields that are automatically filled by model observers/events
      * during 'creating' and 'saving' events
      *
-     * @param $modelOrClass
      *
      * @return string[]
      */
