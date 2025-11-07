@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.2.0 - 2025-11-07
+
+### What's Changed
+
+* Exclude event filled fields by model observers, boot events, and event listeners to know really what are required fields and what are application defatult fields by @WatheqAlshowaiter in https://github.com/WatheqAlshowaiter/model-fields/pull/36
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.1.8...3.2.0
+
 ## 3.1.8 - 2025-10-05
 
 * Update Readme
