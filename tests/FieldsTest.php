@@ -224,7 +224,9 @@ class FieldsTest extends TestCase
         $expected = [];
 
         $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFields());
+        $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFieldsForOlderVersions());
         $this->assertEquals($expected, Uncle::requiredFields());
+        $this->assertEquals($expected, Uncle::requiredFieldsForOlderVersions());
     }
 
     public function test_nullable_fields_for_father_model()
