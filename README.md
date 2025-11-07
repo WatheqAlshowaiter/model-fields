@@ -38,7 +38,8 @@
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
 <!-- ./shields -->
 
-Quickly retrieve **required**, **nullable**, and **default** fields for any Laravel model. Think that's simple? You probably haven’t faced the legacy projects I have. :).
+Quickly retrieve **required**, **nullable**, and **default** fields for any Laravel model. Think that's simple? You
+probably haven’t faced the legacy projects I have. :).
 
 > [!Note]  
 > This is the documentation for version 3, if you want the version 1 or version 2 documentations go  
@@ -151,6 +152,63 @@ Post::requiredFields();  // returns ['user_id', 'ulid', 'title', 'description']
 ```sh
 # console command 
 php artisan model:fields App\\Models\\Post --required # or -r
+```
+
+#### Observer and Event-Filled Fields
+
+Fields that are automatically filled when creating by model observers, boot events, and event listeners are
+automatically excluded from required fields.
+
+The package supports three patterns:
+
+- **Boot method closures:** `self::creating()`, `self::saving()`
+- **Observer pattern:** `PostObserver` class
+- **Dispatched events:** `$dispatchesEvents` property
+
+For example, given this model:
+
+```php
+class Post extends Model
+{
+    protected $dispatchesEvents = [
+        // a dispatched event trigger listener that fills the `number` field
+        'creating' => PostCreatingEvent::class, 
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        self::observe(PostObserver::class);
+
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
+        
+        self::saving(function ($model) {
+            $model->ulid = Str::ulid();
+        });
+    }
+}
+
+class PostObserver
+{
+    public function creating(Post $model): void
+    {
+        $model->status = 'draft';
+    }
+    
+    public function saving(Post $model): void
+    {
+        $model->state = 'pending';
+    }
+}
+```
+
+```php
+Post::requiredFields();
+
+// returns only user-provided fields, excluding auto-filled ones like:
+//  `uuid`, `ulid`, `status`, `state`, and `number`
 ```
 
 ### And more
@@ -307,7 +365,7 @@ php artisan model:fields \\Modules\\Order\\src\\Models\\Order
 php artisan model:fields "Modules\Order\src\Models\Order"
 ```
 
-- You have 3 output formats: list, json and table. the list is the default
+- You have 3 output formats: list, json, and table. the list is the default
 
 ```sh
 php artisan model:fields User --format=json
@@ -378,8 +436,10 @@ them.
 
 ## Related Packages
 
-- **[Backup Tables](https://github.com/WatheqAlshowaiter/backup-tables)** - Backup single or multiple database tables with ease.
-- **[Filament Sticky Table Header](https://github.com/WatheqAlshowaiter/filament-sticky-table-header)** - Make Filament table headers stick when scrolling for better UX.
+- **[Backup Tables](https://github.com/WatheqAlshowaiter/backup-tables)** - Backup single or multiple database tables
+  with ease.
+- **[Filament Sticky Table Header](https://github.com/WatheqAlshowaiter/filament-sticky-table-header)** - Make Filament
+  table headers stick when scrolling for better UX.
 
 ## Credits
 
