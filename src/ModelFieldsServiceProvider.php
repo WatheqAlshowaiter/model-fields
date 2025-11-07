@@ -594,12 +594,13 @@ class ModelFieldsServiceProvider extends ServiceProvider
             Builder::macro('applicationDefaultFields', function () {
                 $modelClass = $this->getModel();
                 $modelInstance = new $modelClass;
-                $attributes = $modelInstance->getAttributes();
+                $attributes = collect($modelInstance->getAttributes())->filter()->keys()->toArray(); // ignore null values
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $allFields = $this->allFields();
 
                 return collect($attributes)
-                    ->keys()
+                    ->merge($observerDefaultAttributes)
                     ->filter(function ($field) use ($allFields) {
                         return in_array($field, $allFields);
                     })

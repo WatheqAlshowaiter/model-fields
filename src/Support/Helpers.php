@@ -38,7 +38,8 @@ class Helpers
      * Get fields that are automatically filled by model observers/events
      * during 'creating' and 'saving' events
      *
-     * @param  class-string  $model
+     * @param $modelOrClass
+     *
      * @return string[]
      */
     public static function getObserverFilledFields($modelOrClass)

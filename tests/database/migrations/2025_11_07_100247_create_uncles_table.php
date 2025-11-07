@@ -16,6 +16,7 @@ class CreateUnclesTable extends Migration
             $table->string('observer_saving'); // filled by observer saving
             $table->string('event_creating'); // filled by event creating
             $table->string('event_saving'); // filled by event saving
+            $table->string('attribute_field'); // filled by event saving
         });
     }
 

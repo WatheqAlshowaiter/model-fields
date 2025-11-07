@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Uncle extends Model
 {
+    protected $attributes = [
+        'attribute_field' => 'default-value',
+    ];
+
     protected $dispatchesEvents = [
         'creating' => UncleCreating::class, // fill `event_creating` field
         'saving' => UncleSaving::class, // fill `event_saving` field

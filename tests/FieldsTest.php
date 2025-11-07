@@ -45,8 +45,7 @@ class FieldsTest extends TestCase
             $table->timestamps();
         });
 
-        $testModelClass = new class extends Model
-        {
+        $testModelClass = new class extends Model {
             protected $table = 'test_table';
 
             public static function requiredFields()
@@ -220,7 +219,7 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::requiredFieldsForOlderVersions());
     }
 
-    public function test_required_fields_for_uncles_model()
+    public function test_required_fields_for_uncle_model()
     {
         $expected = [];
 
@@ -356,6 +355,22 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::applicationDefaultFields());
     }
 
+    public function test_application_default_fields_for_uncle_model()
+    {
+        $expected = [
+            'attribute_field',
+            'event_creating',
+            'observer_creating',
+            'boot_creating',
+            'event_saving',
+            'observer_saving',
+            'boot_saving',
+        ];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->applicationDefaultFields());
+        $this->assertEquals($expected, Uncle::applicationDefaultFields());
+    }
+
     public function test_default_fields_for_mother_model()
     {
         $expected = [
@@ -385,12 +400,28 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::defaultFields());
     }
 
+    public function test_default_fields_for_uncle_model()
+    {
+        $expected = [
+            'attribute_field',
+            'event_creating',
+            'observer_creating',
+            'boot_creating',
+            'event_saving',
+            'observer_saving',
+            'boot_saving',
+        ];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->defaultFields());
+        $this->assertEquals($expected, Uncle::defaultFields());
+    }
+
     /**
      * @throws ReflectionException
      */
     private function removeMacro(string $class, string $macro): void
     {
-        if (! method_exists($class, 'hasMacro')) {
+        if (!method_exists($class, 'hasMacro')) {
             return;
         }
 

@@ -171,7 +171,7 @@ For example, given this model:
 class Post extends Model
 {
     protected $dispatchesEvents = [
-        // a dispatched event trigger listener that fills the `number` field
+        // a dispatched event trigger listener that fills the `user_id` field
         'creating' => PostCreatingEvent::class, 
     ];
 
@@ -181,11 +181,11 @@ class Post extends Model
         self::observe(PostObserver::class);
 
         self::creating(function ($model) {
-            $model->uuid = Str::uuid();
+            $model->ulid = Str::ulid();
         });
         
         self::saving(function ($model) {
-            $model->ulid = Str::ulid();
+            $model->title = 'default title'
         });
     }
 }
@@ -194,12 +194,12 @@ class PostObserver
 {
     public function creating(Post $model): void
     {
-        $model->status = 'draft';
+        $model->description = 'default description';
     }
     
     public function saving(Post $model): void
     {
-        $model->state = 'pending';
+        $model->description = 'default saving description';
     }
 }
 ```
@@ -207,8 +207,7 @@ class PostObserver
 ```php
 Post::requiredFields();
 
-// returns only user-provided fields, excluding auto-filled ones like:
-//  `uuid`, `ulid`, `status`, `state`, and `number`
+// returns [] because it excludes auto-filled fields 
 ```
 
 ### And more
@@ -294,18 +293,54 @@ Fields::model(Post::class)->applicationDefaultFields();
 //or 
 Post::applicationDefaultFields();
 
-// If there is default attributes in the model
+// If there are default attributes in the model
 class Post extends Model
 {
     protected $attributes = [
         'title' => 'default title', 
-        'description' => 'default description',
+        'description' => null, // will be ignored
     ];
+    
+     protected $dispatchesEvents = [
+        // if there is a field autofilled by this event,
+        // then it will be added to the application default fields
+        'creating' => PostCreatingEvent::class, 
+    ];
+    
+    // or any event-filled fields
+     protected static function boot(): void
+    {
+        parent::boot();
+        self::observe(PostObserver::class);
+
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
+
+        self::saving(function ($model) {
+            $model->ulid = Str::ulid();
+        });
+    }
+}
+
+// the same in the observer class
+class PostObserver
+{
+    
+    public function creating(Post $model): void
+    {
+        // ..
+    }
+    
+    public function saving(Post $model): void
+    {
+        // ..
+    }
 }
 
 // returns
 // [
-//     'title', 'description',
+//     'title', 'uuid', 'ulid',
 // ]
 ```
 
@@ -327,8 +362,16 @@ class Post extends Model
 {
     protected $attributes = [
         'title' => 'default title', 
-        'description' => 'default description',
     ];
+    
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            $model->description = 'default description';
+        });
+    }
 }
 
 // returns

@@ -260,12 +260,13 @@ class FieldsService
         $this->throwIfNotUsingModelMethodFirst();
 
         $modelInstance = new $this->modelClass;
-        $attributes = $modelInstance->getAttributes();
+        $attributes = collect($modelInstance->getAttributes())->filter()->keys()->toArray(); // ignore null values
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $allFields = $this->allFields();
 
         return collect($attributes)
-            ->keys()
+            ->merge($observerDefaultAttributes)
             ->filter(function ($field) use ($allFields) {
                 return in_array($field, $allFields);
             })
