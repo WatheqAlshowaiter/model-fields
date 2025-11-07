@@ -379,6 +379,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $queryResult = DB::select(/** @lang SQLite */ "PRAGMA table_info($table)");
 
@@ -393,6 +394,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->toArray();
@@ -486,6 +490,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $queryResult = DB::select(
         /** @lang SQLite */ "
@@ -523,6 +528,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->toArray();
@@ -808,6 +816,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang PostgreSQL */ "
             SELECT
@@ -872,6 +881,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->unique()
@@ -961,6 +973,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang TSQL */ '
             SELECT
@@ -1010,6 +1023,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->toArray();
