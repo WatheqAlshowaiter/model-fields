@@ -17,6 +17,7 @@ use WatheqAlshowaiter\ModelFields\Tests\Models\Grandson;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Mother;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Someone;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Son;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Uncle;
 
 class FieldsTest extends TestCase
 {
@@ -219,6 +220,16 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::requiredFieldsForOlderVersions());
     }
 
+    public function test_required_fields_for_uncle_model()
+    {
+        $expected = [];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFields());
+        $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFieldsForOlderVersions());
+        $this->assertEquals($expected, Uncle::requiredFields());
+        $this->assertEquals($expected, Uncle::requiredFieldsForOlderVersions());
+    }
+
     public function test_nullable_fields_for_father_model()
     {
         $expected = [
@@ -345,6 +356,22 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::applicationDefaultFields());
     }
 
+    public function test_application_default_fields_for_uncle_model()
+    {
+        $expected = [
+            'attribute_field',
+            'event_creating',
+            'observer_creating',
+            'boot_creating',
+            'event_saving',
+            'observer_saving',
+            'boot_saving',
+        ];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->applicationDefaultFields());
+        $this->assertEquals($expected, Uncle::applicationDefaultFields());
+    }
+
     public function test_default_fields_for_mother_model()
     {
         $expected = [
@@ -372,6 +399,22 @@ class FieldsTest extends TestCase
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
         $this->assertEquals($expected, Brother::defaultFields());
+    }
+
+    public function test_default_fields_for_uncle_model()
+    {
+        $expected = [
+            'attribute_field',
+            'event_creating',
+            'observer_creating',
+            'boot_creating',
+            'event_saving',
+            'observer_saving',
+            'boot_saving',
+        ];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->defaultFields());
+        $this->assertEquals($expected, Uncle::defaultFields());
     }
 
     /**

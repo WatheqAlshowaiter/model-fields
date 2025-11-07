@@ -169,6 +169,7 @@ class ModelFieldsServiceProvider extends ServiceProvider
                 $table = Helpers::getTableFromThisModel($this->getModel());
 
                 $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->getModel());
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $primaryIndex = $this->primaryField();
 
@@ -190,6 +191,9 @@ class ModelFieldsServiceProvider extends ServiceProvider
                     })
                     ->reject(function ($column) use ($modelDefaultAttributes) {
                         return in_array($column['name'], $modelDefaultAttributes);
+                    })
+                    ->reject(function ($column) use ($observerDefaultAttributes) {
+                        return in_array($column['name'], $observerDefaultAttributes);
                     })
                     ->pluck('name')
                     ->unique()
@@ -590,12 +594,13 @@ class ModelFieldsServiceProvider extends ServiceProvider
             Builder::macro('applicationDefaultFields', function () {
                 $modelClass = $this->getModel();
                 $modelInstance = new $modelClass;
-                $attributes = $modelInstance->getAttributes();
+                $attributes = collect($modelInstance->getAttributes())->filter()->keys()->toArray(); // ignore null values
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $allFields = $this->allFields();
 
                 return collect($attributes)
-                    ->keys()
+                    ->merge($observerDefaultAttributes)
                     ->filter(function ($field) use ($allFields) {
                         return in_array($field, $allFields);
                     })
@@ -755,6 +760,7 @@ class ModelFieldsServiceProvider extends ServiceProvider
             Builder::macro('requiredFieldsForSqlite', function () {
                 $table = Helpers::getTableFromThisModel($this->getModel());
                 $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->getModel());
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $queryResult = DB::select(/** @lang SQLite */ "PRAGMA table_info($table)");
 
@@ -770,6 +776,9 @@ class ModelFieldsServiceProvider extends ServiceProvider
                     ->reject(function ($column) use ($modelDefaultAttributes) {
                         return in_array($column['name'], $modelDefaultAttributes);
                     })
+                    ->reject(function ($column) use ($observerDefaultAttributes) {
+                        return in_array($column['name'], $observerDefaultAttributes);
+                    })
                     ->pluck('name')
                     ->toArray();
             });
@@ -777,6 +786,7 @@ class ModelFieldsServiceProvider extends ServiceProvider
             Builder::macro('requiredFieldsForMysqlAndMariaDb', function () {
                 $table = Helpers::getTableFromThisModel($this->getModel());
                 $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->getModel());
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $queryResult = DB::select(
                     /** @lang SQLite */ "
@@ -815,6 +825,9 @@ class ModelFieldsServiceProvider extends ServiceProvider
                     ->reject(function ($column) use ($modelDefaultAttributes) {
                         return in_array($column['name'], $modelDefaultAttributes);
                     })
+                    ->reject(function ($column) use ($observerDefaultAttributes) {
+                        return in_array($column['name'], $observerDefaultAttributes);
+                    })
                     ->pluck('name')
                     ->toArray();
             });
@@ -822,6 +835,7 @@ class ModelFieldsServiceProvider extends ServiceProvider
             Builder::macro('requiredFieldsForPostgres', function () {
                 $table = Helpers::getTableFromThisModel($this->getModel());
                 $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->getModel());
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $primaryIndex = DB::select(/** @lang PostgreSQL */ "
                     SELECT
@@ -887,6 +901,9 @@ class ModelFieldsServiceProvider extends ServiceProvider
                     ->reject(function ($column) use ($modelDefaultAttributes) {
                         return in_array($column['name'], $modelDefaultAttributes);
                     })
+                    ->reject(function ($column) use ($observerDefaultAttributes) {
+                        return in_array($column['name'], $observerDefaultAttributes);
+                    })
                     ->pluck('name')
                     ->unique()
                     ->toArray();
@@ -895,6 +912,7 @@ class ModelFieldsServiceProvider extends ServiceProvider
             Builder::macro('requiredFieldsForSqlServer', function () {
                 $table = Helpers::getTableFromThisModel($this->getModel());
                 $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->getModel());
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $primaryIndex = DB::select(/** @lang TSQL */ '
                     SELECT
@@ -944,6 +962,9 @@ class ModelFieldsServiceProvider extends ServiceProvider
                     })
                     ->reject(function ($column) use ($modelDefaultAttributes) {
                         return in_array($column['name'], $modelDefaultAttributes);
+                    })
+                    ->reject(function ($column) use ($observerDefaultAttributes) {
+                        return in_array($column['name'], $observerDefaultAttributes);
                     })
                     ->pluck('name')
                     ->toArray();

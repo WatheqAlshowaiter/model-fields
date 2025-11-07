@@ -38,7 +38,8 @@
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
 <!-- ./shields -->
 
-Quickly retrieve **required**, **nullable**, and **default** fields for any Laravel model. Think that's simple? You probably haven’t faced the legacy projects I have. :).
+Quickly retrieve **required**, **nullable**, and **default** fields for any Laravel model. Think that's simple? You
+probably haven’t faced the legacy projects I have. :).
 
 > [!Note]  
 > This is the documentation for version 3, if you want the version 1 or version 2 documentations go  
@@ -153,6 +154,62 @@ Post::requiredFields();  // returns ['user_id', 'ulid', 'title', 'description']
 php artisan model:fields App\\Models\\Post --required # or -r
 ```
 
+#### Observer and Event-Filled Fields
+
+Fields that are automatically filled when creating by model observers, boot events, and event listeners are
+automatically excluded from required fields.
+
+The package supports three patterns:
+
+- **Boot method closures:** `self::creating()`, `self::saving()`
+- **Observer pattern:** `PostObserver` class
+- **Dispatched events:** `$dispatchesEvents` property
+
+For example, given this model:
+
+```php
+class Post extends Model
+{
+    protected $dispatchesEvents = [
+        // a dispatched event trigger listener that fills the `user_id` field
+        'creating' => PostCreatingEvent::class, 
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        self::observe(PostObserver::class);
+
+        self::creating(function ($model) {
+            $model->ulid = Str::ulid();
+        });
+        
+        self::saving(function ($model) {
+            $model->title = 'default title'
+        });
+    }
+}
+
+class PostObserver
+{
+    public function creating(Post $model): void
+    {
+        $model->description = 'default description';
+    }
+    
+    public function saving(Post $model): void
+    {
+        $model->description = 'default saving description';
+    }
+}
+```
+
+```php
+Post::requiredFields();
+
+// returns [] because it excludes auto-filled fields 
+```
+
 ### And more
 
 We have the flexibility to get all fields, required fields, nullable fields, primary key, database default fields,
@@ -236,18 +293,54 @@ Fields::model(Post::class)->applicationDefaultFields();
 //or 
 Post::applicationDefaultFields();
 
-// If there is default attributes in the model
+// If there are default attributes in the model
 class Post extends Model
 {
     protected $attributes = [
         'title' => 'default title', 
-        'description' => 'default description',
+        'description' => null, // will be ignored
     ];
+    
+     protected $dispatchesEvents = [
+        // if there is a field autofilled by this event,
+        // then it will be added to the application default fields
+        'creating' => PostCreatingEvent::class, 
+    ];
+    
+    // or any event-filled fields
+     protected static function boot(): void
+    {
+        parent::boot();
+        self::observe(PostObserver::class);
+
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
+
+        self::saving(function ($model) {
+            $model->ulid = Str::ulid();
+        });
+    }
+}
+
+// the same in the observer class
+class PostObserver
+{
+    
+    public function creating(Post $model): void
+    {
+        // ..
+    }
+    
+    public function saving(Post $model): void
+    {
+        // ..
+    }
 }
 
 // returns
 // [
-//     'title', 'description',
+//     'title', 'uuid', 'ulid',
 // ]
 ```
 
@@ -269,8 +362,16 @@ class Post extends Model
 {
     protected $attributes = [
         'title' => 'default title', 
-        'description' => 'default description',
     ];
+    
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            $model->description = 'default description';
+        });
+    }
 }
 
 // returns
@@ -307,7 +408,7 @@ php artisan model:fields \\Modules\\Order\\src\\Models\\Order
 php artisan model:fields "Modules\Order\src\Models\Order"
 ```
 
-- You have 3 output formats: list, json and table. the list is the default
+- You have 3 output formats: list, json, and table. the list is the default
 
 ```sh
 php artisan model:fields User --format=json
@@ -378,8 +479,10 @@ them.
 
 ## Related Packages
 
-- **[Backup Tables](https://github.com/WatheqAlshowaiter/backup-tables)** - Backup single or multiple database tables with ease.
-- **[Filament Sticky Table Header](https://github.com/WatheqAlshowaiter/filament-sticky-table-header)** - Make Filament table headers stick when scrolling for better UX.
+- **[Backup Tables](https://github.com/WatheqAlshowaiter/backup-tables)** - Backup single or multiple database tables
+  with ease.
+- **[Filament Sticky Table Header](https://github.com/WatheqAlshowaiter/filament-sticky-table-header)** - Make Filament
+  table headers stick when scrolling for better UX.
 
 ## Credits
 

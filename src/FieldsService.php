@@ -83,6 +83,7 @@ class FieldsService
         }
 
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $primaryIndex = $this->primaryField();
 
@@ -104,6 +105,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->unique()
@@ -256,12 +260,13 @@ class FieldsService
         $this->throwIfNotUsingModelMethodFirst();
 
         $modelInstance = new $this->modelClass;
-        $attributes = $modelInstance->getAttributes();
+        $attributes = collect($modelInstance->getAttributes())->filter()->keys()->toArray(); // ignore null values
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $allFields = $this->allFields();
 
         return collect($attributes)
-            ->keys()
+            ->merge($observerDefaultAttributes)
             ->filter(function ($field) use ($allFields) {
                 return in_array($field, $allFields);
             })
@@ -374,6 +379,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $queryResult = DB::select(/** @lang SQLite */ "PRAGMA table_info($table)");
 
@@ -388,6 +394,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->toArray();
@@ -481,6 +490,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $queryResult = DB::select(
             /** @lang SQLite */ "
@@ -518,6 +528,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->toArray();
@@ -803,6 +816,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang PostgreSQL */ "
             SELECT
@@ -867,6 +881,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->unique()
@@ -956,6 +973,7 @@ class FieldsService
     {
         $table = Helpers::getTableFromThisModel($this->modelClass);
         $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->modelClass);
+        $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $primaryIndex = DB::select(/** @lang TSQL */ '
             SELECT
@@ -1005,6 +1023,9 @@ class FieldsService
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
+            })
+            ->reject(function ($column) use ($observerDefaultAttributes) {
+                return in_array($column['name'], $observerDefaultAttributes);
             })
             ->pluck('name')
             ->toArray();

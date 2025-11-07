@@ -2,14 +2,37 @@
 
 namespace WatheqAlshowaiter\ModelFields\Tests;
 
+use Illuminate\Support\Facades\Event;
 use Orchestra\Testbench\TestCase as Orchestra;
 use WatheqAlshowaiter\ModelFields\ModelFieldsServiceProvider;
+use WatheqAlshowaiter\ModelFields\Tests\Listeners\UncleCreatingListener;
+use WatheqAlshowaiter\ModelFields\Tests\Listeners\UncleSavingListener;
+use WatheqAlshowaiter\ModelFields\Tests\Models\UncleCreating;
+use WatheqAlshowaiter\ModelFields\Tests\Models\UncleSaving;
 
 class TestCase extends Orchestra
 {
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Register event listeners for Uncle model events
+        Event::listen(UncleCreating::class, UncleCreatingListener::class);
+        Event::listen(UncleSaving::class, UncleSavingListener::class);
+
+        // Register listeners for the eloquent events that the package uses for detection
+        Event::listen(
+            'eloquent.creating: WatheqAlshowaiter\ModelFields\Tests\Models\Uncle',
+            function ($model) {
+                (new UncleCreatingListener)->handle(new UncleCreating($model));
+            }
+        );
+        Event::listen(
+            'eloquent.saving: WatheqAlshowaiter\ModelFields\Tests\Models\Uncle',
+            function ($model) {
+                (new UncleSavingListener)->handle(new UncleSaving($model));
+            }
+        );
     }
 
     protected function getPackageProviders($app)
