@@ -17,6 +17,7 @@ use WatheqAlshowaiter\ModelFields\Tests\Models\Grandson;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Mother;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Someone;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Son;
+use WatheqAlshowaiter\ModelFields\Tests\Models\Uncle;
 
 class FieldsTest extends TestCase
 {
@@ -372,6 +373,16 @@ class FieldsTest extends TestCase
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
         $this->assertEquals($expected, Brother::defaultFields());
+    }
+
+    public function test_required_fields_for_uncles_model()
+    {
+        $expected = [
+            'column_2',
+        ];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFields());
+        //$this->assertEquals($expected, Uncle::defaultFields());
     }
 
     /**
