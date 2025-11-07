@@ -24,13 +24,13 @@ class TestCase extends Orchestra
         Event::listen(
             'eloquent.creating: WatheqAlshowaiter\ModelFields\Tests\Models\Uncle',
             function ($model) {
-                (new UncleCreatingListener())->handle(new UncleCreating($model));
+                (new UncleCreatingListener)->handle(new UncleCreating($model));
             }
         );
         Event::listen(
             'eloquent.saving: WatheqAlshowaiter\ModelFields\Tests\Models\Uncle',
             function ($model) {
-                (new UncleSavingListener())->handle(new UncleSaving($model));
+                (new UncleSavingListener)->handle(new UncleSaving($model));
             }
         );
     }

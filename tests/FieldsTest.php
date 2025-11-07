@@ -45,7 +45,8 @@ class FieldsTest extends TestCase
             $table->timestamps();
         });
 
-        $testModelClass = new class extends Model {
+        $testModelClass = new class extends Model
+        {
             protected $table = 'test_table';
 
             public static function requiredFields()

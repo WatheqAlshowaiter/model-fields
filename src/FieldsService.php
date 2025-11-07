@@ -20,12 +20,11 @@ class FieldsService
      * Set up the model class to get fields from
      *
      * @param  class-string<Model>  $modelClass
-     *
      * @return $this
      */
     public function model($modelClass)
     {
-        if (!$this->isEloquentModelClass($modelClass)) {
+        if (! $this->isEloquentModelClass($modelClass)) {
             throw new InvalidModelClassException('Model class must be an instance of Eloquent model');
         }
 
@@ -197,7 +196,7 @@ class FieldsService
                 return $column;
             })
             ->filter(function ($column) use ($primaryField) {
-                return $column['default'] !== null && !(in_array($column['name'], $primaryField));
+                return $column['default'] !== null && ! (in_array($column['name'], $primaryField));
             })
             ->pluck('name')
             ->unique()
@@ -390,7 +389,7 @@ class FieldsService
             ->reject(function ($column) {
                 return $column['pk']
                     || $column['dflt_value'] != null
-                    || !$column['notnull'];
+                    || ! $column['notnull'];
             })
             ->reject(function ($column) use ($modelDefaultAttributes) {
                 return in_array($column['name'], $modelDefaultAttributes);
@@ -472,7 +471,7 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) {
-                return !$column['notnull'];
+                return ! $column['notnull'];
             })
             ->pluck('name')
             ->toArray();
@@ -493,7 +492,7 @@ class FieldsService
         $observerDefaultAttributes = Helpers::getObserverFilledFields($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -544,7 +543,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -587,7 +586,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -630,7 +629,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ '
+            /** @lang SQLite */ '
             SELECT
                 COLUMN_NAME AS name
             FROM
@@ -659,7 +658,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang SQLite */ "
+            /** @lang SQLite */ "
             SELECT
                 COLUMN_NAME AS name,
                 COLUMN_TYPE AS type,
@@ -753,7 +752,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -784,7 +783,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name
@@ -856,7 +855,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -935,7 +934,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang PostgreSQL */ '
+            /** @lang PostgreSQL */ '
             SELECT
                 is_nullable AS nullable,
                 column_name AS name,
@@ -954,7 +953,7 @@ class FieldsService
                 return (array) $column;
             })
             ->filter(function ($column) use ($primaryIndex) {
-                return $column['default'] !== null && !(in_array($column['name'], $primaryIndex));
+                return $column['default'] !== null && ! (in_array($column['name'], $primaryIndex));
             })
             ->pluck('name')
             ->unique()
@@ -995,7 +994,7 @@ class FieldsService
             ->toArray();
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -1039,7 +1038,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -1101,7 +1100,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
@@ -1133,7 +1132,7 @@ class FieldsService
         $table = Helpers::getTableFromThisModel($this->modelClass);
 
         $queryResult = DB::select(
-        /** @lang TSQL */ "
+            /** @lang TSQL */ "
             SELECT
                 COLUMN_NAME AS name,
                 DATA_TYPE AS type,
