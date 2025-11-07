@@ -44,7 +44,8 @@ class UncleCreating
 {
     public Uncle $model;
 
-    public function __construct(Uncle $model) {
+    public function __construct(Uncle $model)
+    {
         $this->model = $model;
     }
 }
@@ -53,7 +54,8 @@ class UncleSaving
 {
     public Uncle $model;
 
-    public function __construct(Uncle $model) {
+    public function __construct(Uncle $model)
+    {
         $this->model = $model;
     }
 }

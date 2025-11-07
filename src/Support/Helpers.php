@@ -39,10 +39,9 @@ class Helpers
      * during 'creating' and 'saving' events
      *
      * @param  class-string  $model
-     *
      * @return string[]
      */
-    public static function getObserverFilledFields( $modelOrClass)
+    public static function getObserverFilledFields($modelOrClass)
     {
         if ($modelOrClass instanceof Model) {
             $model = $modelOrClass->newInstance();   // fresh instance of same model
