@@ -45,8 +45,7 @@ class FieldsTest extends TestCase
             $table->timestamps();
         });
 
-        $testModelClass = new class extends Model
-        {
+        $testModelClass = new class extends Model {
             protected $table = 'test_table';
 
             public static function requiredFields()
@@ -220,6 +219,14 @@ class FieldsTest extends TestCase
         $this->assertEquals($expected, Brother::requiredFieldsForOlderVersions());
     }
 
+    public function test_required_fields_for_uncles_model()
+    {
+        $expected = [];
+
+        $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFields());
+        $this->assertEquals($expected, Uncle::requiredFields());
+    }
+
     public function test_nullable_fields_for_father_model()
     {
         $expected = [
@@ -373,16 +380,6 @@ class FieldsTest extends TestCase
         ];
         $this->assertEquals($expected, Fields::model(Brother::class)->defaultFields());
         $this->assertEquals($expected, Brother::defaultFields());
-    }
-
-    public function test_required_fields_for_uncles_model()
-    {
-        $expected = [
-            'column_2',
-        ];
-
-        $this->assertEquals($expected, Fields::model(Uncle::class)->requiredFields());
-        //$this->assertEquals($expected, Uncle::defaultFields());
     }
 
     /**

@@ -4,9 +4,10 @@ namespace WatheqAlshowaiter\ModelFields\Support;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
 
 /**
- * Here are the shared logic across multiple files, now are ModelFieldsService & ModelFieldsServiceProvider
+ * Here are the shared logic across multiple files, now are FieldsService & ModelFieldsServiceProvider
  */
 class Helpers
 {
@@ -38,100 +39,29 @@ class Helpers
      * during 'creating' and 'saving' events
      *
      * @param  class-string  $model
-     * @return string[]
-     */
-    public static function getObserverFilledFields($model)
-    {
-        /** @var Model $modelInstance */
-        $modelInstance = new $model;
-
-        // Get attributes before firing events
-        $attributesBeforeEvents = array_keys($modelInstance->getAttributes());
-
-        // Fire the creating and saving events to trigger observers
-        $modelInstance->fireModelEvent('creating', false);
-        $modelInstance->fireModelEvent('saving', false);
-
-        // Get attributes after firing events
-        $attributesAfterEvents = array_keys($modelInstance->getAttributes());
-
-        // Get all database fields
-        $allFields = self::getAllFieldsForModel($model);
-
-        // Return only the new fields that were added by observers/events
-        // and are actual database fields
-        return collect($attributesAfterEvents)
-            ->diff($attributesBeforeEvents)
-            ->filter(function ($field) use ($allFields) {
-                return in_array($field, $allFields);
-            })
-            ->values()
-            ->toArray();
-    }
-
-    /**
-     * Helper to get all fields for a model (used internally)
      *
-     * @param  class-string  $model
      * @return string[]
      */
-    private static function getAllFieldsForModel($model)
+    public static function getObserverFilledFields( $modelOrClass)
     {
-        if (self::isLaravelVersionLessThan10()) {
-            // For older versions, we need to query the database
-            $table = self::getTableFromThisModel($model);
-            $databaseDriver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
-
-            switch ($databaseDriver) {
-                case 'sqlite':
-                    $queryResult = \Illuminate\Support\Facades\DB::select("PRAGMA table_info($table)");
-
-                    return collect($queryResult)
-                        ->map(fn ($column) => (array) $column)
-                        ->pluck('name')
-                        ->toArray();
-                case 'mysql':
-                case 'mariadb':
-                    $queryResult = \Illuminate\Support\Facades\DB::select(
-                        'SELECT COLUMN_NAME AS name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? ORDER BY ORDINAL_POSITION ASC',
-                        [$table]
-                    );
-
-                    return collect($queryResult)
-                        ->map(fn ($column) => (array) $column)
-                        ->pluck('name')
-                        ->toArray();
-                case 'pgsql':
-                    $queryResult = \Illuminate\Support\Facades\DB::select(
-                        'SELECT column_name AS name FROM information_schema.columns WHERE table_name = ? ORDER BY ordinal_position ASC',
-                        [$table]
-                    );
-
-                    return collect($queryResult)
-                        ->map(fn ($column) => (array) $column)
-                        ->pluck('name')
-                        ->toArray();
-                case 'sqlsrv':
-                    $queryResult = \Illuminate\Support\Facades\DB::select(
-                        'SELECT COLUMN_NAME AS name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = SCHEMA_NAME() AND TABLE_NAME = ? ORDER BY ORDINAL_POSITION ASC',
-                        [$table]
-                    );
-
-                    return collect($queryResult)
-                        ->map(fn ($column) => (array) $column)
-                        ->pluck('name')
-                        ->toArray();
-                default:
-                    return [];
-            }
+        if ($modelOrClass instanceof Model) {
+            $model = $modelOrClass->newInstance();   // fresh instance of same model
+            $modelClass = get_class($modelOrClass);
+        } else {
+            $model = new $modelOrClass;
+            $modelClass = $modelOrClass;
         }
 
-        $table = self::getTableFromThisModel($model);
+        // ensure clean baseline
+        $model->syncOriginal();
 
-        return collect(\Illuminate\Support\Facades\Schema::getColumns($table))
-            ->pluck('name')
-            ->unique()
-            ->values()
-            ->toArray();
+        // fire the creating events (observer + model booted events)
+        Event::dispatch("eloquent.creating: {$modelClass}", $model);
+        Event::dispatch("eloquent.saving: {$modelClass}", $model);
+
+        $dirty = $model->getDirty();
+        $dirtyNoNull = array_filter($dirty); // exclude null values
+
+        return array_keys($dirtyNoNull);
     }
 }

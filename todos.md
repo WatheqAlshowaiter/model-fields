@@ -67,5 +67,5 @@
             - [x] test opening the url (mocking with reflectionClass)
     - [x] make sure $this->input->isInteractive() it enough
     - [ ] add new changes in using the terminal to the docs 
-- [ ] (next version) exclude from required fields that are filled in "creating/saving" observers/events and add test cases for
+- [x] exclude from required fields that are filled in "creating/saving" observers/events and add test cases for
   that

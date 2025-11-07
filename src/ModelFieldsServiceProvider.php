@@ -169,6 +169,7 @@ class ModelFieldsServiceProvider extends ServiceProvider
                 $table = Helpers::getTableFromThisModel($this->getModel());
 
                 $modelDefaultAttributes = Helpers::getModelDefaultAttributes($this->getModel());
+                $observerDefaultAttributes = Helpers::getObserverFilledFields($this->getModel());
 
                 $primaryIndex = $this->primaryField();
 
@@ -190,6 +191,9 @@ class ModelFieldsServiceProvider extends ServiceProvider
                     })
                     ->reject(function ($column) use ($modelDefaultAttributes) {
                         return in_array($column['name'], $modelDefaultAttributes);
+                    })
+                    ->reject(function ($column) use ($observerDefaultAttributes) {
+                        return in_array($column['name'], $observerDefaultAttributes);
                     })
                     ->pluck('name')
                     ->unique()
