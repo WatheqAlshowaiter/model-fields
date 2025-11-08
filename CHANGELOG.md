@@ -2,6 +2,14 @@
 
 All notable changes to `model-required-fields` will be documented in this file.
 
+## 3.2.1 - 2025-11-08
+
+### What's Changed
+
+* chore: add new combined github action by @WatheqAlshowaiter in https://github.com/WatheqAlshowaiter/model-fields/pull/37
+
+**Full Changelog**: https://github.com/WatheqAlshowaiter/model-fields/compare/3.2.0...3.2.1
+
 ## 3.2.0 - 2025-11-07
 
 ### What's Changed
