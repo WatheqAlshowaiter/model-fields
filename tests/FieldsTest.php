@@ -4,9 +4,7 @@ namespace WatheqAlshowaiter\ModelFields\Tests;
 
 use BadMethodCallException;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use ReflectionClass;
 use ReflectionException;
 use WatheqAlshowaiter\ModelFields\Exceptions\InvalidModelClassException;
@@ -18,6 +16,7 @@ use WatheqAlshowaiter\ModelFields\Tests\Models\Mother;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Someone;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Son;
 use WatheqAlshowaiter\ModelFields\Tests\Models\Uncle;
+use WatheqAlshowaiter\ModelFields\Tests\Models\WithOverride;
 
 class FieldsTest extends TestCase
 {
@@ -39,28 +38,10 @@ class FieldsTest extends TestCase
 
     public function test_macro_is_overridden_when_same_static_method_name_added()
     {
-        Schema::create('test_table', function ($table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->timestamps();
-        });
-
-        $testModelClass = new class extends Model
-        {
-            protected $table = 'test_table';
-
-            public static function requiredFields()
-            {
-                return [
-                    'some_field',
-                ];
-            }
-        };
-
-        $this->assertEquals(['some_field'], $testModelClass::requiredFields());
+        $this->assertEquals(['some override text'], WithOverride::requiredFields());
 
         // but other methods works fine
-        $this->assertEquals(['created_at', 'updated_at'], $testModelClass::nullableFields());
+        $this->assertEquals(['created_at', 'updated_at'], WithOverride::nullableFields());
     }
 
     public function test_throw_exception_if_model_is_not_extends_of_eloquent_model()
