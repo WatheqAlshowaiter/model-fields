@@ -6,8 +6,7 @@
 [![Required Laravel Version][ico-laravel]][link-packagist]
 [![Required PHP Version][ico-php]][link-packagist]
 [![Latest Version on Packagist][ico-version]][link-packagist]
-![GitHub Tests For Laravel Versions Action Status][ico-tests-for-laravel-versions]
-![GitHub Tests For Databases Action Status][ico-tests-for-databases]
+![GitHub Test Matrix Action Status][ico-test-matrix]
 ![GitHub Code Style Action Status][ico-code-style]
 [![Total Downloads][ico-downloads]][link-downloads]
 ![GitHub Stars][ico-github-stars]
@@ -23,9 +22,7 @@
 
 [ico-code-style]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square
 
-[ico-tests-for-laravel-versions]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-fields/tests-for-laravel-versions.yml?branch=main&label=laravel%20versions%20tests&style=flat-square
-
-[ico-tests-for-databases]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-fields/tests-for-databases.yml?branch=main&label=databases%20tests&style=flat-square
+[ico-test-matrix]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-fields/test-matrix.yml?branch=main&label=tests&style=flat-square
 
 [ico-github-stars]: https://img.shields.io/github/stars/watheqalshowaiter/model-fields?style=flat-square
 

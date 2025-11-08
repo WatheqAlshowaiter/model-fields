@@ -1,0 +1,178 @@
+name: Test Matrix
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: [12.*, 11.*, 10.*, 9.*, 8.*, 7.*, 6.*]
+
+        include:
+          - laravel: 12.*
+            testbench: 10.*
+            php: 8.4
+
+          - laravel: 11.*
+            testbench: 9.*
+            php: 8.3
+
+          - laravel: 10.*
+            testbench: 8.*
+            php: 8.2
+
+          - laravel: 9.*
+            testbench: 7.*
+            php: 8.1
+
+          - laravel: 8.*
+            testbench: 6.*
+            php: 8.0
+
+          - laravel: 7.*
+            testbench: 5.*
+            php: 7.4
+
+          - laravel: 6.*
+            testbench: 4.*
+            php: 7.4
+
+        database: [sqlite, mysql_57, mysql_8, mariadb, pgsql, mssql]
+
+    name: PHP ${{ matrix.php }} | L${{ matrix.laravel }} | DB:${{ matrix.database }}
+
+    services:
+      mysql57:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: laravel
+        ports: [3307:3306]
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      mysql8:
+        image: mysql:8
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: laravel
+        ports: [3308:3306]
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      mariadb:
+        image: mariadb:10
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+          MARIADB_DATABASE: laravel
+        ports: [3309:3306]
+
+      pgsql:
+        image: postgres:14
+        env:
+          POSTGRES_DB: laravel
+          POSTGRES_USER: forge
+          POSTGRES_PASSWORD: password
+        ports: [5432:5432]
+
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: Forge123
+        ports: [1434:1433]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: >
+            dom, curl, libxml, mbstring, zip,
+            pcntl, pdo, sqlite, pdo_sqlite,
+            pdo_mysql, pdo_pgsql, sqlsrv, pdo_sqlsrv, odbc, pdo_odbc
+
+      - name: Prepare database ENV
+        run: |
+          if [[ "${{ matrix.database }}" == "sqlite" ]]; then
+            echo "DB_CONNECTION=sqlite" >> $GITHUB_ENV
+            echo "DB_DATABASE=:memory:" >> $GITHUB_ENV
+          fi
+
+          if [[ "${{ matrix.database }}" == "mysql_57" ]]; then
+            echo "DB_CONNECTION=mysql" >> $GITHUB_ENV
+            echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+            echo "DB_PORT=3307" >> $GITHUB_ENV
+            echo "DB_USERNAME=root" >> $GITHUB_ENV
+            echo "DB_DATABASE=laravel" >> $GITHUB_ENV
+          fi
+
+          if [[ "${{ matrix.database }}" == "mysql_8" ]]; then
+            echo "DB_CONNECTION=mysql" >> $GITHUB_ENV
+            echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+            echo "DB_PORT=3308" >> $GITHUB_ENV
+            echo "DB_USERNAME=root" >> $GITHUB_ENV
+            echo "DB_DATABASE=laravel" >> $GITHUB_ENV
+          fi
+
+          if [[ "${{ matrix.database }}" == "mariadb" ]]; then
+            echo "DB_CONNECTION=mysql" >> $GITHUB_ENV
+            echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+            echo "DB_PORT=3309" >> $GITHUB_ENV
+            echo "DB_USERNAME=root" >> $GITHUB_ENV
+            echo "DB_DATABASE=laravel" >> $GITHUB_ENV
+          fi
+
+          if [[ "${{ matrix.database }}" == "pgsql" ]]; then
+            echo "DB_CONNECTION=pgsql" >> $GITHUB_ENV
+            echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+            echo "DB_PORT=5433" >> $GITHUB_ENV
+            echo "DB_USERNAME=forge" >> $GITHUB_ENV
+            echo "DB_PASSWORD=password" >> $GITHUB_ENV
+            echo "DB_DATABASE=laravel" >> $GITHUB_ENV
+          fi
+
+          if [[ "${{ matrix.database }}" == "mssql" ]]; then
+            echo "DB_CONNECTION=sqlsrv" >> $GITHUB_ENV
+            echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+            echo "DB_PORT=1434" >> $GITHUB_ENV
+            echo "DB_USERNAME=SA" >> $GITHUB_ENV
+            echo "DB_PASSWORD=Forge123" >> $GITHUB_ENV
+            echo "DB_DATABASE=master" >> $GITHUB_ENV
+          fi
+
+      - name: Install SQL Server Tools (only for mssql)
+        if: matrix.database == 'mssql'
+        run: |
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools18 unixodbc-dev
+          echo "/opt/mssql-tools18/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          composer require \
+              "laravel/framework:${{ matrix.laravel }}" \
+              "orchestra/testbench:${{ matrix.testbench }}" \
+              --no-interaction --no-update
+          composer update --prefer-dist --no-interaction
+
+      - name: Run Tests
+        run: vendor/bin/phpunit
