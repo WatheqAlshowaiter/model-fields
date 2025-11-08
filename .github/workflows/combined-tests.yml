@@ -94,7 +94,7 @@ jobs:
           POSTGRES_DB: laravel
           POSTGRES_USER: forge
           POSTGRES_PASSWORD: password
-        ports: [5433:5432]
+        ports: [5432:5432]
 
       mssql:
         image: mcr.microsoft.com/mssql/server:2019-latest
