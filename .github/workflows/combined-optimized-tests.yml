@@ -1,4 +1,4 @@
-name: tests-laravel-and-databases
+name: tests-laravel-and-databases-optimized
 
 on:
   push:
@@ -89,7 +89,7 @@ jobs:
         ports: [3309:3306]
 
       pgsql:
-        image: postgres:14
+        image: postgres:15
         env:
           POSTGRES_DB: laravel
           POSTGRES_USER: forge
