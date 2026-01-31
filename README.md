@@ -14,29 +14,18 @@
 [![ko-fi][ico-ko-fi]][link-ko-fi]
 
 [ico-laravel]: https://img.shields.io/badge/Laravel-%E2%89%A56.0-ff2d20?style=flat-square&logo=laravel
-
 [ico-php]: https://img.shields.io/packagist/php-v/watheqalshowaiter/model-fields?color=%238892BF&style=flat-square&logo=php
-
 [ico-version]: https://img.shields.io/packagist/v/watheqalshowaiter/model-fields.svg?style=flat-square
-
 [ico-downloads]: https://img.shields.io/packagist/dt/watheqalshowaiter/model-fields.svg?style=flat-square&color=%23007ec6
-
 [ico-code-style]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-fields/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square
-
 [ico-test-matrix]: https://img.shields.io/github/actions/workflow/status/watheqalshowaiter/model-fields/test-matrix.yml?branch=main&label=tests&style=flat-square
-
 [ico-github-stars]: https://img.shields.io/github/stars/watheqalshowaiter/model-fields?style=flat-square
-
 [ico-palestine]: https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg
-
 [ico-ko-fi]: https://img.shields.io/badge/Ko--fi-Support-ff5f5f?logo=ko-fi&style=flat-square
 
 [link-packagist]: https://packagist.org/packages/watheqalshowaiter/model-fields
-
 [link-downloads]: https://packagist.org/packages/watheqalshowaiter/model-fields/stats
-
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
-
 [link-ko-fi]: https://ko-fi.com/watheq_show
 <!-- ./shields -->
 
