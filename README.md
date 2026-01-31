@@ -11,6 +11,7 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 ![GitHub Stars][ico-github-stars]
 [![StandWithPalestine][ico-palestine]][link-palestine]
+[![ko-fi][ico-ko-fi]][link-ko-fi]
 
 [ico-laravel]: https://img.shields.io/badge/Laravel-%E2%89%A56.0-ff2d20?style=flat-square&logo=laravel
 
@@ -28,11 +29,15 @@
 
 [ico-palestine]: https://raw.githubusercontent.com/TheBSD/StandWithPalestine/main/badges/StandWithPalestine.svg
 
+[ico-ko-fi]: https://img.shields.io/badge/Ko--fi-Support-ff5f5f?logo=ko-fi&style=flat-square
+
 [link-packagist]: https://packagist.org/packages/watheqalshowaiter/model-fields
 
 [link-downloads]: https://packagist.org/packages/watheqalshowaiter/model-fields/stats
 
 [link-palestine]: https://github.com/TheBSD/StandWithPalestine/blob/main/docs/README.md
+
+[link-ko-fi]: https://ko-fi.com/watheq_show
 <!-- ./shields -->
 
 Quickly retrieve **required**, **nullable**, and **default** fields for any Laravel model. Think that's simple? You
@@ -480,6 +485,10 @@ them.
   with ease.
 - **[Filament Sticky Table Header](https://github.com/WatheqAlshowaiter/filament-sticky-table-header)** - Make Filament
   table headers stick when scrolling for better UX.
+
+## Support this project
+
+If this project helps you, consider supporting it on [Ko-fi ☕](https://ko-fi.com/watheq_show).
 
 ## Credits
 
